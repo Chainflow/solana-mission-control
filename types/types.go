@@ -26,7 +26,7 @@ type (
 		ID      int           `json:"id"`
 	}
 
-	Epoch struct {
+	Commitment struct {
 		Commitemnt string `json:"commitment"`
 	}
 
@@ -201,5 +201,29 @@ type (
 			Identity string `json:"identity"`
 		} `json:"result"`
 		// ID int `json:"id"`
+	}
+
+	VoteAccount struct {
+		ActivatedStake   int64   `json:"activatedStake"`
+		Commission       int     `json:"commission"`
+		EpochCredits     [][]int `json:"epochCredits"`
+		EpochVoteAccount bool    `json:"epochVoteAccount"`
+		LastVote         int     `json:"lastVote"`
+		NodePubkey       string  `json:"nodePubkey"`
+		RootSlot         int     `json:"rootSlot"`
+		VotePubkey       string  `json:"votePubkey"`
+	}
+
+	GetVoteAccountsResponse struct {
+		Result struct {
+			Current    []VoteAccount `json:"current"`
+			Delinquent []VoteAccount `json:"delinquent"`
+		} `json:"result"`
+		Error rpcError `json:"error"`
+	}
+
+	rpcError struct {
+		Message string `json:"message"`
+		Code    int64  `json:"id"`
 	}
 )
