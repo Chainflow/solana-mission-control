@@ -226,4 +226,20 @@ type (
 		Message string `json:"message"`
 		Code    int64  `json:"id"`
 	}
+
+	Stake struct {
+		Jsonrpc string `json:"jsonrpc"`
+		Result  struct {
+			Active   int64  `json:"active"`
+			Inactive int64  `json:"inactive"`
+			State    string `json:"state"`
+		} `json:"result"`
+		// ID int `json:"id"`
+	}
+
+	SlotLeader struct {
+		Jsonrpc string `json:"jsonrpc"`
+		Result  string `json:"result"`
+		// ID      int    `json:"id"`
+	}
 )

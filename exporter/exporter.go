@@ -36,6 +36,7 @@ type solanaCollector struct {
 	validatorDelinquent     *prometheus.Desc
 	solanaVersion           *prometheus.Desc
 	accountBalance          *prometheus.Desc
+	slotLeader              *prometheus.Desc
 	// nodeHealth              *prometheus.Metric
 }
 
@@ -70,6 +71,10 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"solana_account_balance",
 			"Account balance",
 			[]string{"solana_acc_balance"}, nil),
+		slotLeader: prometheus.NewDesc(
+			"solana_slot_leader",
+			"Current slot leader",
+			[]string{"solana_slot_leader"}, nil),
 	}
 }
 
@@ -77,6 +82,7 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.solanaVersion
 	ch <- c.accountBalance
 	ch <- c.totalValidatorsDesc
+	ch <- c.slotLeader
 }
 
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
@@ -137,5 +143,12 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	} else {
 		s := strconv.FormatInt(bal.Result.Value, 10)
 		ch <- prometheus.MustNewConstMetric(c.accountBalance, prometheus.GaugeValue, 1, s)
+	}
+
+	leader, err := monitor.GetSlotLeader(c.config)
+	if err != nil {
+		ch <- prometheus.NewInvalidMetric(c.slotLeader, err)
+	} else {
+		ch <- prometheus.MustNewConstMetric(c.slotLeader, prometheus.GaugeValue, 1, leader.Result)
 	}
 }

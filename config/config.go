@@ -39,8 +39,8 @@ type (
 		CommandsRate string `mapstructure:"tg_commnads_rate"`
 	}
 
-	// InfluxDB stores influxDB credntials
-	InfluxDB struct {
+	// Prometheus stores Prometheus details
+	Prometheus struct {
 		// Port on which influxdb is running
 		Port string `mapstructure:"port"`
 		// IP to connect to influxdb where it is running
@@ -117,7 +117,7 @@ type (
 		Scraper             Scraper             `mapstructure:"scraper"`
 		Telegram            Telegram            `mapstructure:"telegram"`
 		SendGrid            SendGrid            `mapstructure:"sendgrid"`
-		// InfluxDB            InfluxDB            `mapstructure:"influxdb"`
+		Prometheus          Prometheus          `mapstructure:"prometheus"`
 	}
 )
 

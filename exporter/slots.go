@@ -13,7 +13,7 @@ import (
 )
 
 const (
-	slotPacerSchedule = 1 * time.Second
+	slotPacerSchedule = 3 * time.Second
 )
 
 var (
@@ -93,7 +93,6 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		<-ticker.C
 
 		// Get account balance
-
 		bal, err := monitor.GetBalance(cfg)
 		if err != nil {
 			log.Printf("Error while getting account balance : %v", err)
@@ -103,7 +102,6 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		balance.Set(float64(bal.Result.Value))
 
 		// Get Node Health
-
 		health, err := monitor.GetNodeHealth(cfg)
 		if err != nil {
 			log.Printf("Error while getting node health info : %v", err)
@@ -121,6 +119,19 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		}
 
 		nodeHealth.Set(h)
+
+		// getBalFromDB
+		// v1api := v1.NewAPI(client)
+		// ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		// defer cancel()
+
+		// result, err := v1api.Query(ctx, "solana_node_health", time.Now())
+		// if err != nil {
+		// 	fmt.Printf("Error querying Prometheus: %v\n", err)
+		// 	os.Exit(1)
+		// }
+
+		// log.Fatalf("Result:\n%v\n", result)
 
 		// Get current slot height and epoch info
 		// ctx, cancel := context.WithTimeout(context.Background(), httpTimeout)
