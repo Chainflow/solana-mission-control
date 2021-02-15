@@ -2,9 +2,12 @@ package monitor
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"net/http"
+	"strings"
 
+	"github.com/PrathyushaLakkireddy/solana-prometheus/alerter"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
@@ -27,6 +30,12 @@ func GetNodeHealth(cfg *config.Config) (types.NodeHealth, error) {
 	if err != nil {
 		log.Printf("Error: %v", err)
 		return result, err
+	}
+
+	if strings.EqualFold(result.Result, "ok") {
+		log.Printf("Node health : %s", result.Result)
+	} else {
+		_ = alerter.SendTelegramAlert(fmt.Sprintf("Your node is not running"), cfg)
 	}
 
 	return result, nil
