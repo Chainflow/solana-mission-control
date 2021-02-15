@@ -52,11 +52,7 @@ var (
 		Help: "Current balance if your account.",
 	})
 
-	aa = prometheus.NewDesc("node_health", "Current health of the node.", nil, prometheus.Labels{})
-
-	// health = prometheus.NewDesc(prometheus.Desc{
-	// 	prometheus.BuildFQName("node_health","node_health","node_health"),
-	// })
+	// aa = prometheus.NewDesc("node_health", "Current health of the node.", nil, prometheus.Labels{})
 
 	leaderSlotsTotal = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
@@ -75,6 +71,7 @@ func init() {
 	prometheus.MustRegister(leaderSlotsTotal)
 	prometheus.MustRegister(nodeHealth)
 	prometheus.MustRegister(balance)
+	// prometheus.MustRegister(blockTime)
 }
 
 func (c *solanaCollector) WatchSlots(cfg *config.Config) {
@@ -228,20 +225,3 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		watermark = info.SlotIndex
 	}
 }
-
-// func (c *solanaCollector) fetchLeaderSlots(epochSlot int64) (map[int64]string, error) {
-// 	sch, err := c.rpcClient.GetLeaderSchedule(context.Background(), epochSlot)
-// 	if err != nil {
-// 		return nil, fmt.Errorf("failed to get leader schedule: %w", err)
-// 	}
-
-// 	slots := make(map[int64]string)
-
-// 	for pk, sch := range sch {
-// 		for _, i := range sch {
-// 			slots[int64(i)] = pk
-// 		}
-// 	}
-
-// 	return slots, err
-// }

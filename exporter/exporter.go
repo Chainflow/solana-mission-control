@@ -2,6 +2,8 @@ package exporter
 
 import (
 	// "context"
+	"fmt"
+	"log"
 	"strconv"
 	"time"
 
@@ -37,7 +39,8 @@ type solanaCollector struct {
 	solanaVersion           *prometheus.Desc
 	accountBalance          *prometheus.Desc
 	slotLeader              *prometheus.Desc
-	// nodeHealth              *prometheus.Metric
+	blockTime               *prometheus.Desc
+	currentSlot             *prometheus.Desc
 }
 
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
@@ -75,6 +78,16 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"solana_slot_leader",
 			"Current slot leader",
 			[]string{"solana_slot_leader"}, nil),
+		currentSlot: prometheus.NewDesc(
+			"solana_current_slot",
+			"Current slot height",
+			[]string{"solana_current_slot"}, nil,
+		),
+		blockTime: prometheus.NewDesc(
+			"solana_block_time",
+			"Current block time.",
+			[]string{"solana_block_time"}, nil,
+		),
 	}
 }
 
@@ -83,6 +96,7 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.accountBalance
 	ch <- c.totalValidatorsDesc
 	ch <- c.slotLeader
+	ch <- c.currentSlot
 }
 
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
@@ -151,4 +165,35 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	} else {
 		ch <- prometheus.MustNewConstMetric(c.slotLeader, prometheus.GaugeValue, 1, leader.Result)
 	}
+
+	slot, err := monitor.GetCurrentSlot(c.config)
+	if err != nil {
+		ch <- prometheus.NewInvalidMetric(c.currentSlot, err)
+	} else {
+		cs := strconv.FormatInt(slot.Result, 10)
+		ch <- prometheus.MustNewConstMetric(c.currentSlot, prometheus.GaugeValue, 1, cs)
+	}
+
+	bt, err := monitor.GetBlockTime(slot.Result, c.config)
+	if err != nil {
+		log.Printf("Errir while getting block time: %v", err)
+	}
+
+	pvt, err := monitor.GetBlockTime(slot.Result-1, c.config)
+	if err != nil {
+		log.Printf("Errir while getting previous block time: %v", err)
+	}
+
+	t1 := time.Unix(bt.Result, 0)
+	t2 := time.Unix(pvt.Result, 0)
+
+	sub := t1.Sub(t2)
+	diff := sub.Seconds()
+
+	if diff < 0 {
+		diff = -(diff)
+	}
+	s := fmt.Sprintf("%.2f", diff)
+
+	ch <- prometheus.MustNewConstMetric(c.blockTime, prometheus.GaugeValue, diff, s+"s")
 }

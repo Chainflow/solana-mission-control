@@ -23,6 +23,14 @@ func main() {
 		log.Fatal(err)
 	}
 
+	// client, err := api.NewClient(api.Config{
+	// 	// Address: "http://demo.robustperception.io:9090",
+	// 	Address: fmt.Sprintf("%s:%s", cfg.Prometheus.IP, cfg.Prometheus.Port),
+	// })
+	// if err != nil {
+	// 	log.Fatalf("Error creating client: %v\n", err)
+	// }
+
 	// log.Printf("cfg..", cfg)
 
 	collector := exporter.NewSolanaCollector(cfg)

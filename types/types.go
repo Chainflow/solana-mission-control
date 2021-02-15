@@ -242,4 +242,10 @@ type (
 		Result  string `json:"result"`
 		// ID      int    `json:"id"`
 	}
+
+	CurrentSlot struct {
+		Jsonrpc string `json:"jsonrpc"`
+		Result  int64  `json:"result"`
+		// ID      int    `json:"id"`
+	}
 )
