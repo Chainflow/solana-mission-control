@@ -16,9 +16,6 @@ func GetConfirmedBlocks(rangeStart int64, rangeEnd int64, cfg *config.Config) ([
 		Body:     types.Payload{Jsonrpc: "2.0", Method: "getConfirmedBlocks", ID: 1, Params: []interface{}{rangeStart, rangeEnd}},
 	}
 
-	// log.Fatalf("ops...", ops)
-
-	// cfm, err := scraper.GetConfirmedBlocks(ops)
 	var cfm types.ConfirmedBlocks
 	resp, err := HitHTTPTarget(ops)
 	if err != nil {

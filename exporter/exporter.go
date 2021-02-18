@@ -20,15 +20,6 @@ const (
 	httpTimeout = 5 * time.Second
 )
 
-// var (
-// 	rpcAddr = cfg.
-// 	addr    = flag.String("addr", ":8080", "Listen address")
-// )
-
-// func init() {
-// 	klog.InitFlags(nil)
-// }
-
 type solanaCollector struct {
 	config                  *config.Config
 	totalValidatorsDesc     *prometheus.Desc

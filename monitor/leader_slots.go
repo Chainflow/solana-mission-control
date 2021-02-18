@@ -16,7 +16,6 @@ func GetLeaderSlots(epochSlot int64, cfg *config.Config) (map[int64]string, erro
 		Body:     types.Payload{Jsonrpc: "2.0", Method: "getLeaderSchedule", ID: 1, Params: []interface{}{epochSlot}},
 	}
 
-	// log.Fatalf("ops...", ops, epochSlot)
 	var sch types.LeaderShedule
 
 	resp, err := HitHTTPTarget(ops)
@@ -37,7 +36,6 @@ func GetLeaderSlots(epochSlot int64, cfg *config.Config) (map[int64]string, erro
 		if pk == cfg.ValDetails.PubKey {
 			for _, i := range sch {
 				slots[int64(i)] = pk
-				// log.Printf("i,pk, sch", i, pk)
 			}
 		}
 	}

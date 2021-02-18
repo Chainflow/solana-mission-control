@@ -17,10 +17,6 @@ func GetBalance(cfg *config.Config) (types.Balance, error) {
 		Method:   http.MethodPost,
 		Body: types.Payload{Jsonrpc: "2.0", Method: "getBalance", ID: 1, Params: []interface{}{
 			cfg.ValDetails.PubKey, // should be base58 encoded to query data
-			// "83astBRguLMdt2h5U1Tpdq5tjFoJ6noeGwaY3mDLVcri",
-			// types.Encode{
-			// 	Encoding: "jsonParsed",
-			// },
 		}},
 	}
 

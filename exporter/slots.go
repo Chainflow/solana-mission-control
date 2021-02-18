@@ -117,21 +117,6 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 
 		nodeHealth.Set(h)
 
-		// getBalFromDB
-		// v1api := v1.NewAPI(client)
-		// ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-		// defer cancel()
-
-		// result, err := v1api.Query(ctx, "solana_node_health", time.Now())
-		// if err != nil {
-		// 	fmt.Printf("Error querying Prometheus: %v\n", err)
-		// 	os.Exit(1)
-		// }
-
-		// log.Fatalf("Result:\n%v\n", result)
-
-		// Get current slot height and epoch info
-		// ctx, cancel := context.WithTimeout(context.Background(), httpTimeout)
 		resp, err := monitor.GetEpochInfo(cfg)
 		if err != nil {
 			log.Printf("failed to fetch info info, retrying: %v", err)
@@ -150,6 +135,10 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		currentEpochNumber.Set(float64(info.Epoch))
 		epochFirstSlot.Set(float64(firstSlot))
 		epochLastSlot.Set(float64(lastSlot))
+
+		// *** get metrics from prometheus tetst ***
+
+		monitor.GetFromPromRange()
 
 		// Check whether we need to fetch a new leader schedule
 		if epochNumber != info.Epoch {
