@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"net/http"
 
@@ -12,26 +13,10 @@ import (
 )
 
 func main() {
-	// flag.Parse()
-
-	// if *rpcAddr == "" {
-	// 	klog.Fatal("Please specify -rpcURI")
-	// }
-
 	cfg, err := config.ReadFromFile()
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	// client, err := api.NewClient(api.Config{
-	// 	// Address: "http://demo.robustperception.io:9090",
-	// 	Address: fmt.Sprintf("%s:%s", cfg.Prometheus.IP, cfg.Prometheus.Port),
-	// })
-	// if err != nil {
-	// 	log.Fatalf("Error creating client: %v\n", err)
-	// }
-
-	// log.Printf("cfg..", cfg)
 
 	collector := exporter.NewSolanaCollector(cfg)
 
@@ -39,31 +24,8 @@ func main() {
 
 	prometheus.MustRegister(collector)
 	http.Handle("/metrics", promhttp.Handler())
-	http.ListenAndServe(":8080", nil)
-
-	// klog.Infof("listening on %s", *addr)
-	// klog.Fatal(http.ListenAndServe(*addr, nil))
+	err = http.ListenAndServe(fmt.Sprintf("%s", cfg.Prometheus.ListenAddress), nil)
+	if err != nil {
+		log.Printf("Error while listening on server : %v", err)
+	}
 }
-
-// func recordMetrics() {
-// 	go func() {
-// 		for {
-// 			opsProcessed.Inc()
-// 			time.Sleep(2 * time.Second)
-// 		}
-// 	}()
-// }
-
-// var (
-// 	opsProcessed = promauto.NewCounter(prometheus.CounterOpts{
-// 		Name: "myapp_processed_ops_total",
-// 		Help: "The total number of processed events",
-// 	})
-// )
-
-// func main() {
-// 	recordMetrics()
-
-// 	http.Handle("/metrics", promhttp.Handler())
-// 	http.ListenAndServe(":2112", nil)
-// }

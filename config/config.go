@@ -51,6 +51,8 @@ type (
 		Username string `mapstructure:"username"`
 		// Password of influxdb
 		Password string `mapstructure:"password"`
+
+		ListenAddress string `mapstructure:"listen_address"`
 	}
 
 	// Endpoints defines multiple API base-urls to fetch the data
