@@ -32,10 +32,15 @@ func GetNodeHealth(cfg *config.Config) (types.NodeHealth, error) {
 		return result, err
 	}
 
-	if strings.EqualFold(result.Result, "ok") {
-		log.Printf("Node health : %s", result.Result)
-	} else {
-		_ = alerter.SendTelegramAlert(fmt.Sprintf("Your node is not running"), cfg)
+	if result.Result != "" {
+		if strings.EqualFold(result.Result, "ok") {
+			log.Printf("Node health : %s", result.Result)
+		} else {
+			err = alerter.SendTelegramAlert(fmt.Sprintf("Your node is not running"), cfg)
+			if err != nil {
+				log.Printf("Error while sending node health alert: %v", err)
+			}
+		}
 	}
 
 	return result, nil
