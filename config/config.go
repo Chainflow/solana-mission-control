@@ -52,7 +52,8 @@ type (
 		// Password of influxdb
 		Password string `mapstructure:"password"`
 
-		ListenAddress string `mapstructure:"listen_address"`
+		ListenAddress     string `mapstructure:"listen_address"`
+		PrometheusAddress string `mapstructure:"prometheus_address"`
 	}
 
 	// Endpoints defines multiple API base-urls to fetch the data

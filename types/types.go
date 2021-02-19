@@ -248,4 +248,20 @@ type (
 		Result  int64  `json:"result"`
 		// ID      int    `json:"id"`
 	}
+
+	AccountBal struct {
+		Status string `json:"status"`
+		Data   struct {
+			ResultType string `json:"resultType"`
+			Result     []struct {
+				Metric struct {
+					Name             string `json:"__name__"`
+					Instance         string `json:"instance"`
+					Job              string `json:"job"`
+					SolanaAccBalance string `json:"solana_acc_balance"`
+				} `json:"metric"`
+				Value []interface{} `json:"value"`
+			} `json:"result"`
+		} `json:"data"`
+	}
 )
