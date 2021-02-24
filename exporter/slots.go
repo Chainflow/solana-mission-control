@@ -60,6 +60,11 @@ var (
 			Help: "Number of leader slots per leader, grouped by skip status (max confirmation)",
 		},
 		[]string{"status", "nodekey"})
+
+	txCount = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_tx_count",
+		Help: "Current transaction count from the ledger.",
+	})
 )
 
 func init() {
@@ -71,6 +76,7 @@ func init() {
 	prometheus.MustRegister(leaderSlotsTotal)
 	prometheus.MustRegister(nodeHealth)
 	prometheus.MustRegister(balance)
+	prometheus.MustRegister(txCount)
 	// prometheus.MustRegister(blockTime)
 }
 
@@ -97,6 +103,16 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		}
 
 		balance.Set(float64(bal.Result.Value))
+
+		// Get tx count
+
+		count, err := monitor.GetTxCount(cfg)
+		if err != nil {
+			log.Printf("Error while getting tx count : %v", err)
+			continue
+		}
+
+		txCount.Set(float64(count.Result))
 
 		// Get Node Health
 		health, err := monitor.GetNodeHealth(cfg)
