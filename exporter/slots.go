@@ -136,10 +136,6 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		epochFirstSlot.Set(float64(firstSlot))
 		epochLastSlot.Set(float64(lastSlot))
 
-		// *** get metrics from prometheus tetst ***
-
-		monitor.GetFromPromRange()
-
 		// Check whether we need to fetch a new leader schedule
 		if epochNumber != info.Epoch {
 			log.Printf("new epoch at slot %d: %d (previous: %d)", firstSlot, info.Epoch, epochNumber)

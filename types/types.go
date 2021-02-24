@@ -264,4 +264,10 @@ type (
 			} `json:"result"`
 		} `json:"data"`
 	}
+
+	TxCount struct {
+		Jsonrpc string `json:"jsonrpc"`
+		Result  int64  `json:"result"`
+		// ID      int    `json:"id"`
+	}
 )
