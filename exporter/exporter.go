@@ -101,6 +101,7 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.slotLeader
 	ch <- c.currentSlot
 	ch <- c.commission
+	ch <- c.delinqentCommission
 }
 
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
@@ -142,9 +143,6 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 }
 
 func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
-	// ctx, cancel := context.WithTimeout(context.Background(), httpTimeout)
-	// defer cancel()
-
 	accs, err := monitor.GetVoteAccounts(c.config)
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.totalValidatorsDesc, err)

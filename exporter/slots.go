@@ -17,11 +17,6 @@ const (
 )
 
 var (
-	totalTransactionsTotal = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "solana_confirmed_transactions_total",
-		Help: "Total number of transactions processed since genesis (max confirmation)",
-	})
-
 	confirmedSlotHeight = prometheus.NewGauge(prometheus.GaugeOpts{
 		Name: "solana_confirmed_slot_height",
 		Help: "Last confirmed slot height processed by watcher routine (max confirmation)",
@@ -52,8 +47,6 @@ var (
 		Help: "Current balance if your account.",
 	})
 
-	// aa = prometheus.NewDesc("node_health", "Current health of the node.", nil, prometheus.Labels{})
-
 	leaderSlotsTotal = prometheus.NewCounterVec(
 		prometheus.CounterOpts{
 			Name: "solana_leader_slots_total",
@@ -68,7 +61,6 @@ var (
 )
 
 func init() {
-	prometheus.MustRegister(totalTransactionsTotal)
 	prometheus.MustRegister(confirmedSlotHeight)
 	prometheus.MustRegister(currentEpochNumber)
 	prometheus.MustRegister(epochFirstSlot)
@@ -77,7 +69,6 @@ func init() {
 	prometheus.MustRegister(nodeHealth)
 	prometheus.MustRegister(balance)
 	prometheus.MustRegister(txCount)
-	// prometheus.MustRegister(blockTime)
 }
 
 func (c *solanaCollector) WatchSlots(cfg *config.Config) {
@@ -146,7 +137,6 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		firstSlot := info.AbsoluteSlot - info.SlotIndex
 		lastSlot := firstSlot + info.SlotsInEpoch
 
-		// totalTransactionsTotal.Set(float64(info.TransactionCount))
 		confirmedSlotHeight.Set(float64(info.AbsoluteSlot))
 		currentEpochNumber.Set(float64(info.Epoch))
 		epochFirstSlot.Set(float64(firstSlot))
