@@ -109,18 +109,20 @@ func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 		}
 		cBal := float64(currentBal)
 
-		diff := cBal - pBal
-		if diff > 0 {
-			err = alerter.SendTelegramAlert(fmt.Sprintf("Delegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
-			if err != nil {
-				log.Printf("Error while sending delegation alert : %v", err)
-				return err
-			}
-		} else {
-			err = alerter.SendTelegramAlert(fmt.Sprintf("Undelegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
-			if err != nil {
-				log.Printf("Error while sending undelegation alert : %v", err)
-				return err
+		if cfg.AlerterPreferences.BalanceChangeAlerts == "yes" {
+			diff := cBal - pBal
+			if diff > 0 {
+				err = alerter.SendTelegramAlert(fmt.Sprintf("Delegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
+				if err != nil {
+					log.Printf("Error while sending delegation alert : %v", err)
+					return err
+				}
+			} else {
+				err = alerter.SendTelegramAlert(fmt.Sprintf("Undelegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
+				if err != nil {
+					log.Printf("Error while sending undelegation alert : %v", err)
+					return err
+				}
 			}
 		}
 	}
