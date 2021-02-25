@@ -10,6 +10,7 @@ import (
 )
 
 func GetCurrentSlot(cfg *config.Config) (types.CurrentSlot, error) {
+	log.Println("Getting current slot")
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method:   http.MethodPost,

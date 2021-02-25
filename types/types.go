@@ -205,7 +205,7 @@ type (
 
 	VoteAccount struct {
 		ActivatedStake   int64   `json:"activatedStake"`
-		Commission       int     `json:"commission"`
+		Commission       int64   `json:"commission"`
 		EpochCredits     [][]int `json:"epochCredits"`
 		EpochVoteAccount bool    `json:"epochVoteAccount"`
 		LastVote         int     `json:"lastVote"`

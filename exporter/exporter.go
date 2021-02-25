@@ -32,6 +32,7 @@ type solanaCollector struct {
 	slotLeader              *prometheus.Desc
 	blockTime               *prometheus.Desc
 	currentSlot             *prometheus.Desc
+	commission              *prometheus.Desc
 }
 
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
@@ -79,6 +80,11 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"Current block time.",
 			[]string{"solana_block_time"}, nil,
 		),
+		commission: prometheus.NewDesc(
+			"solana_val_commission",
+			"Commission.",
+			[]string{"solana_val_commission"}, nil,
+		),
 	}
 }
 
@@ -88,6 +94,7 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.totalValidatorsDesc
 	ch <- c.slotLeader
 	ch <- c.currentSlot
+	ch <- c.commission
 }
 
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
@@ -116,6 +123,13 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 		if account.VotePubkey == c.config.ValDetails.PubKey {
 			ch <- prometheus.MustNewConstMetric(c.validatorDelinquent, prometheus.GaugeValue,
 				1, account.VotePubkey, account.NodePubkey)
+		}
+	}
+	for _, vote := range response.Result.Current {
+		if vote.VotePubkey == c.config.ValDetails.PubKey {
+			v := strconv.FormatInt(vote.Commission, 10)
+			ch <- prometheus.MustNewConstMetric(c.commission, prometheus.GaugeValue, float64(vote.Commission), v)
+			// log.Fatalf("came here..")
 		}
 	}
 }
