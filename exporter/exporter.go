@@ -34,6 +34,7 @@ type solanaCollector struct {
 	currentSlot             *prometheus.Desc
 	commission              *prometheus.Desc
 	delinqentCommission     *prometheus.Desc
+	validatorVote           *prometheus.Desc
 }
 
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
@@ -91,6 +92,11 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"Solana validator delinqent commission.",
 			[]string{"solana_delinqent_commission"}, nil,
 		),
+		validatorVote: prometheus.NewDesc(
+			"solana_vote_account",
+			"whether the vote account is staked for this epoch",
+			[]string{"state"}, nil,
+		),
 	}
 }
 
@@ -102,6 +108,7 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.currentSlot
 	ch <- c.commission
 	ch <- c.delinqentCommission
+	ch <- c.validatorVote
 }
 
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
@@ -120,10 +127,18 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 				float64(account.RootSlot), account.VotePubkey, account.NodePubkey)
 		}
 	}
-
+	var epochvote float64
 	for _, vote := range response.Result.Current {
 		if vote.VotePubkey == c.config.ValDetails.PubKey {
 			v := strconv.FormatInt(vote.Commission, 10)
+
+			if vote.EpochVoteAccount {
+				epochvote = 1
+			} else {
+				epochvote = 0
+			}
+			ch <- prometheus.MustNewConstMetric(c.validatorVote, prometheus.GaugeValue,
+				epochvote, "current")
 			ch <- prometheus.MustNewConstMetric(c.commission, prometheus.GaugeValue, float64(vote.Commission), v)
 
 			ch <- prometheus.MustNewConstMetric(c.validatorDelinquent, prometheus.GaugeValue,
@@ -134,6 +149,13 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 	for _, vote := range response.Result.Delinquent {
 		if vote.VotePubkey == c.config.ValDetails.PubKey {
 			v := strconv.FormatInt(vote.Commission, 10)
+			if vote.EpochVoteAccount {
+				epochvote = 1
+			} else {
+				epochvote = 0
+			}
+			ch <- prometheus.MustNewConstMetric(c.validatorVote, prometheus.GaugeValue,
+				epochvote, "deliquint")
 			ch <- prometheus.MustNewConstMetric(c.delinqentCommission, prometheus.GaugeValue, float64(vote.Commission), v)
 
 			ch <- prometheus.MustNewConstMetric(c.validatorDelinquent, prometheus.GaugeValue,
