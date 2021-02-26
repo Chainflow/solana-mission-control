@@ -58,6 +58,11 @@ var (
 		Name: "solana_tx_count",
 		Help: "Current transaction count from the ledger.",
 	})
+
+	blockHeight = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_block_height",
+		Help: "Current Block Height.",
+	})
 )
 
 func init() {
@@ -69,6 +74,7 @@ func init() {
 	prometheus.MustRegister(nodeHealth)
 	prometheus.MustRegister(balance)
 	prometheus.MustRegister(txCount)
+	prometheus.MustRegister(blockHeight)
 }
 
 func (c *solanaCollector) WatchSlots(cfg *config.Config) {
@@ -141,6 +147,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		currentEpochNumber.Set(float64(info.Epoch))
 		epochFirstSlot.Set(float64(firstSlot))
 		epochLastSlot.Set(float64(lastSlot))
+		blockHeight.Set(float64(resp.Result.BlockHeight))
 
 		// Check whether we need to fetch a new leader schedule
 		if epochNumber != info.Epoch {
