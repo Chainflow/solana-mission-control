@@ -11,6 +11,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	// "k8s.io/klog/v2"
 
+	"github.com/PrathyushaLakkireddy/solana-prometheus/alerter"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/monitor"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
@@ -161,6 +162,24 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 			ch <- prometheus.MustNewConstMetric(c.validatorDelinquent, prometheus.GaugeValue,
 				1, vote.VotePubkey, vote.NodePubkey)
 		}
+	}
+
+	for _, vote := range response.Result.Current {
+
+		if vote.VotePubkey == c.config.ValDetails.PubKey {
+			if vote.EpochVoteAccount == false && vote.ActivatedStake <= 0 {
+				err := alerter.SendTelegramAlert(fmt.Sprintf("Your validator is not voting"), c.config)
+				if err != nil {
+					log.Printf("Error while sending vallidator vote alert: %v", err)
+				}
+			} else {
+				err := alerter.SendTelegramAlert(fmt.Sprintf("Your validator is voting properly"), c.config)
+				if err != nil {
+					log.Printf("Error while sending vallidator vote alert: %v", err)
+				}
+			}
+		}
+
 	}
 }
 
