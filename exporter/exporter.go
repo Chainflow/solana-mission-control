@@ -88,9 +88,9 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			[]string{"solana_val_commission"}, nil,
 		),
 		delinqentCommission: prometheus.NewDesc(
-			"solana_val_delinqent_commission",
+			"solana_val_delinquuent_commission",
 			"Solana validator delinqent commission.",
-			[]string{"solana_delinqent_commission"}, nil,
+			[]string{"solana_delinquent_commission"}, nil,
 		),
 		validatorVote: prometheus.NewDesc(
 			"solana_vote_account",
@@ -155,7 +155,7 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 				epochvote = 0
 			}
 			ch <- prometheus.MustNewConstMetric(c.validatorVote, prometheus.GaugeValue,
-				epochvote, "deliquint")
+				epochvote, "delinquent")
 			ch <- prometheus.MustNewConstMetric(c.delinqentCommission, prometheus.GaugeValue, float64(vote.Commission), v)
 
 			ch <- prometheus.MustNewConstMetric(c.validatorDelinquent, prometheus.GaugeValue,
@@ -227,5 +227,7 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	}
 	s := fmt.Sprintf("%.2f", diff)
 
-	ch <- prometheus.MustNewConstMetric(c.blockTime, prometheus.GaugeValue, diff, s+"s")
+	sec, _ := strconv.ParseFloat(s, 64)
+
+	ch <- prometheus.MustNewConstMetric(c.blockTime, prometheus.GaugeValue, sec, s+"s")
 }
