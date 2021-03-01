@@ -144,6 +144,15 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 
 			ch <- prometheus.MustNewConstMetric(c.validatorDelinquent, prometheus.GaugeValue,
 				0, vote.VotePubkey, vote.NodePubkey)
+
+			// Check weather the validator is voting or not
+			if vote.EpochVoteAccount == false && vote.ActivatedStake <= 0 {
+				msg := "Solana validator is NOT VOTING"
+				AlertValidatorStatus(msg, c.config)
+			} else {
+				msg := "Solana validator is VOTING"
+				AlertValidatorStatus(msg, c.config)
+			}
 		}
 	}
 
@@ -163,23 +172,30 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 				1, vote.VotePubkey, vote.NodePubkey)
 		}
 	}
+}
 
-	for _, vote := range response.Result.Current {
+func AlertValidatorStatus(msg string, cfg *config.Config) {
+	now := time.Now().UTC()
+	currentTime := now.Format(time.Kitchen)
 
-		if vote.VotePubkey == c.config.ValDetails.PubKey {
-			if vote.EpochVoteAccount == false && vote.ActivatedStake <= 0 {
-				err := alerter.SendTelegramAlert(fmt.Sprintf("Your validator is not voting"), c.config)
-				if err != nil {
-					log.Printf("Error while sending vallidator vote alert: %v", err)
-				}
-			} else {
-				err := alerter.SendTelegramAlert(fmt.Sprintf("Your validator is voting properly"), c.config)
-				if err != nil {
-					log.Printf("Error while sending vallidator vote alert: %v", err)
-				}
+	var alertsArray []string
+
+	for _, value := range cfg.RegularStatusAlerts.AlertTimings {
+		t, _ := time.Parse(time.Kitchen, value)
+		alertTime := t.Format(time.Kitchen)
+
+		alertsArray = append(alertsArray, alertTime)
+	}
+
+	log.Printf("Current time : %v and alerts array : %v", currentTime, alertsArray)
+
+	for _, statusAlertTime := range alertsArray {
+		if currentTime == statusAlertTime {
+			err := alerter.SendTelegramAlert(msg, cfg)
+			if err != nil {
+				log.Printf("Error while sending vallidator status alert: %v", err)
 			}
 		}
-
 	}
 }
 
