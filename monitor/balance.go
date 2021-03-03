@@ -69,7 +69,7 @@ func GetIdentity(cfg *config.Config) (types.Identity, error) {
 }
 
 func GetAccountBalFromDB(cfg *config.Config) (string, error) {
-	var result types.AccountBal
+	var result types.DBRes
 	var bal string
 	response, err := http.Get(fmt.Sprintf("%s/api/v1/query?query=solana_account_balance", cfg.Prometheus.PrometheusAddress))
 	if err != nil {
@@ -93,7 +93,6 @@ func GetAccountBalFromDB(cfg *config.Config) (string, error) {
 }
 
 func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
-
 	prevBal, err := GetAccountBalFromDB(cfg)
 	if err != nil {
 		log.Printf("Error while getting bal from db : %v", err)
