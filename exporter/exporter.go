@@ -36,6 +36,7 @@ type solanaCollector struct {
 	commission              *prometheus.Desc
 	delinqentCommission     *prometheus.Desc
 	validatorVote           *prometheus.Desc
+	StatusAlertCount        *prometheus.Desc
 }
 
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
@@ -98,6 +99,11 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"whether the vote account is staked for this epoch",
 			[]string{"state"}, nil,
 		),
+		StatusAlertCount: prometheus.NewDesc(
+			"solana_val_alert_count",
+			"Count of alerts about validator status alerting",
+			[]string{"alert_count"}, nil,
+		),
 	}
 }
 
@@ -110,6 +116,7 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.commission
 	ch <- c.delinqentCommission
 	ch <- c.validatorVote
+	// ch <- c.StatusAlertCount
 }
 
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
@@ -148,10 +155,10 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 			// Check weather the validator is voting or not
 			if vote.EpochVoteAccount == false && vote.ActivatedStake <= 0 {
 				msg := "Solana validator is NOT VOTING"
-				AlertValidatorStatus(msg, c.config)
+				c.AlertValidatorStatus(msg, ch)
 			} else {
 				msg := "Solana validator is VOTING"
-				AlertValidatorStatus(msg, c.config)
+				c.AlertValidatorStatus(msg, ch)
 			}
 		}
 	}
@@ -174,13 +181,13 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 	}
 }
 
-func AlertValidatorStatus(msg string, cfg *config.Config) {
+func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.Metric) {
 	now := time.Now().UTC()
 	currentTime := now.Format(time.Kitchen)
 
 	var alertsArray []string
 
-	for _, value := range cfg.RegularStatusAlerts.AlertTimings {
+	for _, value := range c.config.RegularStatusAlerts.AlertTimings {
 		t, _ := time.Parse(time.Kitchen, value)
 		alertTime := t.Format(time.Kitchen)
 
@@ -188,13 +195,32 @@ func AlertValidatorStatus(msg string, cfg *config.Config) {
 	}
 
 	log.Printf("Current time : %v and alerts array : %v", currentTime, alertsArray)
+	var count float64 = 0
 
 	for _, statusAlertTime := range alertsArray {
 		if currentTime == statusAlertTime {
-			err := alerter.SendTelegramAlert(msg, cfg)
+			count1, _ := monitor.AlertStatusCountFromPrometheus(c.config)
+			if count1 == "1" {
+				return
+			}
+
+			log.Printf("count1..", count1)
+
+			err := alerter.SendTelegramAlert(msg, c.config)
 			if err != nil {
 				log.Printf("Error while sending vallidator status alert: %v", err)
 			}
+
+			count = count + 1
+
+			log.Println("count....", count)
+
+			ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
+				count, "1")
+
+		} else {
+			ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
+				count, "0")
 		}
 	}
 }

@@ -249,7 +249,7 @@ type (
 		// ID      int    `json:"id"`
 	}
 
-	AccountBal struct {
+	DBRes struct {
 		Status string `json:"status"`
 		Data   struct {
 			ResultType string `json:"resultType"`
@@ -259,6 +259,7 @@ type (
 					Instance         string `json:"instance"`
 					Job              string `json:"job"`
 					SolanaAccBalance string `json:"solana_acc_balance"`
+					AlertCount       string `json:"alert_count"`
 				} `json:"metric"`
 				Value []interface{} `json:"value"`
 			} `json:"result"`

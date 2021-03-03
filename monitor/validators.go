@@ -3,6 +3,7 @@ package monitor
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 
@@ -40,4 +41,28 @@ func GetVoteAccounts(cfg *config.Config) (types.GetVoteAccountsResponse, error) 
 	}
 
 	return result, nil
+}
+
+func AlertStatusCountFromPrometheus(cfg *config.Config) (string, error) {
+	var result types.DBRes
+	var count string
+	response, err := http.Get(fmt.Sprintf("%s/api/v1/query?query=solana_val_alert_count", cfg.Prometheus.PrometheusAddress))
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return count, err
+	}
+	responseData, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Println(err)
+	}
+	json.Unmarshal(responseData, &result)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return count, err
+	}
+	if len(result.Data.Result) > 0 {
+		count = result.Data.Result[0].Metric.AlertCount
+	}
+
+	return count, nil
 }
