@@ -213,7 +213,7 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 
 			count = count + 1
 
-			log.Println(count)
+			log.Println("count....", count)
 
 			ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
 				count, "1")
