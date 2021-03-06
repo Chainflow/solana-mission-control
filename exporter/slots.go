@@ -1,6 +1,7 @@
 package exporter
 
 import (
+	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -8,12 +9,14 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	// "k8s.io/klog/v2"
 
+	"github.com/PrathyushaLakkireddy/solana-prometheus/alerter"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/monitor"
+	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
 const (
-	slotPacerSchedule = 3 * time.Second
+	slotPacerSchedule = 5 * time.Second
 )
 
 var (
@@ -100,6 +103,47 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		}
 
 		balance.Set(float64(bal.Result.Value))
+
+		var result types.GetVoteAccountsResponse
+		now := time.Now().UTC()
+		currentTime := now.Format(time.Kitchen)
+
+		var alertsArray []string
+
+		for _, value := range c.config.RegularStatusAlerts.AlertTimings {
+			t, _ := time.Parse(time.Kitchen, value)
+			alertTime := t.Format(time.Kitchen)
+
+			alertsArray = append(alertsArray, alertTime)
+		}
+
+		log.Printf("Current time : %v and alerts array : %v", currentTime, alertsArray)
+		for _, vote := range result.Result.Current {
+			fmt.Println("//////////////////////////////////......................")
+			if vote.VotePubkey == c.config.ValDetails.PubKey {
+				if vote.EpochVoteAccount == false && vote.ActivatedStake <= 0 {
+					for _, statusAlertTime := range alertsArray {
+						if currentTime == statusAlertTime {
+							err := alerter.SendTelegramAlert(fmt.Sprintf("validator is not voting "), c.config)
+							if err != nil {
+								log.Printf("Error while sending vallidator status alert: %v", err)
+							}
+						}
+					}
+				} else {
+					for _, statusAlertTime := range alertsArray {
+						if currentTime == statusAlertTime {
+							fmt.Println("//////////////////////")
+							err := alerter.SendTelegramAlert(fmt.Sprintf("validator is voting"), c.config)
+							if err != nil {
+								log.Printf("Error while sending vallidator status alert: %v", err)
+							}
+						}
+					}
+
+				}
+			}
+		}
 
 		// Get tx count
 

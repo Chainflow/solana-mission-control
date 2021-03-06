@@ -153,13 +153,18 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 				0, vote.VotePubkey, vote.NodePubkey)
 
 			// Check weather the validator is voting or not
+			time.NewTimer(180 * time.Second)
 			if vote.EpochVoteAccount == false && vote.ActivatedStake <= 0 {
+				//time.NewTimer(180 * time.Second)
 				msg := "Solana validator is NOT VOTING"
 				c.AlertValidatorStatus(msg, ch)
 			} else {
+				//time.NewTimer(180 * time.Second)
 				msg := "Solana validator is VOTING"
 				c.AlertValidatorStatus(msg, ch)
+
 			}
+
 		}
 	}
 
@@ -177,6 +182,7 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 
 			ch <- prometheus.MustNewConstMetric(c.validatorDelinquent, prometheus.GaugeValue,
 				1, vote.VotePubkey, vote.NodePubkey)
+
 		}
 	}
 }
@@ -195,33 +201,30 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 	}
 
 	log.Printf("Current time : %v and alerts array : %v", currentTime, alertsArray)
+
 	var count float64 = 0
 
 	for _, statusAlertTime := range alertsArray {
 		if currentTime == statusAlertTime {
-			count1, _ := monitor.AlertStatusCountFromPrometheus(c.config)
-			if count1 == "1" {
+			dbcount, _ := monitor.AlertStatusCountFromPrometheus(c.config)
+			if dbcount == "false" {
+				err := alerter.SendTelegramAlert(msg, c.config)
+				if err != nil {
+					log.Printf("Error while sending vallidator status alert: %v", err)
+				}
+				ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
+					count, "true")
+				count = count + 1
+			} else {
+				ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
+					count, "false")
 				return
 			}
-
-			log.Printf("count1..", count1)
-
-			err := alerter.SendTelegramAlert(msg, c.config)
-			if err != nil {
-				log.Printf("Error while sending vallidator status alert: %v", err)
-			}
-
-			count = count + 1
-
-			log.Println("count....", count)
-
-			ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
-				count, "1")
-
-		} else {
-			ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
-				count, "0")
 		}
+		// else {
+		// 	ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
+		// 		count, "0")
+		// }
 	}
 }
 
