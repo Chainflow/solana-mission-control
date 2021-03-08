@@ -4,6 +4,7 @@ import (
 	// "context"
 	"fmt"
 	"log"
+	"math"
 	"strconv"
 	"time"
 
@@ -127,8 +128,8 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 
 	for _, account := range append(response.Result.Current, response.Result.Delinquent...) {
 		if account.NodePubkey == c.config.ValDetails.PubKey {
-			ch <- prometheus.MustNewConstMetric(c.validatorActivatedStake, prometheus.GaugeValue,
-				float64(account.ActivatedStake), account.VotePubkey, account.NodePubkey)
+			// ch <- prometheus.MustNewConstMetric(c.validatorActivatedStake, prometheus.GaugeValue,
+			// 	float64(account.ActivatedStake), account.VotePubkey, account.NodePubkey)
 			ch <- prometheus.MustNewConstMetric(c.validatorLastVote, prometheus.GaugeValue,
 				float64(account.LastVote), account.VotePubkey, account.NodePubkey)
 			ch <- prometheus.MustNewConstMetric(c.validatorRootSlot, prometheus.GaugeValue,
@@ -151,6 +152,11 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 
 			ch <- prometheus.MustNewConstMetric(c.validatorDelinquent, prometheus.GaugeValue,
 				0, vote.VotePubkey, vote.NodePubkey)
+
+			stake := float64(vote.ActivatedStake) / math.Pow(10, 9)
+
+			ch <- prometheus.MustNewConstMetric(c.validatorActivatedStake, prometheus.GaugeValue,
+				stake, vote.VotePubkey, vote.NodePubkey)
 
 			// Check weather the validator is voting or not
 			if vote.EpochVoteAccount == false && vote.ActivatedStake <= 0 {
