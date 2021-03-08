@@ -177,6 +177,11 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 
 			ch <- prometheus.MustNewConstMetric(c.validatorDelinquent, prometheus.GaugeValue,
 				1, vote.VotePubkey, vote.NodePubkey)
+
+			err := alerter.SendTelegramAlert(fmt.Sprintf("Your solana validator is in DELINQUENT state"), c.config)
+			if err != nil {
+				log.Printf("Error while sending vallidator status alert: %v", err)
+			}
 		}
 	}
 }
@@ -269,12 +274,12 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 
 	bt, err := monitor.GetBlockTime(slot.Result, c.config)
 	if err != nil {
-		log.Printf("Errir while getting block time: %v", err)
+		log.Printf("Error while getting block time: %v", err)
 	}
 
 	pvt, err := monitor.GetBlockTime(slot.Result-1, c.config)
 	if err != nil {
-		log.Printf("Errir while getting previous block time: %v", err)
+		log.Printf("Error while getting previous block time: %v", err)
 	}
 
 	t1 := time.Unix(bt.Result, 0)
