@@ -57,11 +57,6 @@ var (
 		},
 		[]string{"status", "nodekey"})
 
-	txCount = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "solana_tx_count",
-		Help: "Current transaction count from the ledger.",
-	})
-
 	blockHeight = prometheus.NewGauge(prometheus.GaugeOpts{
 		Name: "solana_block_height",
 		Help: "Current Block Height.",
@@ -76,7 +71,6 @@ func init() {
 	prometheus.MustRegister(leaderSlotsTotal)
 	prometheus.MustRegister(nodeHealth)
 	prometheus.MustRegister(balance)
-	prometheus.MustRegister(txCount)
 	prometheus.MustRegister(blockHeight)
 }
 
@@ -144,16 +138,6 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 				}
 			}
 		}
-
-		// Get tx count
-
-		count, err := monitor.GetTxCount(cfg)
-		if err != nil {
-			log.Printf("Error while getting tx count : %v", err)
-			continue
-		}
-
-		txCount.Set(float64(count.Result))
 
 		// Get Node Health
 		health, err := monitor.GetNodeHealth(cfg)

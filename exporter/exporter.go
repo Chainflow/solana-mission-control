@@ -15,6 +15,7 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/monitor"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
+	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
 )
 
 const (
@@ -37,6 +38,7 @@ type solanaCollector struct {
 	delinqentCommission     *prometheus.Desc
 	validatorVote           *prometheus.Desc
 	StatusAlertCount        *prometheus.Desc
+	txCount                 *prometheus.Desc
 }
 
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
@@ -104,6 +106,11 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"Count of alerts about validator status alerting",
 			[]string{"alert_count"}, nil,
 		),
+		txCount: prometheus.NewDesc(
+			"solana_tx_count",
+			"Current transaction count from the ledger.",
+			[]string{"solana_tx_count"}, nil,
+		),
 	}
 }
 
@@ -117,6 +124,7 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.delinqentCommission
 	ch <- c.validatorVote
 	// ch <- c.StatusAlertCount
+	ch <- c.txCount
 }
 
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
@@ -124,6 +132,11 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 		float64(len(response.Result.Delinquent)), "delinquent")
 	ch <- prometheus.MustNewConstMetric(c.totalValidatorsDesc, prometheus.GaugeValue,
 		float64(len(response.Result.Current)), "current")
+
+	count, _ := monitor.GetTxCount(c.config)
+	txcount := utils.NearestThousandFormat(float64(count.Result))
+
+	ch <- prometheus.MustNewConstMetric(c.txCount, prometheus.GaugeValue, float64(count.Result), txcount)
 
 	for _, account := range append(response.Result.Current, response.Result.Delinquent...) {
 		if account.VotePubkey == c.config.ValDetails.PubKey {
@@ -272,7 +285,7 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 
 	bt, err := monitor.GetBlockTime(slot.Result, c.config)
 	if err != nil {
-		log.Printf("Errir while getting block time: %v", err)
+		log.Printf("Error while getting block time: %v", err)
 	}
 
 	pvt, err := monitor.GetBlockTime(slot.Result-1, c.config)
@@ -281,17 +294,19 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	}
 
 	t1 := time.Unix(bt.Result, 0)
+
 	t2 := time.Unix(pvt.Result, 0)
 
 	sub := t1.Sub(t2)
+
 	diff := sub.Seconds()
+
+	fmt.Println("tdiff  time is .....", diff)
 
 	if diff < 0 {
 		diff = -(diff)
 	}
 	s := fmt.Sprintf("%.2f", diff)
-
 	sec, _ := strconv.ParseFloat(s, 64)
-
 	ch <- prometheus.MustNewConstMetric(c.blockTime, prometheus.GaugeValue, sec, s+"s")
 }
