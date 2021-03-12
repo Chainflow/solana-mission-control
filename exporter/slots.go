@@ -2,6 +2,7 @@ package exporter
 
 import (
 	"log"
+	"math"
 	"strings"
 	"time"
 
@@ -99,7 +100,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 			continue
 		}
 
-		balance.Set(float64(bal.Result.Value))
+		balance.Set(float64(bal.Result.Value) / math.Pow(10, 9))
 
 		// Get tx count
 
