@@ -6,7 +6,6 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
@@ -24,20 +23,8 @@ func GetVoteAccounts(cfg *config.Config) (types.GetVoteAccountsResponse, error) 
 	}
 
 	var result types.GetVoteAccountsResponse
-	now := time.Now().UTC()
-	currentTime := now.Format(time.Kitchen)
-
-	var alertsArray []string
-
-	for _, value := range cfg.RegularStatusAlerts.AlertTimings {
-		t, _ := time.Parse(time.Kitchen, value)
-		alertTime := t.Format(time.Kitchen)
-
-		alertsArray = append(alertsArray, alertTime)
-	}
-
-	log.Printf("Current time : %v and alerts array : %v", currentTime, alertsArray)
-
+    
+	
 	resp, err := HitHTTPTarget(ops)
 	if err != nil {
 		log.Printf("Error while getting leader shedules: %v", err)

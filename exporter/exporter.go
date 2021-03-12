@@ -325,21 +325,22 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	if err != nil {
 		log.Printf("Error while getting block time: %v", err)
 	}
-
+	fmt.Println("bt is ", bt)
 	pvt, err := monitor.GetBlockTime(slot.Result-1, c.config)
 	if err != nil {
 		log.Printf("Error while getting previous block time: %v", err)
 	}
+	fmt.Println("pvt is ", pvt)
 
 	t1 := time.Unix(bt.Result, 0)
+	fmt.Println("t1 time is ", t1)
 
 	t2 := time.Unix(pvt.Result, 0)
+	fmt.Println("t2 time is ", t2)
 
 	sub := t1.Sub(t2)
 
 	diff := sub.Seconds()
-
-	fmt.Println("tdiff  time is .....", diff)
 
 	if diff < 0 {
 		diff = -(diff)
