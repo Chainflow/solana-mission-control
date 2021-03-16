@@ -59,6 +59,7 @@ type (
 	// Endpoints defines multiple API base-urls to fetch the data
 	Endpoints struct {
 		RPCEndpoint string `mapstructure:"rpc_endpoint"`
+		NetworkRPC  string `mapstructure:"network_rpc"`
 	}
 
 	// ValDetails stores the validator meta details

@@ -11,6 +11,7 @@ import (
 
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/monitor"
+	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
 )
 
 const (
@@ -131,7 +132,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 
 		nodeHealth.Set(h)
 
-		resp, err := monitor.GetEpochInfo(cfg)
+		resp, err := monitor.GetEpochInfo(cfg, utils.Validator)
 		if err != nil {
 			log.Printf("failed to fetch info info, retrying: %v", err)
 			// cancel()
