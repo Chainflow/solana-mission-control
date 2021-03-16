@@ -195,6 +195,7 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 			err := alerter.SendTelegramAlert(fmt.Sprintf("Your solana validator is in DELINQUENT state"), c.config)
 			if err != nil {
 				log.Printf("Error while sending vallidator status alert: %v", err)
@@ -203,6 +204,8 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 >>>>>>> validator alerts modified
 =======
 >>>>>>> timer removed
+=======
+>>>>>>> e6c131ba600730b0de2af12b5cdc8d5738b8db4e
 		}
 	}
 }
@@ -226,6 +229,7 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 
 	for _, statusAlertTime := range alertsArray {
 		if currentTime == statusAlertTime {
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 			count = count + 1
@@ -271,6 +275,22 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 >>>>>>> validator alerts modified
 =======
 >>>>>>> timer removed
+=======
+			dbcount, _ := monitor.AlertStatusCountFromPrometheus(c.config)
+			if dbcount == "false" {
+				err := alerter.SendTelegramAlert(msg, c.config)
+				if err != nil {
+					log.Printf("Error while sending vallidator status alert: %v", err)
+				}
+				ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
+					count, "true")
+				count = count + 1
+			} else {
+				ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
+					count, "false")
+				return
+			}
+>>>>>>> e6c131ba600730b0de2af12b5cdc8d5738b8db4e
 		}
 	}
 }
