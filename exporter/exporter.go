@@ -200,6 +200,11 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 			ch <- prometheus.MustNewConstMetric(c.validatorDelinquent, prometheus.GaugeValue,
 				1, vote.VotePubkey, vote.NodePubkey)
 
+			err := alerter.SendTelegramAlert(fmt.Sprintf("Your solana validator is in DELINQUENT state"), c.config)
+			if err != nil {
+				log.Printf("Error while sending vallidator status alert: %v", err)
+			}
+
 		}
 	}
 }
