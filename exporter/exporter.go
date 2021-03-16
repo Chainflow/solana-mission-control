@@ -4,7 +4,6 @@ import (
 	// "context"
 	"fmt"
 	"log"
-	"math"
 	"strconv"
 	"time"
 
@@ -52,19 +51,19 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 		validatorActivatedStake: prometheus.NewDesc(
 			"solana_validator_activated_stake",
 			"Activated stake per validator",
-			[]string{"votekey", "pubkey"}, nil),
+			[]string{"pubkey", "nodekey"}, nil),
 		validatorLastVote: prometheus.NewDesc(
 			"solana_validator_last_vote",
 			"Last voted slot per validator",
-			[]string{"votekey", "pubkey"}, nil),
+			[]string{"pubkey", "nodekey"}, nil),
 		validatorRootSlot: prometheus.NewDesc(
 			"solana_validator_root_slot",
 			"Root slot per validator",
-			[]string{"votekey", "pubkey"}, nil),
+			[]string{"pubkey", "nodekey"}, nil),
 		validatorDelinquent: prometheus.NewDesc(
 			"solana_validator_delinquent",
 			"Whether a validator is delinquent",
-			[]string{"votekey", "pubkey"}, nil),
+			[]string{"pubkey", "nodekey"}, nil),
 		solanaVersion: prometheus.NewDesc(
 			"solana_node_version",
 			"Node version of solana",
@@ -140,9 +139,9 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 	ch <- prometheus.MustNewConstMetric(c.txCount, prometheus.GaugeValue, float64(count.Result), txcount)
 
 	for _, account := range append(response.Result.Current, response.Result.Delinquent...) {
-		if account.NodePubkey == c.config.ValDetails.PubKey {
-			// ch <- prometheus.MustNewConstMetric(c.validatorActivatedStake, prometheus.GaugeValue,
-			// 	float64(account.ActivatedStake), account.VotePubkey, account.NodePubkey)
+		if account.VotePubkey == c.config.ValDetails.PubKey {
+			ch <- prometheus.MustNewConstMetric(c.validatorActivatedStake, prometheus.GaugeValue,
+				float64(account.ActivatedStake), account.VotePubkey, account.NodePubkey)
 			ch <- prometheus.MustNewConstMetric(c.validatorLastVote, prometheus.GaugeValue,
 				float64(account.LastVote), account.VotePubkey, account.NodePubkey)
 			ch <- prometheus.MustNewConstMetric(c.validatorRootSlot, prometheus.GaugeValue,
@@ -151,7 +150,7 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 	}
 	var epochvote float64
 	for _, vote := range response.Result.Current {
-		if vote.NodePubkey == c.config.ValDetails.PubKey {
+		if vote.VotePubkey == c.config.ValDetails.PubKey {
 			v := strconv.FormatInt(vote.Commission, 10)
 
 			if vote.EpochVoteAccount {
@@ -166,29 +165,21 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 			ch <- prometheus.MustNewConstMetric(c.validatorDelinquent, prometheus.GaugeValue,
 				0, vote.VotePubkey, vote.NodePubkey)
 
-			stake := float64(vote.ActivatedStake) / math.Pow(10, 9)
-
-			ch <- prometheus.MustNewConstMetric(c.validatorActivatedStake, prometheus.GaugeValue,
-				stake, vote.VotePubkey, vote.NodePubkey)
-
 			// Check weather the validator is voting or not
-			time.NewTimer(180 * time.Second)
+
 			if vote.EpochVoteAccount == false && vote.ActivatedStake <= 0 {
-				//time.NewTimer(180 * time.Second)
 				msg := "Solana validator is NOT VOTING"
 				c.AlertValidatorStatus(msg, ch)
 			} else {
-				//time.NewTimer(180 * time.Second)
 				msg := "Solana validator is VOTING"
 				c.AlertValidatorStatus(msg, ch)
-
 			}
 
 		}
 	}
 
 	for _, vote := range response.Result.Delinquent {
-		if vote.NodePubkey == c.config.ValDetails.PubKey {
+		if vote.VotePubkey == c.config.ValDetails.PubKey {
 			v := strconv.FormatInt(vote.Commission, 10)
 			if vote.EpochVoteAccount {
 				epochvote = 1
@@ -203,12 +194,15 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 				1, vote.VotePubkey, vote.NodePubkey)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 			err := alerter.SendTelegramAlert(fmt.Sprintf("Your solana validator is in DELINQUENT state"), c.config)
 			if err != nil {
 				log.Printf("Error while sending vallidator status alert: %v", err)
 			}
 =======
 >>>>>>> validator alerts modified
+=======
+>>>>>>> timer removed
 		}
 	}
 }
@@ -233,6 +227,7 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 	for _, statusAlertTime := range alertsArray {
 		if currentTime == statusAlertTime {
 <<<<<<< HEAD
+<<<<<<< HEAD
 			count = count + 1
 
 			// log.Println("count....", count)
@@ -256,6 +251,8 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 			// ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
 			// 	count, "0")
 =======
+=======
+>>>>>>> timer removed
 			dbcount, _ := monitor.AlertStatusCountFromPrometheus(c.config)
 			if dbcount == "false" {
 				err := alerter.SendTelegramAlert(msg, c.config)
@@ -270,12 +267,11 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 					count, "false")
 				return
 			}
+<<<<<<< HEAD
 >>>>>>> validator alerts modified
+=======
+>>>>>>> timer removed
 		}
-		// else {
-		// 	ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
-		// 		count, "0")
-		// }
 	}
 }
 
@@ -325,18 +321,13 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	if err != nil {
 		log.Printf("Error while getting block time: %v", err)
 	}
-	fmt.Println("bt is ", bt)
 	pvt, err := monitor.GetBlockTime(slot.Result-1, c.config)
 	if err != nil {
 		log.Printf("Error while getting previous block time: %v", err)
 	}
-	fmt.Println("pvt is ", pvt)
-
 	t1 := time.Unix(bt.Result, 0)
-	fmt.Println("t1 time is ", t1)
 
 	t2 := time.Unix(pvt.Result, 0)
-	fmt.Println("t2 time is ", t2)
 
 	sub := t1.Sub(t2)
 
