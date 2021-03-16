@@ -26,7 +26,17 @@ var (
 
 	currentEpochNumber = prometheus.NewGauge(prometheus.GaugeOpts{
 		Name: "solana_confirmed_epoch_number",
-		Help: "Current epoch (max confirmation)",
+		Help: "Current epoch of validator (max confirmation)",
+	})
+
+	networkEpoch = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_network_poch",
+		Help: "Current epoch of network (max confirmation)",
+	})
+
+	epochDifference = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_epoch_diff",
+		Help: "Current epoch difference of network and validator (max confirmation)",
 	})
 
 	epochFirstSlot = prometheus.NewGauge(prometheus.GaugeOpts{
@@ -77,6 +87,8 @@ func init() {
 	prometheus.MustRegister(balance)
 	prometheus.MustRegister(txCount)
 	prometheus.MustRegister(blockHeight)
+	prometheus.MustRegister(networkEpoch)
+	prometheus.MustRegister(epochDifference)
 }
 
 func (c *solanaCollector) WatchSlots(cfg *config.Config) {
@@ -132,9 +144,21 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 
 		nodeHealth.Set(h)
 
-		resp, err := monitor.GetEpochInfo(cfg, utils.Validator)
+		// Get network epoch info
+
+		resp, err := monitor.GetEpochInfo(cfg, utils.Network)
 		if err != nil {
-			log.Printf("failed to fetch info info, retrying: %v", err)
+			log.Printf("failed to fetch epoch info of network, retrying: %v", err)
+			// cancel()
+			continue
+		}
+
+		networkEpoch.Set(float64(resp.Result.Epoch)) // Set n/w epoch
+
+		// Get val epoch info
+		resp, err = monitor.GetEpochInfo(cfg, utils.Validator)
+		if err != nil {
+			log.Printf("failed to fetch poch info of validator, retrying: %v", err)
 			// cancel()
 			continue
 		}
@@ -150,6 +174,10 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		epochFirstSlot.Set(float64(firstSlot))
 		epochLastSlot.Set(float64(lastSlot))
 		blockHeight.Set(float64(resp.Result.BlockHeight))
+
+		// Calculate epoch difference of network and validator
+		diff := float64(resp.Result.Epoch) - float64(info.Epoch)
+		epochDifference.Set(diff)
 
 		// Check whether we need to fetch a new leader schedule
 		if epochNumber != info.Epoch {
