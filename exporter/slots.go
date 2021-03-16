@@ -1,7 +1,6 @@
 package exporter
 
 import (
-	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -9,10 +8,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	// "k8s.io/klog/v2"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/alerter"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/monitor"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
 const (
