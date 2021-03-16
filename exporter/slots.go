@@ -71,9 +71,19 @@ var (
 		Help: "Current transaction count from the ledger.",
 	})
 
-	blockHeight = prometheus.NewGauge(prometheus.GaugeOpts{
+	valBlockHeight = prometheus.NewGauge(prometheus.GaugeOpts{
 		Name: "solana_block_height",
-		Help: "Current Block Height.",
+		Help: "Current Block Height of validator",
+	})
+
+	networkBlockHeight = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_network_block_height",
+		Help: "Current Block Height of network",
+	})
+
+	blockDiff = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_block_height_diff",
+		Help: "Current Block Height difference of network and validator",
 	})
 )
 
@@ -86,9 +96,11 @@ func init() {
 	prometheus.MustRegister(nodeHealth)
 	prometheus.MustRegister(balance)
 	prometheus.MustRegister(txCount)
-	prometheus.MustRegister(blockHeight)
+	prometheus.MustRegister(valBlockHeight)
+	prometheus.MustRegister(networkBlockHeight)
 	prometheus.MustRegister(networkEpoch)
 	prometheus.MustRegister(epochDifference)
+	prometheus.MustRegister(blockDiff)
 }
 
 func (c *solanaCollector) WatchSlots(cfg *config.Config) {
@@ -153,7 +165,8 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 			continue
 		}
 
-		networkEpoch.Set(float64(resp.Result.Epoch)) // Set n/w epoch
+		networkEpoch.Set(float64(resp.Result.Epoch))             // Set n/w epoch
+		networkBlockHeight.Set(float64(resp.Result.BlockHeight)) // set n/w block height
 
 		// Get val epoch info
 		resp, err = monitor.GetEpochInfo(cfg, utils.Validator)
@@ -173,11 +186,14 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		currentEpochNumber.Set(float64(info.Epoch))
 		epochFirstSlot.Set(float64(firstSlot))
 		epochLastSlot.Set(float64(lastSlot))
-		blockHeight.Set(float64(resp.Result.BlockHeight))
+		valBlockHeight.Set(float64(info.BlockHeight))
 
 		// Calculate epoch difference of network and validator
 		diff := float64(resp.Result.Epoch) - float64(info.Epoch)
-		epochDifference.Set(diff)
+		epochDifference.Set(diff) // set epoch diff to prometheus
+
+		heightDiff := float64(resp.Result.BlockHeight) - float64(info.BlockHeight)
+		blockDiff.Set(heightDiff) // block height diff of network and validator
 
 		// Check whether we need to fetch a new leader schedule
 		if epochNumber != info.Epoch {
