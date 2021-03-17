@@ -41,6 +41,9 @@ type solanaCollector struct {
 	statusAlertCount        *prometheus.Desc
 	ipAddress               *prometheus.Desc
 	txCount                 *prometheus.Desc
+	netVoteHeight           *prometheus.Desc
+	valVoteHeight           *prometheus.Desc
+	voteHeightDiff          *prometheus.Desc
 }
 
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
@@ -118,6 +121,21 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"solana transaction count",
 			[]string{"solana_tx_count"}, nil,
 		),
+		netVoteHeight: prometheus.NewDesc(
+			"solana_network_vote_height",
+			"solana network vote height",
+			[]string{"solana_network_vote_height"}, nil,
+		),
+		valVoteHeight: prometheus.NewDesc(
+			"solana_validator_vote_height",
+			"solana validator vote height",
+			[]string{"solana_validator_vote_height"}, nil,
+		),
+		voteHeightDiff: prometheus.NewDesc(
+			"solana_vote_height_diff",
+			"solana vote height difference of validator and network",
+			[]string{"solana_vote_height_diff"}, nil,
+		),
 	}
 }
 
@@ -133,6 +151,9 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.ipAddress
 	// ch <- c.StatusAlertCount
 	ch <- c.txCount
+	ch <- c.netVoteHeight
+	ch <- c.valVoteHeight
+	ch <- c.voteHeightDiff
 }
 
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
@@ -262,6 +283,7 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 }
 
 func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
+	var outV float64
 	accs, err := monitor.GetVoteAccounts(c.config, utils.Validator) // get vote accounts
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.totalValidatorsDesc, err)
@@ -271,6 +293,12 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 		ch <- prometheus.NewInvalidMetric(c.validatorDelinquent, err)
 	} else {
 		c.mustEmitMetrics(ch, accs) // emit vote account metrics
+	}
+	for _, vote := range accs.Result.Current {
+		if vote.NodePubkey == c.config.ValDetails.PubKey {
+			outV = float64(vote.LastVote)
+			ch <- prometheus.MustNewConstMetric(c.valVoteHeight, prometheus.GaugeValue, outV, "current")
+		}
 	}
 
 	// get version
@@ -326,6 +354,18 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	// IP address of gossip
 	address := c.getClusterNodeInfo()
 	ch <- prometheus.MustNewConstMetric(c.ipAddress, prometheus.GaugeValue, 1, address)
+
+	resn, _ := monitor.GetVoteAccounts(c.config, utils.Network)
+	var outN float64
+	for _, vote := range resn.Result.Current {
+		if vote.NodePubkey == c.config.ValDetails.PubKey {
+			outN = float64(vote.LastVote)
+			ch <- prometheus.MustNewConstMetric(c.netVoteHeight, prometheus.GaugeValue, outN, "current")
+		}
+	}
+
+	diff := outN - outV
+	ch <- prometheus.MustNewConstMetric(c.voteHeightDiff, prometheus.GaugeValue, diff, "current")
 }
 
 func (c *solanaCollector) getClusterNodeInfo() string {

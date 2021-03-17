@@ -80,18 +80,6 @@ var (
 		Name: "solana_block_height_diff",
 		Help: "Current Block Height difference of network and validator",
 	})
-	valVoteHeight = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "solana_validator_vote_height",
-		Help: "solana validator vote height",
-	})
-	netVoteHeight = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "solana_network_vote_height",
-		Help: "solana network vote height",
-	})
-	voteHeightDiff = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "solana_vote_height_diff",
-		Help: "solana vote height difference",
-	})
 )
 
 func init() {
@@ -107,9 +95,7 @@ func init() {
 	prometheus.MustRegister(networkEpoch)
 	prometheus.MustRegister(epochDifference)
 	prometheus.MustRegister(blockDiff)
-	prometheus.MustRegister(valVoteHeight)
-	prometheus.MustRegister(netVoteHeight)
-	prometheus.MustRegister(voteHeightDiff)
+
 }
 
 func (c *solanaCollector) WatchSlots(cfg *config.Config) {
@@ -155,39 +141,6 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 
 		nodeHealth.Set(h)
 
-		// Get network vote height
-
-		resn, err := monitor.GetVoteAccounts(cfg, utils.Network)
-		if err != nil {
-			log.Printf("failed to fetch vote infoof network : %v", err)
-			continue
-		}
-		var outN float64
-		for _, vote := range resn.Result.Current {
-			if vote.NodePubkey == c.config.ValDetails.PubKey {
-				outN = float64(vote.LastVote)
-				netVoteHeight.Set(outN)
-			}
-		}
-
-		// Get validator vote height
-
-		resv, err := monitor.GetVoteAccounts(cfg, utils.Validator)
-		if err != nil {
-			log.Printf("failed to fetch vote infoof network : %v", err)
-			continue
-		}
-		var outV float64
-		for _, vote := range resv.Result.Current {
-			if vote.NodePubkey == c.config.ValDetails.PubKey {
-				outV = float64(vote.LastVote)
-				netVoteHeight.Set(outV)
-			}
-		}
-
-		// Get vote height difference of validator and network
-		votediff := outN - outV
-		voteHeightDiff.Set(votediff)
 		// Get network epoch info
 
 		resp, err := monitor.GetEpochInfo(cfg, utils.Network)
