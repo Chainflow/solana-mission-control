@@ -5,8 +5,6 @@ import (
 	"log"
 	"net/http"
 
-	// "k8s.io/klog/v2"
-
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"

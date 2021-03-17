@@ -1,6 +1,7 @@
 package exporter
 
 import (
+	"fmt"
 	"log"
 	"math"
 	"strings"
@@ -9,6 +10,7 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	// "k8s.io/klog/v2"
 
+	"github.com/PrathyushaLakkireddy/solana-prometheus/alerter"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/monitor"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
@@ -191,6 +193,14 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		// Calculate epoch difference of network and validator
 		diff := float64(resp.Result.Epoch) - float64(info.Epoch)
 		epochDifference.Set(diff) // set epoch diff to prometheus
+
+		if diff >= cfg.AlertingThresholds.EpochDiffThreshold {
+			// send alert
+			err = alerter.SendTelegramAlert(fmt.Sprintf("Epoch Difference Alert : Difference b/w network and validator epoch has exceeded the configured thershold &d", cfg.AlertingThresholds.EpochDiffThreshold), cfg)
+			if err != nil {
+				log.Printf("Error while sending epoch diff alert: %v", err)
+			}
+		}
 
 		heightDiff := float64(resp.Result.BlockHeight) - float64(info.BlockHeight)
 		blockDiff.Set(heightDiff) // block height diff of network and validator
