@@ -59,6 +59,7 @@ type (
 	// Endpoints defines multiple API base-urls to fetch the data
 	Endpoints struct {
 		RPCEndpoint string `mapstructure:"rpc_endpoint"`
+		NetworkRPC  string `mapstructure:"network_rpc"`
 	}
 
 	// ValDetails stores the validator meta details
@@ -83,15 +84,16 @@ type (
 
 	// AlerterPreferences stores individual alert settings to enable/disable particular alert
 	AlerterPreferences struct {
-		BalanceChangeAlerts string `mapstructure:"balance_change_alerts"`
-		VotingPowerAlerts   string `mapstructure:"voting_power_alerts"`
-		ProposalAlerts      string `mapstructure:"proposal_alerts"`
-		BlockDiffAlerts     string `mapstructure:"block_diff_alerts"`
-		MissedBlockAlerts   string `mapstructure:"missed_block_alerts"`
-		NumPeersAlerts      string `mapstructure:"num_peers_alerts"`
-		NodeSyncAlert       string `mapstructure:"node_sync_alert"`
-		NodeStatusAlert     string `mapstructure:"node_status_alert"`
-		EthLowBalanceAlert  string `mapstructure:"eth_low_balance_alert"`
+		BalanceChangeAlerts        string `mapstructure:"balance_change_alerts"`
+		AccountBalanceChangeAlerts string `mapstructure:"account_balance_change_alerts"`
+		VotingPowerAlerts          string `mapstructure:"voting_power_alerts"`
+		ProposalAlerts             string `mapstructure:"proposal_alerts"`
+		BlockDiffAlerts            string `mapstructure:"block_diff_alerts"`
+		MissedBlockAlerts          string `mapstructure:"missed_block_alerts"`
+		NumPeersAlerts             string `mapstructure:"num_peers_alerts"`
+		NodeSyncAlert              string `mapstructure:"node_sync_alert"`
+		NodeStatusAlert            string `mapstructure:"node_status_alert"`
+		EthLowBalanceAlert         string `mapstructure:"eth_low_balance_alert"`
 	}
 
 	//  AlertingThreshold defines threshold condition for different alert-cases.
@@ -107,6 +109,9 @@ type (
 		BlockDiffThreshold int64 `mapstructure:"block_diff_threshold"`
 		// EthBalanceThreshold is to send alerts when the etherium balance falls below the configured threshold
 		EthBalanceThreshold float64 `mapstructure:"eth_balance_threshold"`
+
+		// Alert when the validator identity balance is less than this amount of SOL
+		AccountBalThreshold float64 `mapstructure:"account_bal_threshold"`
 	}
 
 	// Config defines all the configurations required for the app

@@ -1,5 +1,6 @@
 package utils
 
+<<<<<<< HEAD
 import (
 	"math"
 	"strconv"
@@ -138,3 +139,18 @@ func NearestThousandFormat(num float64) string {
 	final := xNumSlice[0] + afterDecimal + xPart
 	return final
 }
+=======
+// func convertToBase64(address string) string {
+// 	data := []byte(address)
+// 	encoded := base64.Encode(data)
+
+// 	log.Printf("Encoded Data: %v", encoded)
+
+// 	return encoded
+// }
+
+const (
+	Network   = "network"
+	Validator = "validator"
+)
+>>>>>>> 806b2f1bd11cae7b192cc00c184660983c343054
