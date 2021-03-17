@@ -174,6 +174,7 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 	}
 
 	var epochvote float64
+	var valresult float64
 	// current vote account information
 	for _, vote := range response.Result.Current {
 		if vote.NodePubkey == c.config.ValDetails.PubKey {
@@ -207,6 +208,12 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 				c.AlertValidatorStatus(msg, ch)
 
 			}
+			valresult = float64(vote.LastVote)
+			ch <- prometheus.MustNewConstMetric(c.valVoteHeight, prometheus.GaugeValue, valresult, "validator")
+			netresult := c.getVoteAccountnetinfo()
+			ch <- prometheus.MustNewConstMetric(c.netVoteHeight, prometheus.GaugeValue, netresult, "network")
+			diff := netresult - valresult
+			ch <- prometheus.MustNewConstMetric(c.voteHeightDiff, prometheus.GaugeValue, diff, "vote height difference")
 
 		}
 	}
@@ -350,19 +357,6 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 
 	ch <- prometheus.MustNewConstMetric(c.txCount, prometheus.GaugeValue, float64(count.Result), txcount)
 
-	// Get vote account info
-	var valresult float64
-	for _, vote := range accs.Result.Current {
-		if vote.NodePubkey == c.config.ValDetails.PubKey {
-			valresult = float64(vote.LastVote)
-		}
-	}
-	ch <- prometheus.MustNewConstMetric(c.valVoteHeight, prometheus.GaugeValue, valresult, "validator")
-	netresult := c.getVoteAccountnetinfo()
-	ch <- prometheus.MustNewConstMetric(c.netVoteHeight, prometheus.GaugeValue, netresult, "network")
-	diff := netresult - valresult
-	ch <- prometheus.MustNewConstMetric(c.voteHeightDiff, prometheus.GaugeValue, diff, "vote height difference")
-
 }
 
 func (c *solanaCollector) getClusterNodeInfo() string {
@@ -380,7 +374,7 @@ func (c *solanaCollector) getClusterNodeInfo() string {
 	return address
 }
 
-func (c *solanaCollector) getVoteAccountnetinfo() float64 {
+func (c *solanaCollector) getNetworkVoteAccountinfo() float64 {
 	resn, _ := monitor.GetVoteAccounts(c.config, utils.Network)
 	var outN float64
 	for _, vote := range resn.Result.Current {
