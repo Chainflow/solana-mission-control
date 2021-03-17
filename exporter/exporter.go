@@ -285,7 +285,7 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 		ch <- prometheus.MustNewConstMetric(c.slotLeader, prometheus.GaugeValue, 1, leader.Result)
 	}
 
-	slot, err := monitor.GetCurrentSlot(c.config)
+	slot, err := monitor.GetCurrentSlot(c.config, utils.Validator)
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.currentSlot, err)
 	} else {
