@@ -161,10 +161,6 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 		float64(len(response.Result.Delinquent)), "delinquent")
 	ch <- prometheus.MustNewConstMetric(c.totalValidatorsDesc, prometheus.GaugeValue,
 		float64(len(response.Result.Current)), "current")
-	count, _ := monitor.GetTxCount(c.config)
-	txcount := utils.NearestThousandFormat(float64(count.Result))
-
-	ch <- prometheus.MustNewConstMetric(c.txCount, prometheus.GaugeValue, float64(count.Result), txcount)
 
 	for _, account := range append(response.Result.Current, response.Result.Delinquent...) {
 		if account.NodePubkey == c.config.ValDetails.PubKey {
@@ -174,9 +170,9 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 				float64(account.LastVote), account.VotePubkey, account.NodePubkey)
 			ch <- prometheus.MustNewConstMetric(c.validatorRootSlot, prometheus.GaugeValue,
 				float64(account.RootSlot), account.VotePubkey, account.NodePubkey)
-
 		}
 	}
+
 	var epochvote float64
 	// current vote account information
 	for _, vote := range response.Result.Current {
@@ -347,6 +343,12 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	// IP address of gossip
 	address := c.getClusterNodeInfo()
 	ch <- prometheus.MustNewConstMetric(c.ipAddress, prometheus.GaugeValue, 1, address)
+
+	// get tx count
+	count, _ := monitor.GetTxCount(c.config)
+	txcount := utils.NearestThousandFormat(float64(count.Result))
+
+	ch <- prometheus.MustNewConstMetric(c.txCount, prometheus.GaugeValue, float64(count.Result), txcount)
 
 	// Get vote account info
 	var valresult float64

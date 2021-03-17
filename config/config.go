@@ -87,31 +87,26 @@ type (
 		BalanceChangeAlerts        string `mapstructure:"balance_change_alerts"`
 		AccountBalanceChangeAlerts string `mapstructure:"account_balance_change_alerts"`
 		VotingPowerAlerts          string `mapstructure:"voting_power_alerts"`
-		ProposalAlerts             string `mapstructure:"proposal_alerts"`
-		BlockDiffAlerts            string `mapstructure:"block_diff_alerts"`
-		MissedBlockAlerts          string `mapstructure:"missed_block_alerts"`
-		NumPeersAlerts             string `mapstructure:"num_peers_alerts"`
-		NodeSyncAlert              string `mapstructure:"node_sync_alert"`
-		NodeStatusAlert            string `mapstructure:"node_status_alert"`
-		EthLowBalanceAlert         string `mapstructure:"eth_low_balance_alert"`
+		// ProposalAlerts             string `mapstructure:"proposal_alerts"`
+		BlockDiffAlerts string `mapstructure:"block_diff_alerts"`
+		// MissedBlockAlerts          string `mapstructure:"missed_block_alerts"`
+		// NumPeersAlerts             string `mapstructure:"num_peers_alerts"`
+		NodeSyncAlert   string `mapstructure:"node_sync_alert"`
+		NodeStatusAlert string `mapstructure:"node_status_alert"`
+		// EthLowBalanceAlert         string `mapstructure:"eth_low_balance_alert"`
+		EpochDiffAlerts string `mapstructure:"epoch_diff_alrets"`
 	}
 
 	//  AlertingThreshold defines threshold condition for different alert-cases.
 	// `Alerter` will send alerts if the condition reaches the threshold
 	AlertingThreshold struct {
-		// NumPeersThreshold is to alert when the connected peers falls below this threshold
-		NumPeersThreshold int64 `mapstructure:"num_peers_threshold"`
-		// MissedBlocksThreshold is to alert when validator misses continuous missed bocks
-		// Alerter will send alerts when the missed blocks count reaches the configured threshold
-		MissedBlocksThreshold int64 `mapstructure:"missed_blocks_threshold"`
 		// BlockDiffThreshold is to send alerts when the difference b/w network and validator
 		// block height reaches the given threshold
 		BlockDiffThreshold int64 `mapstructure:"block_diff_threshold"`
-		// EthBalanceThreshold is to send alerts when the etherium balance falls below the configured threshold
-		EthBalanceThreshold float64 `mapstructure:"eth_balance_threshold"`
-
 		// Alert when the validator identity balance is less than this amount of SOL
 		AccountBalThreshold float64 `mapstructure:"account_bal_threshold"`
+
+		EpochDiffThreshold int64 `mapstructure:"epoch_diff_threshold"`
 	}
 
 	// Config defines all the configurations required for the app
