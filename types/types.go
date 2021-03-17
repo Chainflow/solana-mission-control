@@ -271,4 +271,16 @@ type (
 		Result  int64  `json:"result"`
 		// ID      int    `json:"id"`
 	}
+
+	ClustrNode struct {
+		// Jsonrpc string `json:"jsonrpc"`
+		Result []struct {
+			Gossip  string `json:"gossip"`
+			Pubkey  string `json:"pubkey"`
+			RPC     string `json:"rpc"`
+			Tpu     string `json:"tpu"`
+			Version string `json:"version"`
+		} `json:"result"`
+		// ID int `json:"id"`
+	}
 )
