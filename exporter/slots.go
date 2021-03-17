@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	slotPacerSchedule = 3 * time.Second
+	slotPacerSchedule = 2 * time.Second
 )
 
 var (
@@ -68,11 +68,6 @@ var (
 		},
 		[]string{"status", "nodekey"})
 
-	txCount = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "solana_tx_count",
-		Help: "Current transaction count from the ledger.",
-	})
-
 	valBlockHeight = prometheus.NewGauge(prometheus.GaugeOpts{
 		Name: "solana_block_height",
 		Help: "Current Block Height of validator",
@@ -97,12 +92,12 @@ func init() {
 	prometheus.MustRegister(leaderSlotsTotal)
 	prometheus.MustRegister(nodeHealth)
 	prometheus.MustRegister(balance)
-	prometheus.MustRegister(txCount)
 	prometheus.MustRegister(valBlockHeight)
 	prometheus.MustRegister(networkBlockHeight)
 	prometheus.MustRegister(networkEpoch)
 	prometheus.MustRegister(epochDifference)
 	prometheus.MustRegister(blockDiff)
+
 }
 
 func (c *solanaCollector) WatchSlots(cfg *config.Config) {
@@ -128,16 +123,6 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		}
 
 		balance.Set(float64(bal.Result.Value) / math.Pow(10, 9))
-
-		// Get tx count
-
-		count, err := monitor.GetTxCount(cfg)
-		if err != nil {
-			log.Printf("Error while getting tx count : %v", err)
-			continue
-		}
-
-		txCount.Set(float64(count.Result))
 
 		// Get Node Health
 		health, err := monitor.GetNodeHealth(cfg)
