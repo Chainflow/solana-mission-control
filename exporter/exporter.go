@@ -283,7 +283,6 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 }
 
 func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
-	var outV float64
 	accs, err := monitor.GetVoteAccounts(c.config, utils.Validator) // get vote accounts
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.totalValidatorsDesc, err)
@@ -293,12 +292,6 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 		ch <- prometheus.NewInvalidMetric(c.validatorDelinquent, err)
 	} else {
 		c.mustEmitMetrics(ch, accs) // emit vote account metrics
-	}
-	for _, vote := range accs.Result.Current {
-		if vote.NodePubkey == c.config.ValDetails.PubKey {
-			outV = float64(vote.LastVote)
-			ch <- prometheus.MustNewConstMetric(c.valVoteHeight, prometheus.GaugeValue, outV, "current")
-		}
 	}
 
 	// get version
@@ -355,17 +348,13 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	address := c.getClusterNodeInfo()
 	ch <- prometheus.MustNewConstMetric(c.ipAddress, prometheus.GaugeValue, 1, address)
 
-	resn, _ := monitor.GetVoteAccounts(c.config, utils.Network)
-	var outN float64
-	for _, vote := range resn.Result.Current {
-		if vote.NodePubkey == c.config.ValDetails.PubKey {
-			outN = float64(vote.LastVote)
-			ch <- prometheus.MustNewConstMetric(c.netVoteHeight, prometheus.GaugeValue, outN, "current")
-		}
-	}
-
-	diff := outN - outV
+	valresult := c.getVoteAccountnetinfo()
+	netresult := c.getVoteAccountvalinfo()
+	ch <- prometheus.MustNewConstMetric(c.netVoteHeight, prometheus.GaugeValue, netresult, "current")
+	ch <- prometheus.MustNewConstMetric(c.valVoteHeight, prometheus.GaugeValue, valresult, "current")
+	diff := netresult - valresult
 	ch <- prometheus.MustNewConstMetric(c.voteHeightDiff, prometheus.GaugeValue, diff, "current")
+
 }
 
 func (c *solanaCollector) getClusterNodeInfo() string {
@@ -381,6 +370,28 @@ func (c *solanaCollector) getClusterNodeInfo() string {
 		}
 	}
 	return address
+}
+
+func (c *solanaCollector) getVoteAccountnetinfo() float64 {
+	resn, _ := monitor.GetVoteAccounts(c.config, utils.Network)
+	var outN float64
+	for _, vote := range resn.Result.Current {
+		if vote.NodePubkey == c.config.ValDetails.PubKey {
+			outN = float64(vote.LastVote)
+
+		}
+	}
+	return outN
+}
+func (c *solanaCollector) getVoteAccountvalinfo() float64 {
+	resV, _ := monitor.GetVoteAccounts(c.config, utils.Validator)
+	var outV float64
+	for _, vote := range resV.Result.Current {
+		if vote.NodePubkey == c.config.ValDetails.PubKey {
+			outV = float64(vote.LastVote)
+		}
+	}
+	return outV
 }
 
 func blockTimeDiff(bt int64, pvt int64) (float64, string) {
