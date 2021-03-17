@@ -288,8 +288,14 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 		log.Printf("Error while getting previous block time: %v", err)
 	}
 
-	t1 := time.Unix(bt.Result, 0)
-	t2 := time.Unix(pvt.Result, 0)
+	sec, s := blockTimeDiff(bt.Result, pvt.Result)
+
+	ch <- prometheus.MustNewConstMetric(c.blockTime, prometheus.GaugeValue, sec, s+"s")
+}
+
+func blockTimeDiff(bt int64, pvt int64) (float64, string) {
+	t1 := time.Unix(bt, 0)
+	t2 := time.Unix(pvt, 0)
 
 	sub := t1.Sub(t2)
 	diff := sub.Seconds()
@@ -301,5 +307,5 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 
 	sec, _ := strconv.ParseFloat(s, 64)
 
-	ch <- prometheus.MustNewConstMetric(c.blockTime, prometheus.GaugeValue, sec, s+"s")
+	return sec, s
 }
