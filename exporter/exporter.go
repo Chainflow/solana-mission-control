@@ -348,6 +348,7 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	address := c.getClusterNodeInfo()
 	ch <- prometheus.MustNewConstMetric(c.ipAddress, prometheus.GaugeValue, 1, address)
 
+	// Get vote account info
 	var valresult float64
 	for _, vote := range accs.Result.Current {
 		if vote.NodePubkey == c.config.ValDetails.PubKey {
@@ -358,7 +359,7 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	netresult := c.getVoteAccountnetinfo()
 	ch <- prometheus.MustNewConstMetric(c.netVoteHeight, prometheus.GaugeValue, netresult, "network")
 	diff := netresult - valresult
-	ch <- prometheus.MustNewConstMetric(c.voteHeightDiff, prometheus.GaugeValue, diff, "vote hight difference")
+	ch <- prometheus.MustNewConstMetric(c.voteHeightDiff, prometheus.GaugeValue, diff, "vote height difference")
 
 }
 
