@@ -28,6 +28,5 @@ func GetBlockTime(slot int64, cfg *config.Config) (types.BlockTime, error) {
 		log.Printf("Error while unmarshelling block time res: %v", err)
 		return result, err
 	}
-
 	return result, nil
 }

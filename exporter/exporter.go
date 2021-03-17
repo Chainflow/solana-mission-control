@@ -16,6 +16,7 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/monitor"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
+	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
 )
 
 const (
@@ -39,6 +40,10 @@ type solanaCollector struct {
 	validatorVote           *prometheus.Desc
 	statusAlertCount        *prometheus.Desc
 	ipAddress               *prometheus.Desc
+	txCount                 *prometheus.Desc
+	netVoteHeight           *prometheus.Desc
+	valVoteHeight           *prometheus.Desc
+	voteHeightDiff          *prometheus.Desc
 }
 
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
@@ -111,6 +116,26 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"IP Address from clustrnode information, gossip",
 			[]string{"ip_address"}, nil,
 		),
+		txCount: prometheus.NewDesc(
+			"solana_tx_count",
+			"solana transaction count",
+			[]string{"solana_tx_count"}, nil,
+		),
+		netVoteHeight: prometheus.NewDesc(
+			"solana_network_vote_height",
+			"solana network vote height",
+			[]string{"solana_network_vote_height"}, nil,
+		),
+		valVoteHeight: prometheus.NewDesc(
+			"solana_validator_vote_height",
+			"solana validator vote height",
+			[]string{"solana_validator_vote_height"}, nil,
+		),
+		voteHeightDiff: prometheus.NewDesc(
+			"solana_vote_height_diff",
+			"solana vote height difference of validator and network",
+			[]string{"solana_vote_height_diff"}, nil,
+		),
 	}
 }
 
@@ -125,6 +150,10 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.validatorVote
 	ch <- c.ipAddress
 	// ch <- c.StatusAlertCount
+	ch <- c.txCount
+	ch <- c.netVoteHeight
+	ch <- c.valVoteHeight
+	ch <- c.voteHeightDiff
 }
 
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
@@ -132,6 +161,10 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 		float64(len(response.Result.Delinquent)), "delinquent")
 	ch <- prometheus.MustNewConstMetric(c.totalValidatorsDesc, prometheus.GaugeValue,
 		float64(len(response.Result.Current)), "current")
+	count, _ := monitor.GetTxCount(c.config)
+	txcount := utils.NearestThousandFormat(float64(count.Result))
+
+	ch <- prometheus.MustNewConstMetric(c.txCount, prometheus.GaugeValue, float64(count.Result), txcount)
 
 	for _, account := range append(response.Result.Current, response.Result.Delinquent...) {
 		if account.NodePubkey == c.config.ValDetails.PubKey {
@@ -141,6 +174,7 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 				float64(account.LastVote), account.VotePubkey, account.NodePubkey)
 			ch <- prometheus.MustNewConstMetric(c.validatorRootSlot, prometheus.GaugeValue,
 				float64(account.RootSlot), account.VotePubkey, account.NodePubkey)
+
 		}
 	}
 	var epochvote float64
@@ -168,12 +202,16 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 
 			// Check weather the validator is voting or not
 			if vote.EpochVoteAccount == false && vote.ActivatedStake <= 0 {
+
 				msg := "Solana validator is NOT VOTING"
 				c.AlertValidatorStatus(msg, ch)
 			} else {
+
 				msg := "Solana validator is VOTING"
 				c.AlertValidatorStatus(msg, ch)
+
 			}
+
 		}
 	}
 
@@ -198,6 +236,7 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 			if err != nil {
 				log.Printf("Error while sending vallidator status alert: %v", err)
 			}
+
 		}
 	}
 }
@@ -216,38 +255,35 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 	}
 
 	log.Printf("Current time : %v and alerts array : %v", currentTime, alertsArray)
+
 	var count float64 = 0
 
 	for _, statusAlertTime := range alertsArray {
 		if currentTime == statusAlertTime {
-			count = count + 1
-
-			// log.Println("count....", count)
-
-			// ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
-			// 	count, "1")
-
-			count1, _ := monitor.AlertStatusCountFromPrometheus(c.config)
-			if count1 == "1" {
+			dbcount, _ := monitor.AlertStatusCountFromPrometheus(c.config)
+			if dbcount == "false" {
+				err := alerter.SendTelegramAlert(msg, c.config)
+				if err != nil {
+					log.Printf("Error while sending vallidator status alert: %v", err)
+				}
+				ch <- prometheus.MustNewConstMetric(c.statusAlertCount, prometheus.GaugeValue,
+					count, "true")
+				count = count + 1
+			} else {
+				ch <- prometheus.MustNewConstMetric(c.statusAlertCount, prometheus.GaugeValue,
+					count, "false")
 				return
 			}
-
-			log.Printf("count1..", count1)
-
-			err := alerter.SendTelegramAlert(msg, c.config)
-			if err != nil {
-				log.Printf("Error while sending vallidator status alert: %v", err)
-			}
-
-		} else {
-			// ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
-			// 	count, "0")
 		}
+		// else {
+		// 	ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
+		// 		count, "0")
+		// }
 	}
 }
 
 func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
-	accs, err := monitor.GetVoteAccounts(c.config) // get vote accounts
+	accs, err := monitor.GetVoteAccounts(c.config, utils.Validator) // get vote accounts
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.totalValidatorsDesc, err)
 		ch <- prometheus.NewInvalidMetric(c.validatorActivatedStake, err)
@@ -311,6 +347,20 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	// IP address of gossip
 	address := c.getClusterNodeInfo()
 	ch <- prometheus.MustNewConstMetric(c.ipAddress, prometheus.GaugeValue, 1, address)
+
+	// Get vote account info
+	var valresult float64
+	for _, vote := range accs.Result.Current {
+		if vote.NodePubkey == c.config.ValDetails.PubKey {
+			valresult = float64(vote.LastVote)
+		}
+	}
+	ch <- prometheus.MustNewConstMetric(c.valVoteHeight, prometheus.GaugeValue, valresult, "validator")
+	netresult := c.getVoteAccountnetinfo()
+	ch <- prometheus.MustNewConstMetric(c.netVoteHeight, prometheus.GaugeValue, netresult, "network")
+	diff := netresult - valresult
+	ch <- prometheus.MustNewConstMetric(c.voteHeightDiff, prometheus.GaugeValue, diff, "vote height difference")
+
 }
 
 func (c *solanaCollector) getClusterNodeInfo() string {
@@ -326,6 +376,18 @@ func (c *solanaCollector) getClusterNodeInfo() string {
 		}
 	}
 	return address
+}
+
+func (c *solanaCollector) getVoteAccountnetinfo() float64 {
+	resn, _ := monitor.GetVoteAccounts(c.config, utils.Network)
+	var outN float64
+	for _, vote := range resn.Result.Current {
+		if vote.NodePubkey == c.config.ValDetails.PubKey {
+			outN = float64(vote.LastVote)
+
+		}
+	}
+	return outN
 }
 
 func blockTimeDiff(bt int64, pvt int64) (float64, string) {
