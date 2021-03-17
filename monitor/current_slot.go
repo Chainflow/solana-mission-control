@@ -12,9 +12,9 @@ import (
 func GetCurrentSlot(cfg *config.Config) (types.CurrentSlot, error) {
 	log.Println("Getting current slot")
 	ops := types.HTTPOptions{
-		//Endpoint: cfg.Endpoints.RPCEndpoint,
-		Method: http.MethodPost,
-		Body:   types.Payload{Jsonrpc: "2.0", Method: "getSlot", ID: 1},
+		Endpoint: cfg.Endpoints.RPCEndpoint,
+		Method:   http.MethodPost,
+		Body:     types.Payload{Jsonrpc: "2.0", Method: "getSlot", ID: 1},
 	}
 
 	var result types.CurrentSlot

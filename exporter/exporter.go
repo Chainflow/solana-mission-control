@@ -40,6 +40,7 @@ type solanaCollector struct {
 	validatorVote           *prometheus.Desc
 	statusAlertCount        *prometheus.Desc
 	ipAddress               *prometheus.Desc
+	txCount                 *prometheus.Desc
 }
 
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
@@ -111,6 +112,11 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"solana_ip_address",
 			"IP Address from clustrnode information, gossip",
 			[]string{"ip_address"}, nil,
+		),
+		txCount: prometheus.NewDesc(
+			"solana_tx_count",
+			"solana transaction count",
+			[]string{"solana_tx_count"}, nil,
 		),
 	}
 }
@@ -239,11 +245,11 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 				if err != nil {
 					log.Printf("Error while sending vallidator status alert: %v", err)
 				}
-				ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
+				ch <- prometheus.MustNewConstMetric(c.statusAlertCount, prometheus.GaugeValue,
 					count, "true")
 				count = count + 1
 			} else {
-				ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
+				ch <- prometheus.MustNewConstMetric(c.statusAlertCount, prometheus.GaugeValue,
 					count, "false")
 				return
 			}
@@ -256,7 +262,7 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 }
 
 func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
-	accs, err := monitor.GetVoteAccounts(c.config) // get vote accounts
+	accs, err := monitor.GetVoteAccounts(c.config, utils.Validator) // get vote accounts
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.totalValidatorsDesc, err)
 		ch <- prometheus.NewInvalidMetric(c.validatorActivatedStake, err)
