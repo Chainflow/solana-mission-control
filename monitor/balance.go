@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"strconv"
+	"strings"
 
 	// "k8s.io/klog/v2"
 
@@ -99,6 +100,18 @@ func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 		return err
 	}
 
+	cBal := float64(currentBal)
+
+	if strings.EqualFold(cfg.AlerterPreferences.AccountBalanceChangeAlerts, "yes") {
+		if cBal < cfg.AlertingThresholds.AccountBalThreshold {
+			err = alerter.SendTelegramAlert(fmt.Sprintf("Account Balance Alert: Your account balance has dopped below configured threshold, current balance is : %f", cBal), cfg)
+			if err != nil {
+				log.Printf("Error while sending account balance change alert : %v", err)
+				return err
+			}
+		}
+	}
+
 	if prevBal != "" {
 
 		pBal, err := strconv.ParseFloat(prevBal, 64)
@@ -106,7 +119,6 @@ func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 			log.Printf("Error while converting pBal to float64 : %v ", err)
 			return err
 		}
-		cBal := float64(currentBal)
 
 		if cfg.AlerterPreferences.BalanceChangeAlerts == "yes" {
 			diff := cBal - pBal

@@ -1,16 +1,15 @@
 package utils
 
-import (
-	"log"
+// func convertToBase64(address string) string {
+// 	data := []byte(address)
+// 	encoded := base64.Encode(data)
 
-	"github.com/btcsuite/btcutil/base64"
+// 	log.Printf("Encoded Data: %v", encoded)
+
+// 	return encoded
+// }
+
+const (
+	Network   = "network"
+	Validator = "validator"
 )
-
-func convertToBase64(address string) string {
-	data := []byte(string)
-	encoded := base64.Encode(data)
-
-	log.Printf("Encoded Data: %v", encoded)
-
-	return encoded
-}
