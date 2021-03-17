@@ -66,16 +66,7 @@ var (
 		},
 		[]string{"status", "nodekey"})
 
-<<<<<<< HEAD
-	blockHeight = prometheus.NewGauge(prometheus.GaugeOpts{
-=======
-	txCount = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "solana_tx_count",
-		Help: "Current transaction count from the ledger.",
-	})
-
 	valBlockHeight = prometheus.NewGauge(prometheus.GaugeOpts{
->>>>>>> 806b2f1bd11cae7b192cc00c184660983c343054
 		Name: "solana_block_height",
 		Help: "Current Block Height of validator",
 	})
@@ -99,16 +90,11 @@ func init() {
 	prometheus.MustRegister(leaderSlotsTotal)
 	prometheus.MustRegister(nodeHealth)
 	prometheus.MustRegister(balance)
-<<<<<<< HEAD
-	prometheus.MustRegister(blockHeight)
-=======
-	prometheus.MustRegister(txCount)
 	prometheus.MustRegister(valBlockHeight)
 	prometheus.MustRegister(networkBlockHeight)
 	prometheus.MustRegister(networkEpoch)
 	prometheus.MustRegister(epochDifference)
 	prometheus.MustRegister(blockDiff)
->>>>>>> 806b2f1bd11cae7b192cc00c184660983c343054
 }
 
 func (c *solanaCollector) WatchSlots(cfg *config.Config) {

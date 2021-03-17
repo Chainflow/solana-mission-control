@@ -1,21 +1,25 @@
 package utils
 
-<<<<<<< HEAD
 import (
 	"math"
 	"strconv"
 	"strings"
-	//"github.com/btcsuite/btcutil/base64"
 )
 
 // func convertToBase64(address string) string {
-// 	data := []byte(string)
+// 	data := []byte(address)
 // 	encoded := base64.Encode(data)
 
 // 	log.Printf("Encoded Data: %v", encoded)
 
 // 	return encoded
 // }
+
+const (
+	Network   = "network"
+	Validator = "validator"
+)
+
 func RoundPrec(x float64, prec int) float64 {
 	if math.IsNaN(x) || math.IsInf(x, 0) {
 		return x
@@ -139,18 +143,3 @@ func NearestThousandFormat(num float64) string {
 	final := xNumSlice[0] + afterDecimal + xPart
 	return final
 }
-=======
-// func convertToBase64(address string) string {
-// 	data := []byte(address)
-// 	encoded := base64.Encode(data)
-
-// 	log.Printf("Encoded Data: %v", encoded)
-
-// 	return encoded
-// }
-
-const (
-	Network   = "network"
-	Validator = "validator"
-)
->>>>>>> 806b2f1bd11cae7b192cc00c184660983c343054

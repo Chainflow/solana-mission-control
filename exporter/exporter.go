@@ -146,6 +146,7 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 				float64(account.LastVote), account.VotePubkey, account.NodePubkey)
 			ch <- prometheus.MustNewConstMetric(c.validatorRootSlot, prometheus.GaugeValue,
 				float64(account.RootSlot), account.VotePubkey, account.NodePubkey)
+
 		}
 	}
 	var epochvote float64
