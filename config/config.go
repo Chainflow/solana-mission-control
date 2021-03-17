@@ -106,7 +106,7 @@ type (
 		// Alert when the validator identity balance is less than this amount of SOL
 		AccountBalThreshold float64 `mapstructure:"account_bal_threshold"`
 
-		EpochDiffThreshold float64 `mapstructure:"epoch_diff_threshold"`
+		EpochDiffThreshold int64 `mapstructure:"epoch_diff_threshold"`
 	}
 
 	// Config defines all the configurations required for the app
