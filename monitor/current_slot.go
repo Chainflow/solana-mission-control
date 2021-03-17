@@ -7,21 +7,14 @@ import (
 
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
 )
 
-func GetCurrentSlot(cfg *config.Config,node string) (types.CurrentSlot, error) {
+func GetCurrentSlot(cfg *config.Config) (types.CurrentSlot, error) {
 	log.Println("Getting current slot")
 	ops := types.HTTPOptions{
 		//Endpoint: cfg.Endpoints.RPCEndpoint,
-		Method:   http.MethodPost,
-		Body:     types.Payload{Jsonrpc: "2.0", Method: "getSlot", ID: 1},
-	}
-
-	if node == utils.Network{
-		ops.Endpoint = cfg.Endpoints.NetworkRPC
-	}else if {
-		
+		Method: http.MethodPost,
+		Body:   types.Payload{Jsonrpc: "2.0", Method: "getSlot", ID: 1},
 	}
 
 	var result types.CurrentSlot
