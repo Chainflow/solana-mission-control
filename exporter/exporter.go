@@ -210,7 +210,7 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 			}
 			valresult = float64(vote.LastVote)
 			ch <- prometheus.MustNewConstMetric(c.valVoteHeight, prometheus.GaugeValue, valresult, "validator")
-			netresult := c.getVoteAccountnetinfo()
+			netresult := c.getNetworkVoteAccountinfo()
 			ch <- prometheus.MustNewConstMetric(c.netVoteHeight, prometheus.GaugeValue, netresult, "network")
 			diff := netresult - valresult
 			ch <- prometheus.MustNewConstMetric(c.voteHeightDiff, prometheus.GaugeValue, diff, "vote height difference")
