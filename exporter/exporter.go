@@ -348,12 +348,17 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	address := c.getClusterNodeInfo()
 	ch <- prometheus.MustNewConstMetric(c.ipAddress, prometheus.GaugeValue, 1, address)
 
-	valresult := c.getVoteAccountnetinfo()
-	netresult := c.getVoteAccountvalinfo()
-	ch <- prometheus.MustNewConstMetric(c.netVoteHeight, prometheus.GaugeValue, netresult, "current")
-	ch <- prometheus.MustNewConstMetric(c.valVoteHeight, prometheus.GaugeValue, valresult, "current")
+	var valresult float64
+	for _, vote := range accs.Result.Current {
+		if vote.NodePubkey == c.config.ValDetails.PubKey {
+			valresult = float64(vote.LastVote)
+		}
+	}
+	ch <- prometheus.MustNewConstMetric(c.valVoteHeight, prometheus.GaugeValue, valresult, "validator")
+	netresult := c.getVoteAccountnetinfo()
+	ch <- prometheus.MustNewConstMetric(c.netVoteHeight, prometheus.GaugeValue, netresult, "network")
 	diff := netresult - valresult
-	ch <- prometheus.MustNewConstMetric(c.voteHeightDiff, prometheus.GaugeValue, diff, "current")
+	ch <- prometheus.MustNewConstMetric(c.voteHeightDiff, prometheus.GaugeValue, diff, "vote hight difference")
 
 }
 
@@ -382,16 +387,6 @@ func (c *solanaCollector) getVoteAccountnetinfo() float64 {
 		}
 	}
 	return outN
-}
-func (c *solanaCollector) getVoteAccountvalinfo() float64 {
-	resV, _ := monitor.GetVoteAccounts(c.config, utils.Validator)
-	var outV float64
-	for _, vote := range resV.Result.Current {
-		if vote.NodePubkey == c.config.ValDetails.PubKey {
-			outV = float64(vote.LastVote)
-		}
-	}
-	return outV
 }
 
 func blockTimeDiff(bt int64, pvt int64) (float64, string) {
