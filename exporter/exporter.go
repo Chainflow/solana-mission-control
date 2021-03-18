@@ -392,13 +392,13 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 
 	// Export confirmed block time of Network
 	confirmedNtime := c.getNetworkBlockTime()
-	nowN := time.Unix(confirmedNtime, 0)
+	nowN := time.Unix(confirmedNtime, 0).UTC()
 	timesN := nowN.Format(time.RFC1123)
 	ch <- prometheus.MustNewConstMetric(c.networkBlockTime, prometheus.GaugeValue, 1, timesN)
 
 	// Export Confirmed block time of Validator
 	confirmedVtime := c.getValidatorBlockTime()
-	nowV := time.Unix(confirmedVtime, 0)
+	nowV := time.Unix(confirmedVtime, 0).UTC()
 	timesV := nowV.Format(time.RFC1123)
 	ch <- prometheus.MustNewConstMetric(c.validatorBlockTime, prometheus.GaugeValue, 1, timesV)
 
