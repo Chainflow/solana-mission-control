@@ -44,13 +44,10 @@ type solanaCollector struct {
 	netVoteHeight           *prometheus.Desc
 	valVoteHeight           *prometheus.Desc
 	voteHeightDiff          *prometheus.Desc
-<<<<<<< HEAD
+	valVotingStatus         *prometheus.Desc
 	confirmedNetTime        *prometheus.Desc
 	confirmedValTime        *prometheus.Desc
 	ConfirmedTimeDiff       *prometheus.Desc
-=======
-	valVotingStatus         *prometheus.Desc
->>>>>>> 68a2af9c3638ecfc1b8fabd4174f2bd97b1df3e4
 }
 
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
@@ -143,8 +140,11 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"solana vote height difference of validator and network",
 			[]string{"solana_vote_height_diff"}, nil,
 		),
-<<<<<<< HEAD
-
+		valVotingStatus: prometheus.NewDesc(
+			"solana_val_status",
+			"Validator voting status i.e., voting or jailed.",
+			[]string{"solana_val_status"}, nil,
+		),
 		confirmedNetTime: prometheus.NewDesc(
 			"solana_network_confirmed_time",
 			"Confirmed Block time of network",
@@ -159,12 +159,6 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"solana_confirmed_time_diff",
 			"Confirmed Block time difference of network and validator",
 			[]string{"solana_confirmed_time_diff"}, nil,
-=======
-		valVotingStatus: prometheus.NewDesc(
-			"solana_val_status",
-			"Validator voting status i.e., voting or jailed.",
-			[]string{"solana_val_status"}, nil,
->>>>>>> 68a2af9c3638ecfc1b8fabd4174f2bd97b1df3e4
 		),
 	}
 }
@@ -184,13 +178,11 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.netVoteHeight
 	ch <- c.valVoteHeight
 	ch <- c.voteHeightDiff
-<<<<<<< HEAD
+	ch <- c.valVotingStatus
 	ch <- c.confirmedNetTime
 	ch <- c.confirmedValTime
 	ch <- c.ConfirmedTimeDiff
-=======
-	ch <- c.valVotingStatus
->>>>>>> 68a2af9c3638ecfc1b8fabd4174f2bd97b1df3e4
+
 }
 
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
