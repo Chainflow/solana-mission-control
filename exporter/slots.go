@@ -197,7 +197,6 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 				log.Printf("Error while sending block height diff alert: %v", err)
 			}
 		}
-
 		// Check whether we need to fetch a new leader schedule
 		if epochNumber != info.Epoch {
 			log.Printf("new epoch at slot %d: %d (previous: %d)", firstSlot, info.Epoch, epochNumber)

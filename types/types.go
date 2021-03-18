@@ -283,4 +283,12 @@ type (
 		} `json:"result"`
 		// ID int `json:"id"`
 	}
+
+	ConfirmedBlock struct {
+		Jsonrpc string `json:"jsonrpc"`
+		Result  struct {
+			BlockTime int64 `json:"blockTime"`
+		} `json:"result"`
+		// ID int `json:"id"`
+	}
 )
