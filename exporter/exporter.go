@@ -383,6 +383,7 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	confirmedNtime := c.getConfirmedNetworkTime()
 	nowN := time.Unix(confirmedNtime, 0)
 	timesN := nowN.Format(time.RFC1123)
+	fmt.Println(timesN)
 	ch <- prometheus.MustNewConstMetric(c.confirmedNetTime, prometheus.GaugeValue, 1, timesN)
 
 	// Get Confirmed time of Validator
