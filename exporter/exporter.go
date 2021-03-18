@@ -44,6 +44,7 @@ type solanaCollector struct {
 	netVoteHeight           *prometheus.Desc
 	valVoteHeight           *prometheus.Desc
 	voteHeightDiff          *prometheus.Desc
+	valVotingStatus         *prometheus.Desc
 }
 
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
@@ -136,6 +137,11 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"solana vote height difference of validator and network",
 			[]string{"solana_vote_height_diff"}, nil,
 		),
+		valVotingStatus: prometheus.NewDesc(
+			"solana_val_status",
+			"Validator voting status i.e., voting or jailed.",
+			[]string{"solana_val_status"}, nil,
+		),
 	}
 }
 
@@ -154,6 +160,7 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.netVoteHeight
 	ch <- c.valVoteHeight
 	ch <- c.voteHeightDiff
+	ch <- c.valVotingStatus
 }
 
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
@@ -199,14 +206,15 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 
 			// Check weather the validator is voting or not
 			if vote.EpochVoteAccount == false && vote.ActivatedStake <= 0 {
-
 				msg := "Solana validator is NOT VOTING"
 				c.AlertValidatorStatus(msg, ch)
-			} else {
 
+				ch <- prometheus.MustNewConstMetric(c.valVotingStatus, prometheus.GaugeValue, 0, "Jailed")
+			} else {
 				msg := "Solana validator is VOTING"
 				c.AlertValidatorStatus(msg, ch)
 
+				ch <- prometheus.MustNewConstMetric(c.valVotingStatus, prometheus.GaugeValue, 1, "Voting")
 			}
 			valresult = float64(vote.LastVote)
 			ch <- prometheus.MustNewConstMetric(c.valVoteHeight, prometheus.GaugeValue, valresult, "validator")

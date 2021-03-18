@@ -32,7 +32,7 @@ var (
 	})
 
 	networkEpoch = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "solana_network_poch",
+		Name: "solana_network_epoch",
 		Help: "Current epoch of network (max confirmation)",
 	})
 
