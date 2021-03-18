@@ -32,7 +32,7 @@ var (
 	})
 
 	networkEpoch = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "solana_network_poch",
+		Name: "solana_network_epoch",
 		Help: "Current epoch of network (max confirmation)",
 	})
 
@@ -197,7 +197,6 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 				log.Printf("Error while sending block height diff alert: %v", err)
 			}
 		}
-
 		// Check whether we need to fetch a new leader schedule
 		if epochNumber != info.Epoch {
 			log.Printf("new epoch at slot %d: %d (previous: %d)", firstSlot, info.Epoch, epochNumber)
