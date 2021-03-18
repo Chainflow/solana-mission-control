@@ -45,9 +45,12 @@ type solanaCollector struct {
 	valVoteHeight           *prometheus.Desc
 	voteHeightDiff          *prometheus.Desc
 	valVotingStatus         *prometheus.Desc
-	confirmedNetTime        *prometheus.Desc
-	confirmedValTime        *prometheus.Desc
-	ConfirmedTimeDiff       *prometheus.Desc
+	// confirmed block time of network
+	networkBlockTime *prometheus.Desc
+	// confirmed block time of validator
+	validatorBlockTime *prometheus.Desc
+	// block time difference of network and validator
+	blockTimeDiff *prometheus.Desc
 }
 
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
@@ -145,19 +148,19 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"Validator voting status i.e., voting or jailed.",
 			[]string{"solana_val_status"}, nil,
 		),
-		confirmedNetTime: prometheus.NewDesc(
+		networkBlockTime: prometheus.NewDesc(
 			"solana_network_confirmed_time",
 			"Confirmed Block time of network",
 			[]string{"solana_network_confirmed_time"}, nil,
 		),
-		confirmedValTime: prometheus.NewDesc(
+		validatorBlockTime: prometheus.NewDesc(
 			"solana_val_confirmed_time",
 			"Confirmed Block time of validator",
 			[]string{"solana_val_confirmed_time"}, nil,
 		),
-		ConfirmedTimeDiff: prometheus.NewDesc(
-			"solana_confirmed_time_diff",
-			"Confirmed Block time difference of network and validator",
+		blockTimeDiff: prometheus.NewDesc(
+			"solana_confirmed_blocktime_diff",
+			"Block time difference of network and validator",
 			[]string{"solana_confirmed_time_diff"}, nil,
 		),
 	}
@@ -179,9 +182,9 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.valVoteHeight
 	ch <- c.voteHeightDiff
 	ch <- c.valVotingStatus
-	ch <- c.confirmedNetTime
-	ch <- c.confirmedValTime
-	ch <- c.ConfirmedTimeDiff
+	ch <- c.networkBlockTime
+	ch <- c.validatorBlockTime
+	ch <- c.blockTimeDiff
 
 }
 
@@ -387,21 +390,21 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 
 	ch <- prometheus.MustNewConstMetric(c.txCount, prometheus.GaugeValue, float64(count.Result), txcount)
 
-	// Get confirmedtime of Network
-	confirmedNtime := c.getConfirmedNetworkTime()
+	// Export confirmed block time of Network
+	confirmedNtime := c.getNetworkBlockTime()
 	nowN := time.Unix(confirmedNtime, 0)
 	timesN := nowN.Format(time.RFC1123)
-	ch <- prometheus.MustNewConstMetric(c.confirmedNetTime, prometheus.GaugeValue, 1, timesN)
+	ch <- prometheus.MustNewConstMetric(c.networkBlockTime, prometheus.GaugeValue, 1, timesN)
 
-	// Get Confirmed time of Validator
-	confirmedVtime := c.getConfirmedValTime()
+	// Export Confirmed block time of Validator
+	confirmedVtime := c.getValidatorBlockTime()
 	nowV := time.Unix(confirmedVtime, 0)
 	timesV := nowV.Format(time.RFC1123)
-	ch <- prometheus.MustNewConstMetric(c.confirmedValTime, prometheus.GaugeValue, 1, timesV)
+	ch <- prometheus.MustNewConstMetric(c.validatorBlockTime, prometheus.GaugeValue, 1, timesV)
 
 	// Get confirmed Block Time Difference
 	secs, ss := blockTimeDiff(confirmedNtime, confirmedVtime)
-	ch <- prometheus.MustNewConstMetric(c.ConfirmedTimeDiff, prometheus.GaugeValue, secs, ss+"s")
+	ch <- prometheus.MustNewConstMetric(c.blockTimeDiff, prometheus.GaugeValue, secs, ss+"s")
 }
 
 func (c *solanaCollector) getClusterNodeInfo() string {
@@ -449,7 +452,8 @@ func (c *solanaCollector) getValBlockHeight() int64 {
 	return int64(resp.Result.BlockHeight)
 }
 
-func (c *solanaCollector) getConfirmedNetworkTime() int64 {
+// get confirmed block time of network
+func (c *solanaCollector) getNetworkBlockTime() int64 {
 	netBlockHeight := c.getNetworkBlockHeight()
 	result, err := monitor.GetConfirmedBlock(c.config, netBlockHeight, utils.Network)
 	if err != nil {
@@ -459,7 +463,8 @@ func (c *solanaCollector) getConfirmedNetworkTime() int64 {
 	return result.Result.BlockTime
 }
 
-func (c *solanaCollector) getConfirmedValTime() int64 {
+// get confirmed blocktime of validator
+func (c *solanaCollector) getValidatorBlockTime() int64 {
 	valBlockHeight := c.getValBlockHeight()
 	result, err := monitor.GetConfirmedBlock(c.config, valBlockHeight, utils.Validator)
 	if err != nil {
