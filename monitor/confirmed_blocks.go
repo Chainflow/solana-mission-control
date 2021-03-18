@@ -57,6 +57,7 @@ func GetConfirmedBlock(cfg *config.Config, height int64, node string) (types.Con
 	err = json.Unmarshal(resp.Body, &result)
 	if err != nil {
 		log.Printf("Error while unmarshelling block time res: %v", err)
+		return result, err
 	}
 	return result, nil
 
