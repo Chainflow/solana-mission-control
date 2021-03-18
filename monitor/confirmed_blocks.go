@@ -51,6 +51,7 @@ func GetConfirmedBlock(cfg *config.Config, height int64, node string) (types.Con
 	resp, err := HitHTTPTarget(ops)
 	if err != nil {
 		log.Printf("Error while getting block time: %v", err)
+		return result, err
 	}
 
 	err = json.Unmarshal(resp.Body, &result)
