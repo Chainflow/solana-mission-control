@@ -161,7 +161,7 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 		blockTimeDiff: prometheus.NewDesc(
 			"solana_confirmed_blocktime_diff",
 			"Block time difference of network and validator",
-			[]string{"solana_confirmed_time_diff"}, nil,
+			[]string{"solana_confirmed_blocktime_diff"}, nil,
 		),
 	}
 }
@@ -355,14 +355,33 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 		ch <- prometheus.MustNewConstMetric(c.slotLeader, prometheus.GaugeValue, 1, leader.Result)
 	}
 
-	// get current slot
-	slot, err := monitor.GetCurrentSlot(c.config)
+	// get current validator slot
+	slot, err := monitor.GetCurrentSlot(c.config, utils.Validator)
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.currentSlot, err)
 	} else {
 		cs := strconv.FormatInt(slot.Result, 10)
 		ch <- prometheus.MustNewConstMetric(c.currentSlot, prometheus.GaugeValue, 1, cs)
 	}
+
+	// Export Confirmed block time of Validator
+	validatorBlocktime := c.getValidatorBlockTime(slot.Result)
+	nowV := time.Unix(validatorBlocktime, 0).UTC()
+	timesV := nowV.Format(time.RFC1123)
+	ch <- prometheus.MustNewConstMetric(c.validatorBlockTime, prometheus.GaugeValue, 1, timesV)
+
+	// Get current Network slot
+	networkSlot, err := monitor.GetCurrentSlot(c.config, utils.Network)
+
+	// Export confirmed block time of Network
+	networkBlocktime := c.getNetworkBlockTime(networkSlot.Result)
+	nowN := time.Unix(networkBlocktime, 0).UTC()
+	timesN := nowN.Format(time.RFC1123)
+	ch <- prometheus.MustNewConstMetric(c.networkBlockTime, prometheus.GaugeValue, 1, timesN)
+
+	// Get confirmed Block Time Difference of Network and Validator
+	secs, ss := blockTimeDiff(networkBlocktime, validatorBlocktime)
+	ch <- prometheus.MustNewConstMetric(c.blockTimeDiff, prometheus.GaugeValue, secs, ss+"s")
 
 	// get block time and calculate block time diff
 	bt, err := monitor.GetBlockTime(slot.Result, c.config)
@@ -390,21 +409,6 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 
 	ch <- prometheus.MustNewConstMetric(c.txCount, prometheus.GaugeValue, float64(count.Result), txcount)
 
-	// Export confirmed block time of Network
-	networkBlocktime := c.getNetworkBlockTime()
-	nowN := time.Unix(networkBlocktime, 0).UTC()
-	timesN := nowN.Format(time.RFC1123)
-	ch <- prometheus.MustNewConstMetric(c.networkBlockTime, prometheus.GaugeValue, 1, timesN)
-
-	// Export Confirmed block time of Validator
-	validatorBlocktime := c.getValidatorBlockTime()
-	nowV := time.Unix(validatorBlocktime, 0).UTC()
-	timesV := nowV.Format(time.RFC1123)
-	ch <- prometheus.MustNewConstMetric(c.validatorBlockTime, prometheus.GaugeValue, 1, timesV)
-
-	// Get confirmed Block Time Difference of Network and Validator
-	secs, ss := blockTimeDiff(networkBlocktime, validatorBlocktime)
-	ch <- prometheus.MustNewConstMetric(c.blockTimeDiff, prometheus.GaugeValue, secs, ss+"s")
 }
 
 func (c *solanaCollector) getClusterNodeInfo() string {
@@ -434,28 +438,9 @@ func (c *solanaCollector) getNetworkVoteAccountinfo() float64 {
 	return outN
 }
 
-func (c *solanaCollector) getNetworkBlockHeight() int64 {
-	resp, err := monitor.GetEpochInfo(c.config, utils.Network)
-	if err != nil {
-		log.Printf("failed to fetch epoch info of network, retrying: %v", err)
-		// cancel()
-	}
-	return int64(resp.Result.BlockHeight)
-}
-
-func (c *solanaCollector) getValBlockHeight() int64 {
-	resp, err := monitor.GetEpochInfo(c.config, utils.Validator)
-	if err != nil {
-		log.Printf("failed to fetch epoch info of network, retrying: %v", err)
-		// cancel()
-	}
-	return int64(resp.Result.BlockHeight)
-}
-
 // get confirmed block time of network
-func (c *solanaCollector) getNetworkBlockTime() int64 {
-	netBlockHeight := c.getNetworkBlockHeight()
-	result, err := monitor.GetConfirmedBlock(c.config, netBlockHeight, utils.Network)
+func (c *solanaCollector) getNetworkBlockTime(slot int64) int64 {
+	result, err := monitor.GetConfirmedBlock(c.config, slot, utils.Network)
 	if err != nil {
 		log.Printf("failed to fetch confirmed time of network, retrying: %v", err)
 		// cancel()
@@ -464,9 +449,8 @@ func (c *solanaCollector) getNetworkBlockTime() int64 {
 }
 
 // get confirmed blocktime of validator
-func (c *solanaCollector) getValidatorBlockTime() int64 {
-	valBlockHeight := c.getValBlockHeight()
-	result, err := monitor.GetConfirmedBlock(c.config, valBlockHeight, utils.Validator)
+func (c *solanaCollector) getValidatorBlockTime(slot int64) int64 {
+	result, err := monitor.GetConfirmedBlock(c.config, slot, utils.Validator)
 	if err != nil {
 		log.Printf("failed to fetch confirmed time of network, retrying: %v", err)
 		// cancel()
