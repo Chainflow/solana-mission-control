@@ -46,6 +46,12 @@ type solanaCollector struct {
 	voteHeightDiff          *prometheus.Desc
 	valVotingStatus         *prometheus.Desc
 	voteCredits             *prometheus.Desc
+	// confirmed block time of network
+	networkBlockTime *prometheus.Desc
+	// confirmed block time of validator
+	validatorBlockTime *prometheus.Desc
+	// block time difference of network and validator
+	blockTimeDiff *prometheus.Desc
 }
 
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
@@ -143,11 +149,25 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"solana validator voting status i.e., voting or jailed.",
 			[]string{"solana_val_status"}, nil,
 		),
-
 		voteCredits: prometheus.NewDesc(
 			"solana_vote_credits",
 			"solana validator vote credits of previous and current epoch.",
 			[]string{"solana_current_credits", "solana_previous_credits"}, nil,
+		),
+		networkBlockTime: prometheus.NewDesc(
+			"solana_network_confirmed_time",
+			"Confirmed Block time of network",
+			[]string{"solana_network_confirmed_time"}, nil,
+		),
+		validatorBlockTime: prometheus.NewDesc(
+			"solana_val_confirmed_time",
+			"Confirmed Block time of validator",
+			[]string{"solana_val_confirmed_time"}, nil,
+		),
+		blockTimeDiff: prometheus.NewDesc(
+			"solana_confirmed_blocktime_diff",
+			"Block time difference of network and validator",
+			[]string{"solana_confirmed_time_diff"}, nil,
 		),
 	}
 }
@@ -168,6 +188,10 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.valVoteHeight
 	ch <- c.voteHeightDiff
 	ch <- c.valVotingStatus
+	ch <- c.networkBlockTime
+	ch <- c.validatorBlockTime
+	ch <- c.blockTimeDiff
+
 }
 
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
@@ -402,6 +426,21 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 
 	ch <- prometheus.MustNewConstMetric(c.txCount, prometheus.GaugeValue, float64(count.Result), txcount)
 
+	// Export confirmed block time of Network
+	networkBlocktime := c.getNetworkBlockTime()
+	nowN := time.Unix(networkBlocktime, 0).UTC()
+	timesN := nowN.Format(time.RFC1123)
+	ch <- prometheus.MustNewConstMetric(c.networkBlockTime, prometheus.GaugeValue, 1, timesN)
+
+	// Export Confirmed block time of Validator
+	validatorBlocktime := c.getValidatorBlockTime()
+	nowV := time.Unix(validatorBlocktime, 0).UTC()
+	timesV := nowV.Format(time.RFC1123)
+	ch <- prometheus.MustNewConstMetric(c.validatorBlockTime, prometheus.GaugeValue, 1, timesV)
+
+	// Get confirmed Block Time Difference of Network and Validator
+	secs, ss := blockTimeDiff(networkBlocktime, validatorBlocktime)
+	ch <- prometheus.MustNewConstMetric(c.blockTimeDiff, prometheus.GaugeValue, secs, ss+"s")
 }
 
 func (c *solanaCollector) getClusterNodeInfo() string {
@@ -429,6 +468,46 @@ func (c *solanaCollector) getNetworkVoteAccountinfo() float64 {
 		}
 	}
 	return outN
+}
+
+func (c *solanaCollector) getNetworkBlockHeight() int64 {
+	resp, err := monitor.GetEpochInfo(c.config, utils.Network)
+	if err != nil {
+		log.Printf("failed to fetch epoch info of network, retrying: %v", err)
+		// cancel()
+	}
+	return int64(resp.Result.BlockHeight)
+}
+
+func (c *solanaCollector) getValBlockHeight() int64 {
+	resp, err := monitor.GetEpochInfo(c.config, utils.Validator)
+	if err != nil {
+		log.Printf("failed to fetch epoch info of network, retrying: %v", err)
+		// cancel()
+	}
+	return int64(resp.Result.BlockHeight)
+}
+
+// get confirmed block time of network
+func (c *solanaCollector) getNetworkBlockTime() int64 {
+	netBlockHeight := c.getNetworkBlockHeight()
+	result, err := monitor.GetConfirmedBlock(c.config, netBlockHeight, utils.Network)
+	if err != nil {
+		log.Printf("failed to fetch confirmed time of network, retrying: %v", err)
+		// cancel()
+	}
+	return result.Result.BlockTime
+}
+
+// get confirmed blocktime of validator
+func (c *solanaCollector) getValidatorBlockTime() int64 {
+	valBlockHeight := c.getValBlockHeight()
+	result, err := monitor.GetConfirmedBlock(c.config, valBlockHeight, utils.Validator)
+	if err != nil {
+		log.Printf("failed to fetch confirmed time of network, retrying: %v", err)
+		// cancel()
+	}
+	return result.Result.BlockTime
 }
 
 func blockTimeDiff(bt int64, pvt int64) (float64, string) {
