@@ -45,6 +45,7 @@ type solanaCollector struct {
 	valVoteHeight           *prometheus.Desc
 	voteHeightDiff          *prometheus.Desc
 	valVotingStatus         *prometheus.Desc
+	voteCredits             *prometheus.Desc
 }
 
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
@@ -139,8 +140,14 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 		),
 		valVotingStatus: prometheus.NewDesc(
 			"solana_val_status",
-			"Validator voting status i.e., voting or jailed.",
+			"solana validator voting status i.e., voting or jailed.",
 			[]string{"solana_val_status"}, nil,
+		),
+
+		voteCredits: prometheus.NewDesc(
+			"solana_vote_credits",
+			"solana validator vote credits of previous and current epoch.",
+			[]string{"solana_current_credits", "solana_previous_credits"}, nil,
 		),
 	}
 }
@@ -223,6 +230,10 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 			diff := netresult - valresult
 			ch <- prometheus.MustNewConstMetric(c.voteHeightDiff, prometheus.GaugeValue, diff, "vote height difference")
 
+			// calcualte vote credits
+			cCredits, pCredits := c.calcualteEpochVoteCredits(vote.EpochCredits)
+			ch <- prometheus.MustNewConstMetric(c.voteCredits, prometheus.GaugeValue, 1, cCredits, pCredits)
+
 		}
 	}
 
@@ -250,6 +261,32 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 
 		}
 	}
+}
+
+func (c *solanaCollector) calcualteEpochVoteCredits(credits [][]int64) (string, string) {
+	epochInfo, err := monitor.GetEpochInfo(c.config, utils.Validator)
+	if err != nil {
+		log.Printf("Error while getting epoch info : %v", err)
+	}
+
+	epoch := epochInfo.Result.Epoch
+	var currentCredits, previousCredits int64
+
+	for _, c := range credits {
+		if len(c) >= 3 {
+			if c[0] == epoch {
+				currentCredits = c[1]
+				previousCredits = c[2]
+			}
+		}
+	}
+
+	log.Printf("Current Epoch : %d\n Current Epoch Vote Credits: %d\n Previous Epoch Vote Credits : %d\n", epoch, currentCredits, previousCredits)
+
+	cCredits := strconv.FormatInt(currentCredits, 10)
+	pCredits := strconv.FormatInt(previousCredits, 10)
+
+	return cCredits, pCredits
 }
 
 func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.Metric) {
