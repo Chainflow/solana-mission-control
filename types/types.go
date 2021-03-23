@@ -26,10 +26,11 @@ type (
 		ID      int           `json:"id"`
 	}
 
+	// Commitement struct holds the state of Commitment
 	Commitment struct {
 		Commitemnt string `json:"commitment"`
 	}
-
+	// Encode struct to encode string
 	Encode struct {
 		Encoding string `json:"encoding"`
 	}
@@ -62,6 +63,7 @@ type (
 		Body       []byte
 	}
 
+	// Balance struct which holds information of Account Balancce
 	Balance struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  struct {
@@ -73,6 +75,7 @@ type (
 		ID int `json:"id"`
 	}
 
+	// AccountInfo struct which holds Account Information
 	AccountInfo struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  struct {
@@ -100,6 +103,7 @@ type (
 		ID int `json:"id"`
 	}
 
+	// EpochInfo struct which holds information of current Epoch
 	EpochInfo struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  struct {
@@ -112,6 +116,7 @@ type (
 		ID int `json:"id"`
 	}
 
+	// EpochShedule struct holds Epoch Shedule Information
 	EpochShedule struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  struct {
@@ -124,6 +129,7 @@ type (
 		ID int `json:"id"`
 	}
 
+	// SolanaVersion struct holds solana current version
 	SolanaVersion struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  struct {
@@ -132,24 +138,28 @@ type (
 		ID int `json:"id"`
 	}
 
+	// LeaderShedule struct holds information of leader schedule for an epoch
 	LeaderShedule struct {
 		Jsonrpc string             `json:"jsonrpc"`
 		Result  map[string][]int64 `json:"result"`
 		ID      int                `json:"id"`
 	}
 
+	// ConfirmedBlocks struct which holds information of confirmed blocks
 	ConfirmedBlocks struct {
 		Jsonrpc string  `json:"jsonrpc"`
 		Result  []int64 `json:"result"`
 		ID      int     `json:"id"`
 	}
 
+	// BlockTime struct which holds information of estimated production time of a confirmed block
 	BlockTime struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  int64  `json:"result"`
 		// ID int `json:"id"`
 	}
 
+	// VoteAccount struct which holds information of voting accounts
 	VoteAccounts struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  struct {
@@ -175,6 +185,7 @@ type (
 		ID int `json:"id"`
 	}
 
+	// NodeHealth struct which holds information of health of the node
 	NodeHealth struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  string `json:"result"`
@@ -187,6 +198,7 @@ type (
 		// ID int `json:"id"`
 	}
 
+	// Version struct which holds information of solana version
 	Version struct {
 		// Jsonrpc string `json:"jsonrpc"`
 		Result struct {
@@ -195,6 +207,7 @@ type (
 		// ID int `json:"id"`
 	}
 
+	// Identity struct holds the pubkey for the current node
 	Identity struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  struct {
@@ -203,17 +216,19 @@ type (
 		// ID int `json:"id"`
 	}
 
+	// VoteAccount struct holds information of vote account
 	VoteAccount struct {
-		ActivatedStake   int64   `json:"activatedStake"`
-		Commission       int64   `json:"commission"`
+		ActivatedStake   int64     `json:"activatedStake"`
+		Commission       int64     `json:"commission"`
 		EpochCredits     [][]int64 `json:"epochCredits"`
-		EpochVoteAccount bool    `json:"epochVoteAccount"`
-		LastVote         int     `json:"lastVote"`
-		NodePubkey       string  `json:"nodePubkey"`
-		RootSlot         int     `json:"rootSlot"`
-		VotePubkey       string  `json:"votePubkey"`
+		EpochVoteAccount bool      `json:"epochVoteAccount"`
+		LastVote         int       `json:"lastVote"`
+		NodePubkey       string    `json:"nodePubkey"`
+		RootSlot         int       `json:"rootSlot"`
+		VotePubkey       string    `json:"votePubkey"`
 	}
 
+	// GetVoteAccountsResponse struct holds information of current and deliquent vote accounts
 	GetVoteAccountsResponse struct {
 		Result struct {
 			Current    []VoteAccount `json:"current"`
@@ -222,11 +237,12 @@ type (
 		Error rpcError `json:"error"`
 	}
 
+	// rpcError struct which holds Error message of RPC
 	rpcError struct {
 		Message string `json:"message"`
 		Code    int64  `json:"id"`
 	}
-
+	// Stake struct which holds information of stake account
 	Stake struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  struct {
@@ -237,6 +253,7 @@ type (
 		// ID int `json:"id"`
 	}
 
+	// SlotLeader holds information of current slot leader
 	SlotLeader struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  string `json:"result"`
@@ -290,5 +307,53 @@ type (
 			BlockTime int64 `json:"blockTime"`
 		} `json:"result"`
 		// ID int `json:"id"`
+	}
+
+	ConfirmedSignatureforAddress struct {
+		Jsonrpc string `json:"jsonrpc"`
+		Result  struct {
+			Signature string `json:"signature"`
+			Slot      int    `json:"slot"`
+			BlockTime int64  `json:"blockTime"`
+		} `json:"result"`
+		ID int `json:"id"`
+	}
+
+	ConfirmedTransaction struct {
+		Jsonrpc string `json:"jsonrpc"`
+		Result  struct {
+			Meta struct {
+				Err               interface{}   `json:"err"`
+				Fee               int           `json:"fee"`
+				InnerInstructions []interface{} `json:"innerInstructions"`
+				PostBalances      []interface{} `json:"postBalances"`
+				PostTokenBalances []interface{} `json:"postTokenBalances"`
+				PreBalances       []interface{} `json:"preBalances"`
+				PreTokenBalances  []interface{} `json:"preTokenBalances"`
+				Status            struct {
+					Ok interface{} `json:"Ok"`
+				} `json:"status"`
+			} `json:"meta"`
+			Slot        int `json:"slot"`
+			Transaction struct {
+				Message struct {
+					AccountKeys []string `json:"accountKeys"`
+					Header      struct {
+						NumReadonlySignedAccounts   int `json:"numReadonlySignedAccounts"`
+						NumReadonlyUnsignedAccounts int `json:"numReadonlyUnsignedAccounts"`
+						NumRequiredSignatures       int `json:"numRequiredSignatures"`
+					} `json:"header"`
+					Instructions []struct {
+						Accounts       []int  `json:"accounts"`
+						Data           string `json:"data"`
+						ProgramIDIndex int    `json:"programIdIndex"`
+					} `json:"instructions"`
+					RecentBlockhash string `json:"recentBlockhash"`
+				} `json:"message"`
+				Signatures []string `json:"signatures"`
+			} `json:"transaction"`
+		} `json:"result"`
+		BlockTime int64 `json:"blockTime"`
+		ID        int   `json:"id"`
 	}
 )

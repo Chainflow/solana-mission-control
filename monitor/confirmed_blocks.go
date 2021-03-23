@@ -10,6 +10,7 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
 )
 
+// GetConfirmedBlocks returns a list of confirmed blocks between two slots of given range.
 func GetConfirmedBlocks(rangeStart int64, rangeEnd int64, cfg *config.Config) ([]int64, error) {
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
@@ -33,6 +34,8 @@ func GetConfirmedBlocks(rangeStart int64, rangeEnd int64, cfg *config.Config) ([
 	return cfm.Result, nil
 }
 
+// GetConfirmedBlock takes current slot height and returns identity and transaction information about a
+// confirmed block in the ledger
 func GetConfirmedBlock(cfg *config.Config, height int64, node string) (types.ConfirmedBlock, error) {
 	var result types.ConfirmedBlock
 	ops := types.HTTPOptions{

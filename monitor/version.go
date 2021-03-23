@@ -9,6 +9,7 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
+// GetVersion returns the current solana versions running on the node
 func GetVersion(cfg *config.Config) (types.Version, error) {
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,

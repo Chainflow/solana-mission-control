@@ -9,6 +9,7 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
+// GetLeaderSlots returns a map of slots associated with the given publickey
 func GetLeaderSlots(epochSlot int64, cfg *config.Config) (map[int64]string, error) {
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,

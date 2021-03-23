@@ -21,7 +21,7 @@ func SendTelegramAlert(msg string, cfg *config.Config) error {
 }
 
 // SendEmailAlert sends alert to email account
-//by checking user's choice
+// by checking user's choice
 func SendEmailAlert(msg string, cfg *config.Config) error {
 	if strings.ToUpper(strconv.FormatBool(cfg.EnableAlerts.EnableEmailAlerts)) == "TRUE" {
 		if err := NewEmailAlerter().SendEmail(msg, cfg); err != nil {

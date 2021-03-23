@@ -12,6 +12,7 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
 )
 
+// GetVoteAccounts returns voting accounts information
 func GetVoteAccounts(cfg *config.Config, node string) (types.GetVoteAccountsResponse, error) {
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
@@ -51,6 +52,7 @@ func GetVoteAccounts(cfg *config.Config, node string) (types.GetVoteAccountsResp
 	return result, nil
 }
 
+// AlertStatusCountFromPrometheus returns the AlertCount for validator voting alert
 func AlertStatusCountFromPrometheus(cfg *config.Config) (string, error) {
 	var result types.DBRes
 	var count string

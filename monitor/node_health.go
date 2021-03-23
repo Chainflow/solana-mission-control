@@ -12,6 +12,7 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
+// GetNodeHealth returns the current health of the node.
 func GetNodeHealth(cfg *config.Config) (types.NodeHealth, error) {
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,

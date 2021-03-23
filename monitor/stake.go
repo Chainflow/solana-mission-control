@@ -9,6 +9,7 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
+// GetStake returns epoch activation information for a stake account
 func GetStake(cfg *config.Config) (types.Stake, error) {
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,

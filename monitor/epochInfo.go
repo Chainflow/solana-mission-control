@@ -10,6 +10,7 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
 )
 
+// GetEpochInfo returns information about the current epoch
 func GetEpochInfo(cfg *config.Config, node string) (types.EpochInfo, error) {
 	ops := types.HTTPOptions{
 		// Endpoint: cfg.Endpoints.RPCEndpoint,

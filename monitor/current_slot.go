@@ -10,6 +10,7 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
 )
 
+// GetCurrentSlot returns Current slot
 func GetCurrentSlot(cfg *config.Config, node string) (types.CurrentSlot, error) {
 	log.Println("Getting current slot")
 	ops := types.HTTPOptions{

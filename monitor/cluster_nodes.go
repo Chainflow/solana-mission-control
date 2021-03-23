@@ -9,6 +9,7 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
+// GetClusterNodes returns information about all the nodes participating in the cluster
 func GetClusterNodes(cfg *config.Config) (types.ClustrNode, error) {
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,

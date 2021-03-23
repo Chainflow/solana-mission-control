@@ -24,28 +24,31 @@ const (
 )
 
 type solanaCollector struct {
-	config                  *config.Config
-	totalValidatorsDesc     *prometheus.Desc
-	validatorActivatedStake *prometheus.Desc
-	validatorLastVote       *prometheus.Desc
-	validatorRootSlot       *prometheus.Desc
-	validatorDelinquent     *prometheus.Desc
-	solanaVersion           *prometheus.Desc
-	accountBalance          *prometheus.Desc
-	slotLeader              *prometheus.Desc
-	blockTime               *prometheus.Desc
-	currentSlot             *prometheus.Desc
-	commission              *prometheus.Desc
-	delinqentCommission     *prometheus.Desc
-	validatorVote           *prometheus.Desc
-	statusAlertCount        *prometheus.Desc
-	ipAddress               *prometheus.Desc
-	txCount                 *prometheus.Desc
-	netVoteHeight           *prometheus.Desc
-	valVoteHeight           *prometheus.Desc
-	voteHeightDiff          *prometheus.Desc
-	valVotingStatus         *prometheus.Desc
-	voteCredits             *prometheus.Desc
+	config                    *config.Config
+	totalValidatorsDesc       *prometheus.Desc
+	validatorActivatedStake   *prometheus.Desc
+	validatorLastVote         *prometheus.Desc
+	validatorRootSlot         *prometheus.Desc
+	validatorDelinquent       *prometheus.Desc
+	solanaVersion             *prometheus.Desc
+	accountBalance            *prometheus.Desc
+	slotLeader                *prometheus.Desc
+	blockTime                 *prometheus.Desc
+	currentSlot               *prometheus.Desc
+	commission                *prometheus.Desc
+	delinqentCommission       *prometheus.Desc
+	validatorVote             *prometheus.Desc
+	statusAlertCount          *prometheus.Desc
+	ipAddress                 *prometheus.Desc
+	txCount                   *prometheus.Desc
+	netVoteHeight             *prometheus.Desc
+	valVoteHeight             *prometheus.Desc
+	voteHeightDiff            *prometheus.Desc
+	valVotingStatus           *prometheus.Desc
+	voteCredits               *prometheus.Desc
+	networkConfirmationTime   *prometheus.Desc
+	validatorConfirmationTime *prometheus.Desc
+	confirmationTimeDiff      *prometheus.Desc
 	// confirmed block time of network
 	networkBlockTime *prometheus.Desc
 	// confirmed block time of validator
@@ -54,6 +57,7 @@ type solanaCollector struct {
 	blockTimeDiff *prometheus.Desc
 }
 
+//
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 	return &solanaCollector{
 		config: cfg,
@@ -170,6 +174,7 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			[]string{"solana_confirmed_blocktime_diff"}, nil,
 		),
 	}
+
 }
 
 func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
@@ -444,7 +449,6 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	txcount := utils.NearestThousandFormat(float64(count.Result))
 
 	ch <- prometheus.MustNewConstMetric(c.txCount, prometheus.GaugeValue, float64(count.Result), txcount)
-
 }
 
 func (c *solanaCollector) getClusterNodeInfo() string {
