@@ -100,6 +100,7 @@ func init() {
 
 }
 
+// WatchSlots generate ticker and Set solana metrics to prometheus.
 func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 	var (
 		// Current mapping of relative slot numbers to leader public keys.
@@ -155,7 +156,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		networkEpoch.Set(float64(resp.Result.Epoch))             // Set n/w epoch
 		networkBlockHeight.Set(float64(resp.Result.BlockHeight)) // set n/w block height
 
-		// Get val epoch info
+		// Get validator epoch info
 		resp, err = monitor.GetEpochInfo(cfg, utils.Validator)
 		if err != nil {
 			log.Printf("failed to fetch poch info of validator, retrying: %v", err)
@@ -188,7 +189,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		}
 
 		heightDiff := float64(resp.Result.BlockHeight) - float64(info.BlockHeight)
-		blockDiff.Set(heightDiff) // block height diff of network and validator
+		blockDiff.Set(heightDiff) // block height difference of network and validator
 
 		if int64(heightDiff) >= cfg.AlertingThresholds.BlockDiffThreshold {
 			// send alert
@@ -227,6 +228,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		rangeStart := firstSlot + watermark
 		rangeEnd := firstSlot + info.SlotIndex - 1
 
+		// get confirmed blocks
 		cfm, err := monitor.GetConfirmedBlocks(rangeStart, rangeEnd, cfg)
 		if err != nil {
 			log.Printf("failed to request confirmed blocks at %d, retrying: %v", watermark, err)

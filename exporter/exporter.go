@@ -23,6 +23,7 @@ const (
 	httpTimeout = 5 * time.Second
 )
 
+// solanaCollector respresents a set of solana metrics
 type solanaCollector struct {
 	config                    *config.Config
 	totalValidatorsDesc       *prometheus.Desc
@@ -57,7 +58,7 @@ type solanaCollector struct {
 	blockTimeDiff *prometheus.Desc
 }
 
-//
+// NewSolanaCollector exports solana collector metrics to prometheus
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 	return &solanaCollector{
 		config: cfg,
@@ -177,6 +178,7 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 
 }
 
+// Desribe exports metrics to the channel
 func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.solanaVersion
 	ch <- c.accountBalance
@@ -292,6 +294,7 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 	}
 }
 
+// calculateEpochVoteCredits returns epoch credits of vote account
 func (c *solanaCollector) calcualteEpochVoteCredits(credits [][]int64) (string, string) {
 	epochInfo, err := monitor.GetEpochInfo(c.config, utils.Validator)
 	if err != nil {
@@ -318,6 +321,7 @@ func (c *solanaCollector) calcualteEpochVoteCredits(credits [][]int64) (string, 
 	return cCredits, pCredits
 }
 
+// AlertValidatorStatus sends validator status alerts at respective alert timings.
 func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.Metric) {
 	now := time.Now().UTC()
 	currentTime := now.Format(time.Kitchen)
@@ -359,6 +363,7 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 	}
 }
 
+// Collect exports metrics
 func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	accs, err := monitor.GetVoteAccounts(c.config, utils.Validator) // get vote accounts
 	if err != nil {
@@ -451,6 +456,7 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	ch <- prometheus.MustNewConstMetric(c.txCount, prometheus.GaugeValue, float64(count.Result), txcount)
 }
 
+// getClusterNodeInfo returns gossip address of node
 func (c *solanaCollector) getClusterNodeInfo() string {
 	result, err := monitor.GetClusterNodes(c.config)
 	if err != nil {
@@ -466,6 +472,7 @@ func (c *solanaCollector) getClusterNodeInfo() string {
 	return address
 }
 
+// getNetworkVoteAccountinfo returns last vote  information of  network vote account
 func (c *solanaCollector) getNetworkVoteAccountinfo() float64 {
 	resn, _ := monitor.GetVoteAccounts(c.config, utils.Network)
 	var outN float64
@@ -498,6 +505,7 @@ func (c *solanaCollector) getValidatorBlockTime(slot int64) int64 {
 	return result.Result.BlockTime
 }
 
+// blockTimeDiff calculate block time difference
 func blockTimeDiff(bt int64, pvt int64) (float64, string) {
 	t1 := time.Unix(bt, 0)
 	t2 := time.Unix(pvt, 0)
