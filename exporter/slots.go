@@ -100,7 +100,15 @@ func init() {
 
 }
 
-// WatchSlots generate ticker and Set solana metrics to prometheus.
+// WatchSlots uses to get data from different methods and store it in prometheus. Those are
+// 1. Account balance
+// 2. Node Health
+// 3. Network Epoch Information
+// 4. Validator Epoch information
+// 5. epoch difference of network and validator and send alert if it is drppoed below epoch threshold
+// 6. block height difference of network and validator
+// 7. fetch a new leader schedule if previous epoch has done
+// 8. Get list of confirmed blocks
 func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 	var (
 		// Current mapping of relative slot numbers to leader public keys.

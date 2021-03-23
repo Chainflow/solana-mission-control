@@ -201,6 +201,20 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 
 }
 
+// mustEmitMetrics gets the data from Current and Deliquent validator vote accounts and export metrics of validator Vote account to prometheus.
+//  Those metrics are
+// 1. Current validator's info
+// 2. Deliquent validator's info
+// 3. curent validator node key and vote key
+// 4. Validator vote account wether it is voting or not and send alert
+// 5. Current validator Vote commision
+// 6. Validator Activated Stake
+// 7. Validator Vote Height
+// 8. Network Vote Height
+// 9. VOte Height difference of Validator and Network
+// 10. Validator Vote Credits
+// 11. Deliquent validator commision
+// 12. Deliquent validatot vote account whether it voting or not and send alerts
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
 	ch <- prometheus.MustNewConstMetric(c.totalValidatorsDesc, prometheus.GaugeValue,
 		float64(len(response.Result.Delinquent)), "delinquent")
@@ -363,7 +377,16 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 	}
 }
 
-// Collect exports metrics
+// Collect get data from methods and exports metrics to prometheus. Those metrics are
+// 1. Solana Version
+// 2. Account Balance
+// 3. slot Leader
+// 4. Confirmed block time of Validator
+// 5. Confirmed block time of Network
+// 6. Confirmed BlockTime difference of validator and network
+// 7. IP address
+// 8. Total Transaction Count
+// 9. Get current Blocktime and previous Blocktime and Difference of them.
 func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	accs, err := monitor.GetVoteAccounts(c.config, utils.Validator) // get vote accounts
 	if err != nil {
