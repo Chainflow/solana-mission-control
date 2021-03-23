@@ -17,14 +17,6 @@ func GetClusterNodes(cfg *config.Config) (types.ClustrNode, error) {
 		Body:     types.Payload{Jsonrpc: "2.0", Method: "getClusterNodes", ID: 1},
 	}
 
-	// if node == utils.Network {
-	// 	ops.Endpoint = cfg.Endpoints.NetworkRPC
-	// } else if node == utils.Validator {
-	// 	ops.Endpoint = cfg.Endpoints.RPCEndpoint
-	// } else {
-	// 	ops.Endpoint = cfg.Endpoints.RPCEndpoint
-	// }
-
 	var result types.ClustrNode
 	resp, err := HitHTTPTarget(ops)
 	if err != nil {

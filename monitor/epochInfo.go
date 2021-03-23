@@ -13,7 +13,6 @@ import (
 // GetEpochInfo returns information about the current epoch
 func GetEpochInfo(cfg *config.Config, node string) (types.EpochInfo, error) {
 	ops := types.HTTPOptions{
-		// Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method: http.MethodPost,
 		Body:   types.Payload{Jsonrpc: "2.0", Method: "getEpochInfo", ID: 1},
 	}
