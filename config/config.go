@@ -136,6 +136,7 @@ func ReadFromFile() (*Config, error) {
 
 	v := viper.New()
 	v.AddConfigPath(".")
+	v.AddConfigPath("../")
 	// v.AddConfigPath(configPath)
 	v.SetConfigName("config")
 	if err := v.ReadInConfig(); err != nil {

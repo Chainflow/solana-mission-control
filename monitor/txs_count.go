@@ -11,13 +11,17 @@ import (
 
 // GetTxCount returns the current Transaction count from the ledger
 func GetTxCount(cfg *config.Config) (types.TxCount, error) {
+	var result types.TxCount
+	var err error
+	if cfg == nil {
+		return result, err
+	}
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method:   http.MethodPost,
 		Body:     types.Payload{Jsonrpc: "2.0", Method: "getTransactionCount", ID: 1},
 	}
 
-	var result types.TxCount
 	resp, err := HitHTTPTarget(ops)
 	if err != nil {
 		log.Printf("Error: %v", err)
