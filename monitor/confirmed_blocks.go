@@ -36,7 +36,6 @@ func GetConfirmedBlocks(rangeStart int64, rangeEnd int64, cfg *config.Config) ([
 func GetConfirmedBlock(cfg *config.Config, height int64, node string) (types.ConfirmedBlock, error) {
 	var result types.ConfirmedBlock
 	ops := types.HTTPOptions{
-		// Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method: http.MethodPost,
 		Body:   types.Payload{Jsonrpc: "2.0", Method: "getConfirmedBlock", ID: 1, Params: []interface{}{height}},
 	}
