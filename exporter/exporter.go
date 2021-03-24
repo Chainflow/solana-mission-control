@@ -81,7 +81,7 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"solana_node_version",
 			"Node version of solana",
 			[]string{"version"}, nil),
-		accountBalance: prometheus.NewDesc(
+		accountBalance: prometheus.NewDesc( // check using or not
 			"solana_account_balance",
 			"Account balance",
 			[]string{"solana_acc_balance"}, nil),
@@ -282,7 +282,6 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 			if err != nil {
 				log.Printf("Error while sending vallidator status alert: %v", err)
 			}
-
 		}
 	}
 }
@@ -379,7 +378,7 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.accountBalance, err)
 	} else {
-		s := strconv.FormatInt(bal.Result.Value, 10)
+		s := strconv.FormatInt(bal.Result.Value, 10) // TODO : cross check the value
 		ch <- prometheus.MustNewConstMetric(c.accountBalance, prometheus.GaugeValue, 1, s)
 	}
 

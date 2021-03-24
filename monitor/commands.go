@@ -3,6 +3,7 @@ package monitor
 import (
 	"fmt"
 	"log"
+	"math"
 	"strconv"
 	"strings"
 
@@ -41,26 +42,22 @@ func TelegramAlerting(cfg *config.Config) {
 
 		if update.Message.Text == "/status" {
 			msgToSend = GetStatus(cfg)
-			// }
-			// else if update.Message.Text == "/node" {
-			// 	msgToSend = NodeStatus(cfg, c)
-			// } else if update.Message.Text == "/peers" {
-			// 	msgToSend = GetPeersCountMsg(cfg, c)
-			// } else if update.Message.Text == "/balance" {
-			// 	msgToSend = GetAccountBal(cfg, c)
+		} else if update.Message.Text == "/node" {
+			msgToSend = NodeStatus(cfg)
+		} else if update.Message.Text == "/balance" {
+			msgToSend = GetAccountBal(cfg)
 		} else if update.Message.Text == "/list" {
 			msgToSend = GetHelp()
+		} else {
+			text := strings.Split(update.Message.Text, "")
+			if len(text) != 0 {
+				if text[0] == "/" {
+					msgToSend = "Command not found do /list to know about available commands"
+				} else {
+					msgToSend = " "
+				}
+			}
 		}
-		// else {
-		// 	text := strings.Split(update.Message.Text, "")
-		// 	if len(text) != 0 {
-		// 		if text[0] == "/" {
-		// 			msgToSend = "Command not found do /list to know about available commands"
-		// 		} else {
-		// 			msgToSend = " "
-		// 		}
-		// 	}
-		// }
 
 		log.Printf("[%s] %s", update.Message.From.UserName, msgToSend)
 
@@ -76,7 +73,7 @@ func TelegramAlerting(cfg *config.Config) {
 // GetHelp returns the msg to show for /help
 func GetHelp() string {
 	msg := "List of available commands\n /status - returns validator status, current block height " +
-		"and network block height\n /peers - returns number of connected peers\n /node - return status of caught-up\n" +
+		"and network block height\n /node - return status of caught-up\n" +
 		"/balance - returns the current balance of your account \n /list - list out the available commands"
 
 	return msg
@@ -104,6 +101,39 @@ func GetStatus(cfg *config.Config) string {
 		log.Printf("Error while getting network block height res : %v", err)
 	}
 	msg = msg + fmt.Sprintf("Network  block height : %d\n", networkHeight.Result.BlockHeight)
+
+	return msg
+}
+
+// NodeStatus returns the node health wetaher it is up or down by giving /node
+func NodeStatus(cfg *config.Config) string {
+	var status string
+
+	nodeHealth, err := GetNodeHealth(cfg) // Get solana node health
+	if err != nil {
+		log.Printf("Error while getting node health : %v", err)
+	}
+
+	if nodeHealth == 1 {
+		status = fmt.Sprintf("- Your Solana validator node is %s \n", "UP")
+	} else {
+		status = fmt.Sprintf("- Your Solana validator node is %s \n", "DOWN")
+	}
+
+	return status
+}
+
+// GetAccountBal which resturns the account balance for the command /balance
+func GetAccountBal(cfg *config.Config) string {
+	var msg string
+
+	res, err := GetBalance(cfg)
+	if err != nil {
+		log.Printf("Error while getting account balance : %v", err)
+	}
+	bal := float64(res.Result.Value) / math.Pow(10, 9)
+	b := fmt.Sprintf("%.2f", bal)
+	msg = fmt.Sprintf("Your account balance is %s SOL\n", b)
 
 	return msg
 }
