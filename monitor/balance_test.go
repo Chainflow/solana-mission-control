@@ -14,7 +14,7 @@ func TestGetBalance(t *testing.T) {
 	}
 	res, err := monitor.GetBalance(cfg)
 	if err != nil {
-		t.Error("Error while fetching block time")
+		t.Error("Error while fetching Account balance")
 	}
 	if res.Result.Value == 0 {
 		t.Error("Expexted non empty result, but got empty result: ", res.Result)

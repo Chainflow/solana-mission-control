@@ -16,7 +16,7 @@ func TestConfirmedValidatorBlock(t *testing.T) {
 	}
 	res, err := monitor.GetConfirmedBlock(cfg, 70539097, utils.Validator)
 	if err != nil {
-		t.Error("Error while getting confirmed block Information at given heights")
+		t.Error("Error while getting confirmed block Information at given height")
 	}
 	if res.Result.BlockTime == 0 {
 		t.Error("Expexted non empty result, but got empty result: ", res)

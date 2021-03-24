@@ -15,7 +15,7 @@ func TestGetValidatorEpochinfo(t *testing.T) {
 	}
 	res, err := monitor.GetEpochInfo(cfg, utils.Validator)
 	if err != nil {
-		t.Error("Error while fetching block time")
+		t.Error("Error while fetching Epoch Information")
 	}
 	if res.Result.Epoch == 0 {
 		t.Error("Expexted non empty result, but got empty result: ", res.Result)
@@ -32,7 +32,7 @@ func TestGetNetworkEpochinfo(t *testing.T) {
 	}
 	res, err := monitor.GetEpochInfo(cfg, utils.Network)
 	if err != nil {
-		t.Error("Error while fetching block time")
+		t.Error("Error while fetching epoch information")
 	}
 	if res.Result.Epoch == 0 {
 		t.Error("Expexted non empty result, but got empty result: ", res.Result)

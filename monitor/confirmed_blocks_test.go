@@ -14,7 +14,7 @@ func TestConfirmedBlocks(t *testing.T) {
 	}
 	res, err := monitor.GetConfirmedBlocks(70539000, 70539097, cfg)
 	if err != nil {
-		t.Error("Error while getting confirmed blocks in given range")
+		t.Error("Error while getting confirmed blocks at given range")
 	}
 	if res == nil {
 		t.Error("Expexted non empty result, but got empty result: ", res)

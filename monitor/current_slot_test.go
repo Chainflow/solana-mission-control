@@ -44,6 +44,6 @@ func TestNetworkCurrentSlot(t *testing.T) {
 	}
 
 	if res.Result != 0 {
-		t.Log("Got validator current slot : ", res.Result)
+		t.Log("Got network current slot : ", res.Result)
 	}
 }
