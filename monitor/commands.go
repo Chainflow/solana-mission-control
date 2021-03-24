@@ -46,6 +46,10 @@ func TelegramAlerting(cfg *config.Config) {
 			msgToSend = NodeStatus(cfg)
 		} else if update.Message.Text == "/balance" {
 			msgToSend = GetAccountBal(cfg)
+		} else if update.Message.Text == "/epoch" {
+			msgToSend = GetEpochDetails(cfg)
+		} else if update.Message.Text == "/vote_credits" {
+			msgToSend = GetVoteCredits(cfg)
 		} else if update.Message.Text == "/list" {
 			msgToSend = GetHelp()
 		} else {
@@ -74,7 +78,9 @@ func TelegramAlerting(cfg *config.Config) {
 func GetHelp() string {
 	msg := "List of available commands\n /status - returns validator status, current block height " +
 		"and network block height\n /node - return status of caught-up\n" +
-		"/balance - returns the current balance of your account \n /list - list out the available commands"
+		" /balance - returns the current balance of your account \n /epoch - returns current epoch of " +
+		"network and validator\n /vote_credits - returns vote credits of current and" +
+		"previous epochs \n /list - list out the available commands"
 
 	return msg
 }
@@ -134,6 +140,43 @@ func GetAccountBal(cfg *config.Config) string {
 	bal := float64(res.Result.Value) / math.Pow(10, 9)
 	b := fmt.Sprintf("%.2f", bal)
 	msg = fmt.Sprintf("Your account balance is %s SOL\n", b)
+
+	return msg
+}
+
+// GetEpochDetails returns current epoch of validator and network for /epoch
+func GetEpochDetails(cfg *config.Config) string {
+	var msg string
+
+	valEpoch, err := GetEpochInfo(cfg, utils.Validator)
+	if err != nil {
+		log.Printf("Error while getting val epoch info : %v", err)
+	}
+
+	msg = fmt.Sprintf("Current Epoch Info :: \n")
+
+	msg = msg + fmt.Sprintf("Validator Epoch : %d\n", valEpoch.Result.Epoch)
+
+	netEpoch, err := GetEpochInfo(cfg, utils.Network)
+	if err != nil {
+		log.Printf("Error while getting network epoch info : %v", err)
+	}
+
+	msg = msg + fmt.Sprintf("Network Epoch : %d\n", netEpoch.Result.Epoch)
+
+	return msg
+}
+
+// GetVoteCredits returns credits for /vote_credits
+func GetVoteCredits(cfg *config.Config) string {
+	var msg string
+
+	cCredits, pCredits, err := GetCredits(cfg)
+	if err != nil {
+		log.Printf("Error while getting vte credits from db : %v", err)
+	}
+
+	msg = fmt.Sprintf("Epoch vote credits ::\n Current epoch credits : %s\n Previous epoch credits: %s\n", cCredits, pCredits)
 
 	return msg
 }

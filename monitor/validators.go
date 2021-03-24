@@ -98,3 +98,30 @@ func GetValStatusFromDB(cfg *config.Config) (string, error) {
 
 	return status, nil
 }
+
+// GetCredits returns the vote credits of previous and current epoch
+func GetCredits(cfg *config.Config) (string, string, error) {
+	var result types.DBRes
+	var cCredits, pCredits string
+	response, err := http.Get(fmt.Sprintf("%s/api/v1/query?query=solana_vote_credits", cfg.Prometheus.PrometheusAddress))
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return cCredits, pCredits, err
+	}
+	responseData, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Printf("Error while reading vote credits from db : %v", err)
+		return cCredits, pCredits, err
+	}
+	json.Unmarshal(responseData, &result)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return cCredits, pCredits, err
+	}
+	if len(result.Data.Result) > 0 {
+		cCredits = result.Data.Result[0].Metric.SolanaCurrentCredits
+		pCredits = result.Data.Result[0].Metric.SolanaPreviousCredits
+	}
+
+	return cCredits, pCredits, nil
+}

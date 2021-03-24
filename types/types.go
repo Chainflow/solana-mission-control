@@ -255,12 +255,14 @@ type (
 			ResultType string `json:"resultType"`
 			Result     []struct {
 				Metric struct {
-					Name             string `json:"__name__"`
-					Instance         string `json:"instance"`
-					Job              string `json:"job"`
-					SolanaAccBalance string `json:"solana_acc_balance"`
-					AlertCount       string `json:"alert_count"`
-					SolanaValStatus  string `json:"solana_val_status"`
+					Name                  string `json:"__name__"`
+					Instance              string `json:"instance"`
+					Job                   string `json:"job"`
+					SolanaAccBalance      string `json:"solana_acc_balance"`
+					AlertCount            string `json:"alert_count"`
+					SolanaValStatus       string `json:"solana_val_status"`
+					SolanaPreviousCredits string `json:"solana_previous_credits"`
+					SolanaCurrentCredits  string `json:"solana_current_credits"`
 				} `json:"metric"`
 				Value []interface{} `json:"value"`
 			} `json:"result"`
