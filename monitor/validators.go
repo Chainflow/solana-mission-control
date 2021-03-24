@@ -77,3 +77,27 @@ func AlertStatusCountFromPrometheus(cfg *config.Config) (string, error) {
 
 	return count, nil
 }
+
+func GetValStatusFromDB(cfg *config.Config) (string, error) {
+	var result types.DBRes
+	var status string
+	response, err := http.Get(fmt.Sprintf("%s/api/v1/query?query=solana_val_status", cfg.Prometheus.PrometheusAddress))
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return status, err
+	}
+	responseData, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		log.Println(err)
+	}
+	json.Unmarshal(responseData, &result)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return status, err
+	}
+	if len(result.Data.Result) > 0 {
+		status = result.Data.Result[0].Metric.SolanaValStatus
+	}
+
+	return status, nil
+}

@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"math"
-	"strings"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -134,20 +133,10 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		balance.Set(float64(bal.Result.Value) / math.Pow(10, 9))
 
 		// Get Node Health
-		health, err := monitor.GetNodeHealth(cfg)
+		h, err := monitor.GetNodeHealth(cfg)
 		if err != nil {
 			log.Printf("Error while getting node health info : %v", err)
 			continue
-		}
-		var h float64
-		if health.Error.Message != "" {
-			if strings.EqualFold(health.Error.Message, "Node is unhealthy") {
-				h = 0
-			}
-		} else {
-			if strings.EqualFold(health.Result, "ok") {
-				h = 1
-			}
 		}
 
 		nodeHealth.Set(h)
@@ -190,7 +179,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 
 		if int64(diff) >= cfg.AlertingThresholds.EpochDiffThreshold {
 			// send alert
-			err = alerter.SendTelegramAlert(fmt.Sprintf("Epoch Difference Alert : Difference b/w network and validator epoch has exceeded the configured thershold &d", cfg.AlertingThresholds.EpochDiffThreshold), cfg)
+			err = alerter.SendTelegramAlert(fmt.Sprintf("Epoch Difference Alert : Difference b/w network and validator epoch has exceeded the configured thershold %d", cfg.AlertingThresholds.EpochDiffThreshold), cfg)
 			if err != nil {
 				log.Printf("Error while sending epoch diff alert: %v", err)
 			}
@@ -206,6 +195,10 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 				log.Printf("Error while sending block height diff alert: %v", err)
 			}
 		}
+
+		// Calling command based alerting
+		monitor.TelegramAlerting(c.config)
+
 		// Check whether we need to fetch a new leader schedule
 		if epochNumber != info.Epoch {
 			log.Printf("new epoch at slot %d: %d (previous: %d)", firstSlot, info.Epoch, epochNumber)
