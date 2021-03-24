@@ -9,6 +9,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
+	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
 )
 
 // TelegramAlerting will check for the commands from the configured telegram account
@@ -91,6 +92,18 @@ func GetStatus(cfg *config.Config) string {
 	}
 
 	msg = msg + fmt.Sprintf("Solana validator is currently %s\n", status)
+
+	valHeight, err := GetEpochInfo(cfg, utils.Validator)
+	if err != nil {
+		log.Printf("Error while getting val block height res : %v", err)
+	}
+	msg = msg + fmt.Sprintf("Validator block height : %d\n", valHeight.Result.BlockHeight)
+
+	networkHeight, err := GetEpochInfo(cfg, utils.Network)
+	if err != nil {
+		log.Printf("Error while getting network block height res : %v", err)
+	}
+	msg = msg + fmt.Sprintf("Network  block height : %d\n", networkHeight.Result.BlockHeight)
 
 	return msg
 }
