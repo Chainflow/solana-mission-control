@@ -204,14 +204,14 @@ type (
 	}
 
 	VoteAccount struct {
-		ActivatedStake   int64   `json:"activatedStake"`
-		Commission       int64   `json:"commission"`
+		ActivatedStake   int64     `json:"activatedStake"`
+		Commission       int64     `json:"commission"`
 		EpochCredits     [][]int64 `json:"epochCredits"`
-		EpochVoteAccount bool    `json:"epochVoteAccount"`
-		LastVote         int     `json:"lastVote"`
-		NodePubkey       string  `json:"nodePubkey"`
-		RootSlot         int     `json:"rootSlot"`
-		VotePubkey       string  `json:"votePubkey"`
+		EpochVoteAccount bool      `json:"epochVoteAccount"`
+		LastVote         int       `json:"lastVote"`
+		NodePubkey       string    `json:"nodePubkey"`
+		RootSlot         int       `json:"rootSlot"`
+		VotePubkey       string    `json:"votePubkey"`
 	}
 
 	GetVoteAccountsResponse struct {
@@ -260,6 +260,7 @@ type (
 					Job              string `json:"job"`
 					SolanaAccBalance string `json:"solana_acc_balance"`
 					AlertCount       string `json:"alert_count"`
+					SolanaValStatus  string `json:"solana_val_status"`
 				} `json:"metric"`
 				Value []interface{} `json:"value"`
 			} `json:"result"`

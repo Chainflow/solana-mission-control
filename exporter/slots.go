@@ -115,6 +115,9 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 	for {
 		<-ticker.C
 
+		// Calling command based alerting
+		monitor.TelegramAlerting(c.config)
+
 		// Get account balance
 		bal, err := monitor.GetBalance(cfg)
 		if err != nil {
@@ -197,6 +200,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 				log.Printf("Error while sending block height diff alert: %v", err)
 			}
 		}
+
 		// Check whether we need to fetch a new leader schedule
 		if epochNumber != info.Epoch {
 			log.Printf("new epoch at slot %d: %d (previous: %d)", firstSlot, info.Epoch, epochNumber)
