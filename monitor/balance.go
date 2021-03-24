@@ -16,6 +16,7 @@ import (
 
 // GetBalance returns the balance of the account
 func GetBalance(cfg *config.Config) (types.Balance, error) {
+	log.Println("Getting Account Balance...")
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method:   http.MethodPost,

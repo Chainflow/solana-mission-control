@@ -11,6 +11,7 @@ import (
 
 // GetBlockTime returns the estimated production time of a confirmed block
 func GetBlockTime(slot int64, cfg *config.Config) (types.BlockTime, error) {
+	log.Println("Getting block time...")
 	var result types.BlockTime
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,

@@ -11,6 +11,7 @@ import (
 
 // GetStake returns epoch activation information for a stake account
 func GetStake(cfg *config.Config) (types.Stake, error) {
+	log.Println("Getting Stake...")
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method:   http.MethodPost,

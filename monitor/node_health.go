@@ -14,6 +14,7 @@ import (
 
 // GetNodeHealth returns the current health of the node.
 func GetNodeHealth(cfg *config.Config) (types.NodeHealth, error) {
+	log.Println("Getting Node Health...")
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method:   http.MethodPost,

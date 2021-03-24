@@ -100,7 +100,7 @@ func init() {
 
 }
 
-// WatchSlots uses to get data from different methods and store it in prometheus. Those are
+// WatchSlots get data from different methods and store that data in prometheus. Those are
 // 1. Account balance
 // 2. Node Health
 // 3. Network Epoch Information

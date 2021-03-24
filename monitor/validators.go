@@ -14,6 +14,7 @@ import (
 
 // GetVoteAccounts returns voting accounts information
 func GetVoteAccounts(cfg *config.Config, node string) (types.GetVoteAccountsResponse, error) {
+	log.Println("Getting Vote Account Information...")
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method:   http.MethodPost,

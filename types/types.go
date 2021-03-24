@@ -253,19 +253,21 @@ type (
 		// ID int `json:"id"`
 	}
 
-	// SlotLeader holds information of current slot leader
+	// SlotLeader holds the  information of current slot leader
 	SlotLeader struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  string `json:"result"`
 		// ID      int    `json:"id"`
 	}
 
+	// CurrentSlot holds the information of Current slot
 	CurrentSlot struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  int64  `json:"result"`
 		// ID      int    `json:"id"`
 	}
 
+	// DBRes struct holds the Account balance and alertcount which stored in Database
 	DBRes struct {
 		Status string `json:"status"`
 		Data   struct {
@@ -283,12 +285,14 @@ type (
 		} `json:"data"`
 	}
 
+	// TxCount struct which holds information of Transaction count
 	TxCount struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  int64  `json:"result"`
 		// ID      int    `json:"id"`
 	}
 
+	// ClusterNode struct which holds information about all the nodes participating in the cluster
 	ClustrNode struct {
 		// Jsonrpc string `json:"jsonrpc"`
 		Result []struct {
@@ -301,6 +305,7 @@ type (
 		// ID int `json:"id"`
 	}
 
+	// ConfirmedBlock struct which holds blocktime of confirmedBlock at current slot height
 	ConfirmedBlock struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  struct {
@@ -309,6 +314,7 @@ type (
 		// ID int `json:"id"`
 	}
 
+	// ConfirmedSignatureforAddress struct holds information of confirmed block
 	ConfirmedSignatureforAddress struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  struct {
@@ -318,7 +324,7 @@ type (
 		} `json:"result"`
 		ID int `json:"id"`
 	}
-
+	// ConfirmedTransaction struct holds information of confirmed transaction
 	ConfirmedTransaction struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  struct {
