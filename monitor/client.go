@@ -11,21 +11,6 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
-type (
-	Commitment string
-)
-
-const (
-	// Most recent block confirmed by supermajority of the cluster as having reached maximum lockout.
-	CommitmentMax Commitment = "max"
-	// Most recent block having reached maximum lockout on this node.
-	CommitmentRoot Commitment = "root"
-	// Most recent block that has been voted on by supermajority of the cluster (optimistic confirmation).
-	CommitmentSingleGossiper Commitment = "singleGossip"
-	// The node will query its most recent block. Note that the block may not be complete.
-	CommitmentRecent Commitment = "recent"
-)
-
 func addQueryParameters(req *http.Request, queryParams types.QueryParams) {
 	params := url.Values{}
 	for key, value := range queryParams {
