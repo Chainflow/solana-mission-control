@@ -129,15 +129,6 @@ type (
 		ID int `json:"id"`
 	}
 
-	// SolanaVersion struct holds solana current version
-	SolanaVersion struct {
-		Jsonrpc string `json:"jsonrpc"`
-		Result  struct {
-			SolanaCore string `json:"solana-core"`
-		} `json:"result"`
-		ID int `json:"id"`
-	}
-
 	// LeaderShedule struct holds information of leader schedule for an epoch
 	LeaderShedule struct {
 		Jsonrpc string             `json:"jsonrpc"`
@@ -156,33 +147,6 @@ type (
 	BlockTime struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  int64  `json:"result"`
-		// ID int `json:"id"`
-	}
-
-	// VoteAccount struct which holds information of voting accounts
-	VoteAccounts struct {
-		Jsonrpc string `json:"jsonrpc"`
-		Result  struct {
-			Current []struct {
-				Commission       int  `json:"commission"`
-				EpochVoteAccount bool `json:"epochVoteAccount"`
-				// EpochCredits     [][]int `json:"epochCredits"`
-				NodePubkey     string `json:"nodePubkey"`
-				LastVote       int    `json:"lastVote"`
-				ActivatedStake int    `json:"activatedStake"`
-				VotePubkey     string `json:"votePubkey"`
-			} `json:"current"`
-			Delinquent []struct {
-				Commission       int  `json:"commission"`
-				EpochVoteAccount bool `json:"epochVoteAccount"`
-				// EpochCredits     []interface{} `json:"epochCredits"`
-				NodePubkey     string `json:"nodePubkey"`
-				LastVote       int    `json:"lastVote"`
-				ActivatedStake int    `json:"activatedStake"`
-				VotePubkey     string `json:"votePubkey"`
-			} `json:"delinquent"`
-		} `json:"result"`
-		ID int `json:"id"`
 	}
 
 	// NodeHealth struct which holds information of health of the node
@@ -195,7 +159,6 @@ type (
 			Data    struct {
 			} `json:"data"`
 		} `json:"error"`
-		// ID int `json:"id"`
 	}
 
 	// Version struct which holds information of solana version
@@ -204,7 +167,6 @@ type (
 		Result struct {
 			SolanaCore string `json:"solana-core"`
 		} `json:"result"`
-		// ID int `json:"id"`
 	}
 
 	// Identity struct holds the pubkey for the current node
@@ -213,7 +175,6 @@ type (
 		Result  struct {
 			Identity string `json:"identity"`
 		} `json:"result"`
-		// ID int `json:"id"`
 	}
 
 	// VoteAccount struct holds information of vote account
@@ -250,21 +211,18 @@ type (
 			Inactive int64  `json:"inactive"`
 			State    string `json:"state"`
 		} `json:"result"`
-		// ID int `json:"id"`
 	}
 
 	// SlotLeader holds the  information of current slot leader
 	SlotLeader struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  string `json:"result"`
-		// ID      int    `json:"id"`
 	}
 
 	// CurrentSlot holds the information of Current slot
 	CurrentSlot struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  int64  `json:"result"`
-		// ID      int    `json:"id"`
 	}
 
 	// DBRes struct holds the Account balance and alertcount which stored in Database
@@ -292,7 +250,6 @@ type (
 	TxCount struct {
 		Jsonrpc string `json:"jsonrpc"`
 		Result  int64  `json:"result"`
-		// ID      int    `json:"id"`
 	}
 
 	// ClusterNode struct which holds information about all the nodes participating in the cluster
@@ -305,7 +262,6 @@ type (
 			Tpu     string `json:"tpu"`
 			Version string `json:"version"`
 		} `json:"result"`
-		// ID int `json:"id"`
 	}
 
 	// ConfirmedBlock struct which holds blocktime of confirmedBlock at current slot height
@@ -314,55 +270,5 @@ type (
 		Result  struct {
 			BlockTime int64 `json:"blockTime"`
 		} `json:"result"`
-		// ID int `json:"id"`
-	}
-
-	// ConfirmedSignatureforAddress struct holds information of confirmed block
-	ConfirmedSignatureforAddress struct {
-		Jsonrpc string `json:"jsonrpc"`
-		Result  struct {
-			Signature string `json:"signature"`
-			Slot      int    `json:"slot"`
-			BlockTime int64  `json:"blockTime"`
-		} `json:"result"`
-		ID int `json:"id"`
-	}
-	// ConfirmedTransaction struct holds information of confirmed transaction
-	ConfirmedTransaction struct {
-		Jsonrpc string `json:"jsonrpc"`
-		Result  struct {
-			Meta struct {
-				Err               interface{}   `json:"err"`
-				Fee               int           `json:"fee"`
-				InnerInstructions []interface{} `json:"innerInstructions"`
-				PostBalances      []interface{} `json:"postBalances"`
-				PostTokenBalances []interface{} `json:"postTokenBalances"`
-				PreBalances       []interface{} `json:"preBalances"`
-				PreTokenBalances  []interface{} `json:"preTokenBalances"`
-				Status            struct {
-					Ok interface{} `json:"Ok"`
-				} `json:"status"`
-			} `json:"meta"`
-			Slot        int `json:"slot"`
-			Transaction struct {
-				Message struct {
-					AccountKeys []string `json:"accountKeys"`
-					Header      struct {
-						NumReadonlySignedAccounts   int `json:"numReadonlySignedAccounts"`
-						NumReadonlyUnsignedAccounts int `json:"numReadonlyUnsignedAccounts"`
-						NumRequiredSignatures       int `json:"numRequiredSignatures"`
-					} `json:"header"`
-					Instructions []struct {
-						Accounts       []int  `json:"accounts"`
-						Data           string `json:"data"`
-						ProgramIDIndex int    `json:"programIdIndex"`
-					} `json:"instructions"`
-					RecentBlockhash string `json:"recentBlockhash"`
-				} `json:"message"`
-				Signatures []string `json:"signatures"`
-			} `json:"transaction"`
-		} `json:"result"`
-		BlockTime int64 `json:"blockTime"`
-		ID        int   `json:"id"`
 	}
 )
