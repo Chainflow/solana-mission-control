@@ -286,13 +286,13 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 	for _, vote := range response.Result.Delinquent {
 		if vote.NodePubkey == c.config.ValDetails.PubKey {
 			v := strconv.FormatInt(vote.Commission, 10)
-			if vote.EpochVoteAccount {
-				epochvote = 1
-			} else {
-				epochvote = 0
-			}
-			ch <- prometheus.MustNewConstMetric(c.validatorVote, prometheus.GaugeValue,
-				epochvote, "delinquent")
+			// if vote.EpochVoteAccount {
+			// 	epochvote = 1
+			// } else {
+			// 	epochvote = 0
+			// }
+			// ch <- prometheus.MustNewConstMetric(c.validatorVote, prometheus.GaugeValue,
+			// 	epochvote, "delinquent")
 			ch <- prometheus.MustNewConstMetric(c.delinqentCommission, prometheus.GaugeValue, float64(vote.Commission), v) // store delinquent commission
 
 			// send alert if the validator is delinquent

@@ -4,12 +4,14 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"net/http"
 	"strconv"
 	"strings"
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
+	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
 )
 
@@ -50,6 +52,17 @@ func TelegramAlerting(cfg *config.Config) {
 			msgToSend = GetEpochDetails(cfg)
 		} else if update.Message.Text == "/vote_credits" {
 			msgToSend = GetVoteCredits(cfg)
+		} else if update.Message.Text == "/rpc_status" {
+			msgToSend = GetEndPointStatus(cfg)
+		} else if update.Message.Text == "/stop" {
+			msgToSend = Stop()
+			if msgToSend != "" {
+				msg := tgbotapi.NewMessage(update.Message.Chat.ID, msgToSend)
+				msg.ReplyToMessageID = update.Message.MessageID
+
+				bot.Send(msg)
+			}
+			log.Fatalf(msgToSend)
 		} else if update.Message.Text == "/list" {
 			msgToSend = GetHelp()
 		} else {
@@ -80,7 +93,7 @@ func GetHelp() string {
 		"and network block height\n /node - return status of caught-up\n" +
 		" /balance - returns the current balance of your account \n /epoch - returns current epoch of " +
 		"network and validator\n /vote_credits - returns vote credits of current and" +
-		"previous epochs \n /list - list out the available commands"
+		"previous epochs \n /rpc_status - returns the status of validator rpc and network rpc i.e., running or not\n /stop - which panics the running code and also alerts will be stopped\n /list - list out the available commands"
 
 	return msg
 }
@@ -178,5 +191,46 @@ func GetVoteCredits(cfg *config.Config) string {
 
 	msg = fmt.Sprintf("Epoch vote credits ::\n Current epoch credits : %s\n Previous epoch credits: %s\n", cCredits, pCredits)
 
+	return msg
+}
+
+// GetEndPointsStatus retsurns status of the configured endpoints i.e, val and network rpc.
+func GetEndPointStatus(cfg *config.Config) string {
+	ops := types.HTTPOptions{
+		Endpoint: cfg.Endpoints.RPCEndpoint,
+		Method:   http.MethodPost,
+		Body:     types.Payload{Jsonrpc: "2.0", Method: "getVersion", ID: 1},
+	}
+
+	var msg string
+	_, err := HitHTTPTarget(ops)
+	if err != nil {
+		log.Printf("Error in rpc endpoint: %v", err)
+		msg = msg + fmt.Sprintf("⛔⛔ Unreachable to VALIDATOR RPC  endpoint :: %s and the ERROR is : %v\n\n", ops.Endpoint, err.Error())
+	} else {
+		msg = msg + fmt.Sprintf("VALIDATOR RPC  ✅\n\n")
+	}
+
+	// Check network RPC status
+	ops = types.HTTPOptions{
+		Endpoint: cfg.Endpoints.NetworkRPC,
+		Method:   http.MethodPost,
+		Body:     types.Payload{Jsonrpc: "2.0", Method: "getVersion", ID: 1},
+	}
+	_, err = HitHTTPTarget(ops)
+	if err != nil {
+		log.Printf("Error in network rpc: %v", err)
+		msg = msg + fmt.Sprintf("⛔⛔ Unreachable to NETWORK RPC :: %s and the ERROR is : %v\n\n", ops.Endpoint, err.Error())
+	} else {
+		msg = msg + fmt.Sprintf("NETWORK RPC  ✅\n\n")
+	}
+
+	return msg
+}
+
+// Stop which will be used to stop the the running program of monitoring tool
+func Stop() string {
+	var msg string
+	msg = "Monitoring tool has stopped"
 	return msg
 }
