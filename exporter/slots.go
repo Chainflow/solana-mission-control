@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"math"
+	"strings"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -177,7 +178,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		diff := float64(resp.Result.Epoch) - float64(info.Epoch)
 		epochDifference.Set(diff) // set epoch diff to prometheus
 
-		if int64(diff) >= cfg.AlertingThresholds.EpochDiffThreshold {
+		if strings.EqualFold(cfg.AlerterPreferences.EpochDiffAlerts, "yes") && int64(diff) >= cfg.AlertingThresholds.EpochDiffThreshold && int64(diff) > 0 {
 			// send alert
 			err = alerter.SendTelegramAlert(fmt.Sprintf("Epoch Difference Alert : Difference b/w network and validator epoch has exceeded the configured thershold %d", cfg.AlertingThresholds.EpochDiffThreshold), cfg)
 			if err != nil {

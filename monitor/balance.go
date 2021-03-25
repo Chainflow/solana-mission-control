@@ -116,6 +116,7 @@ func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 		}
 	}
 
+	// Send delegation alerts
 	if prevBal != "" {
 
 		pBal, err := strconv.ParseFloat(prevBal, 64)
@@ -124,7 +125,7 @@ func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 			return err
 		}
 
-		if cfg.AlerterPreferences.BalanceChangeAlerts == "yes" {
+		if strings.EqualFold(cfg.AlerterPreferences.DelegationAlerts, "yes") {
 			diff := cBal - pBal
 			if diff > 0 {
 				err = alerter.SendTelegramAlert(fmt.Sprintf("Delegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)

@@ -31,28 +31,13 @@ type (
 	Scraper struct {
 		// Rate is to call and get the data for specified targets on that particular time interval
 		Rate string `mapstructure:"rate"`
-		// ValidatorRate is to call and fetch the data from validatorStatus target on that time interval
-		ValidatorRate string `mapstructure:"validator_rate"`
-		// ContractRate is to call and fetch the data from smart contract realted targets on that time interval
-		ContractRate string `mapstructure:"contract_rate"`
-		// CommandsRate is to check the for telegram commands from telegram chat and returns the data
-		CommandsRate string `mapstructure:"tg_commnads_rate"`
 	}
 
 	// Prometheus stores Prometheus details
 	Prometheus struct {
-		// Port on which influxdb is running
-		Port string `mapstructure:"port"`
-		// IP to connect to influxdb where it is running
-		IP string `mapstructure:"ip"`
-		// Database is the name of the influxdb database to store the data
-		Database string `mapstructure:"database"`
-		// Username is the name of the user of influxdb
-		Username string `mapstructure:"username"`
-		// Password of influxdb
-		Password string `mapstructure:"password"`
-
-		ListenAddress     string `mapstructure:"listen_address"`
+		// ListenAddress to export metrics on the given port
+		ListenAddress string `mapstructure:"listen_address"`
+		// PrometheusAddress to connect to prormetheus where it has running
 		PrometheusAddress string `mapstructure:"prometheus_address"`
 	}
 
@@ -82,18 +67,14 @@ type (
 		AlertTimings []string `mapstructure:"alert_timings"`
 	}
 
-	// AlerterPreferences stores individual alert settings to enable/disable particular alert
+	// AlerterPreferences which holds individual alert settings to enable/disable particular alert
 	AlerterPreferences struct {
-		BalanceChangeAlerts        string `mapstructure:"balance_change_alerts"`
+		DelegationAlerts           string `mapstructure:"delegation_alerts"`
 		AccountBalanceChangeAlerts string `mapstructure:"account_balance_change_alerts"`
 		VotingPowerAlerts          string `mapstructure:"voting_power_alerts"`
-		// ProposalAlerts             string `mapstructure:"proposal_alerts"`
-		BlockDiffAlerts string `mapstructure:"block_diff_alerts"`
-		// MissedBlockAlerts          string `mapstructure:"missed_block_alerts"`
-		// NumPeersAlerts             string `mapstructure:"num_peers_alerts"`
-		NodeSyncAlert   string `mapstructure:"node_sync_alert"`
-		NodeStatusAlert string `mapstructure:"node_status_alert"`
-		// EthLowBalanceAlert         string `mapstructure:"eth_low_balance_alert"`
+		BlockDiffAlerts            string `mapstructure:"block_diff_alerts"`
+		NodeHealthAlert            string `mapstructure:"node_health_alert"`
+		// NodeStatusAlert            string `mapstructure:"node_status_alert"`
 		EpochDiffAlerts string `mapstructure:"epoch_diff_alrets"`
 	}
 
@@ -131,7 +112,7 @@ func ReadFromFile() (*Config, error) {
 	// 	log.Fatal(err)
 	// }
 
-	// configPath := path.Join(usr.HomeDir, `.matic-jagar/config/`)
+	// configPath := path.Join(usr.HomeDir, `.solana-tool/config/`)
 	// log.Printf("Config Path : %s", configPath)
 
 	v := viper.New()
