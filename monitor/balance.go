@@ -14,7 +14,9 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
+// GetBalance returns the balance of the account
 func GetBalance(cfg *config.Config) (types.Balance, error) {
+	log.Println("Getting Account Balance...")
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method:   http.MethodPost,
@@ -44,6 +46,7 @@ func GetBalance(cfg *config.Config) (types.Balance, error) {
 	return result, nil
 }
 
+// GetIdentity returns the identity publickey for the current node on fail returns Error
 func GetIdentity(cfg *config.Config) (types.Identity, error) {
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
@@ -67,6 +70,7 @@ func GetIdentity(cfg *config.Config) (types.Identity, error) {
 	return result, nil
 }
 
+// GetAccountBalFromDB get the account balance from DataBase
 func GetAccountBalFromDB(cfg *config.Config) (string, error) {
 	var result types.DBRes
 	var bal string
@@ -91,6 +95,8 @@ func GetAccountBalFromDB(cfg *config.Config) (string, error) {
 	return bal, nil
 }
 
+// SendBalanceChangeAlert checks balance and DBbalance, If balance dropped to threshold,
+// sends Alerts to the validator
 func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 	prevBal, err := GetAccountBalFromDB(cfg)
 	if err != nil {
@@ -102,7 +108,7 @@ func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 
 	if strings.EqualFold(cfg.AlerterPreferences.AccountBalanceChangeAlerts, "yes") {
 		if cBal < cfg.AlertingThresholds.AccountBalThreshold {
-			err = alerter.SendTelegramAlert(fmt.Sprintf("Account Balance Alert: Your account balance has dopped below configured threshold, current balance is : %f", cBal), cfg)
+			err = alerter.SendTelegramAlert(fmt.Sprintf("Account Balance Alert: Your account balance has dropped below configured threshold, current balance is : %f", cBal), cfg)
 			if err != nil {
 				log.Printf("Error while sending account balance change alert : %v", err)
 				return err

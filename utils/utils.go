@@ -20,7 +20,7 @@ const (
 	Validator = "validator"
 )
 
-func RoundPrec(x float64, prec int) float64 {
+func roundPrec(x float64, prec int) float64 {
 	if math.IsNaN(x) || math.IsInf(x, 0) {
 		return x
 	}
@@ -45,7 +45,7 @@ func RoundPrec(x float64, prec int) float64 {
 	return rounder / pow * sign
 }
 
-func NumberFormat(number float64, decimals int, decPoint, thousandsSep string) string {
+func numberFormat(number float64, decimals int, decPoint, thousandsSep string) string {
 	if math.IsNaN(number) || math.IsInf(number, 0) {
 		number = 0
 	}
@@ -64,7 +64,7 @@ func NumberFormat(number float64, decimals int, decPoint, thousandsSep string) s
 		fract = 0
 	} else {
 		pow := math.Pow(10, float64(decimals))
-		fract = RoundPrec(fract*pow, 0)
+		fract = roundPrec(fract*pow, 0)
 	}
 
 	if thousandsSep == "" {
@@ -98,6 +98,7 @@ func NumberFormat(number float64, decimals int, decPoint, thousandsSep string) s
 	return ret
 }
 
+// RoundInt rounds the digit to nearest number
 func RoundInt(input float64) int {
 	var result float64
 
@@ -113,12 +114,15 @@ func RoundInt(input float64) int {
 	return int(i)
 }
 
+// FormatNumber returns formatted number
 func FormatNumber(input float64) string {
 	x := RoundInt(input)
-	xFormatted := NumberFormat(float64(x), 2, ".", ",")
+	xFormatted := numberFormat(float64(x), 2, ".", ",")
 	return xFormatted
+
 }
 
+// NearestThousandFormat takes number and converts it to readable format
 func NearestThousandFormat(num float64) string {
 
 	if math.Abs(num) < 999.5 {

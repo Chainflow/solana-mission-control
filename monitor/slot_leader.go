@@ -9,7 +9,9 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
+// GetSlotLeader returns the current slot leader
 func GetSlotLeader(cfg *config.Config) (types.SlotLeader, error) {
+	log.Println("Getting Slot Leader...")
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method:   http.MethodPost,

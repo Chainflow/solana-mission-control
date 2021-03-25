@@ -9,6 +9,7 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
+// GetTxCount returns the current Transaction count from the ledger
 func GetTxCount(cfg *config.Config) (types.TxCount, error) {
 	var result types.TxCount
 	var err error
