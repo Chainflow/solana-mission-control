@@ -19,11 +19,11 @@ func TestValidatorCurrentSlot(t *testing.T) {
 		t.Error("Error while fetching validator current slot : ", err)
 	}
 
-	if res.Result == 0 {
-		t.Error("Expexted non empty result, but got empty version : ", res.Result)
+	if &res == nil {
+		t.Error("Expected non empty result, but got empty version : ", res.Result)
 	}
 
-	if res.Result != 0 {
+	if &res != nil {
 		t.Log("Got validator current slot : ", res.Result)
 	}
 }
@@ -40,7 +40,7 @@ func TestNetworkCurrentSlot(t *testing.T) {
 	}
 
 	if res.Result == 0 {
-		t.Error("Expexted non empty result, but got empty result: ", res.Result)
+		t.Error("Expected non empty result, but got empty result: ", res.Result)
 	}
 
 	if res.Result != 0 {

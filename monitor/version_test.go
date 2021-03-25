@@ -18,11 +18,11 @@ func TestVersion(t *testing.T) {
 		t.Error("Error while fetching version : ", err)
 	}
 
-	if res.Result.SolanaCore == "" {
-		t.Error("Expexted non empty result, but got empty version : ", res.Result.SolanaCore)
+	if &res.Result == nil {
+		t.Error("Expected non empty result, but got empty version : ", res.Result.SolanaCore)
 	}
 
-	if res.Result.SolanaCore != "" {
+	if &res.Result != nil {
 		t.Log("Got Version : ", res.Result.SolanaCore)
 	}
 }

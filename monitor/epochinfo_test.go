@@ -17,10 +17,10 @@ func TestGetValidatorEpochinfo(t *testing.T) {
 	if err != nil {
 		t.Error("Error while fetching Epoch Information")
 	}
-	if res.Result.Epoch == 0 {
-		t.Error("Expexted non empty result, but got empty result: ", res.Result)
+	if &res.Result == nil {
+		t.Error("Expected non empty result, but got empty result: ", res.Result)
 	}
-	if res.Result.Epoch != 0 {
+	if &res.Result != nil {
 		t.Log("Got Epoch information: ", res.Result)
 	}
 }
@@ -34,10 +34,10 @@ func TestGetNetworkEpochinfo(t *testing.T) {
 	if err != nil {
 		t.Error("Error while fetching epoch information")
 	}
-	if res.Result.Epoch == 0 {
-		t.Error("Expexted non empty result, but got empty result: ", res.Result)
+	if &res.Result == nil {
+		t.Error("Expected non empty result, but got empty result: ", res.Result)
 	}
-	if res.Result.Epoch != 0 {
+	if &res.Result.Epoch != nil {
 		t.Log("Got Network Epoch information: ", res.Result)
 	}
 }

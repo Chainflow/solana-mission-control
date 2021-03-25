@@ -17,12 +17,12 @@ func TestGetValidatorVoteAccounts(t *testing.T) {
 	if err != nil {
 		t.Error("Error while Validator Vote Account information")
 	}
-	if res.Result.Current == nil || res.Result.Delinquent == nil {
-		t.Error("Expexted non empty result, but got empty result: ", res.Result)
+	if &res.Result.Current == nil || &res.Result.Delinquent == nil {
+		t.Error("Expected non empty result, but got empty result: ", res.Result)
 	}
-	if res.Result.Current != nil {
+	if &res.Result.Current != nil {
 		t.Log("Got Validator current vote account information", res.Result)
-	} else if res.Result.Delinquent != nil {
+	} else if &res.Result.Delinquent != nil {
 		t.Log("Got Validator Deliquent vote account information", res.Result)
 	}
 }
@@ -37,9 +37,9 @@ func TestGetNetworkVoteAccounts(t *testing.T) {
 		t.Error("Error while fetching Network Vote Account Information")
 	}
 	if res.Result.Current == nil {
-		t.Error("Expexted non empty result, but got empty result: ", res.Result)
+		t.Error("Expected non empty result, but got empty result: ", res.Result)
 	} else if res.Result.Delinquent == nil {
-		t.Error("Expexted non empty result, but got empty result: ", res.Result)
+		t.Error("Expected non empty result, but got empty result: ", res.Result)
 	}
 	if res.Result.Current != nil {
 		t.Log("Got Network current vote account information", res.Result)

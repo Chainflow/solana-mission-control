@@ -17,8 +17,8 @@ func TestClusterNodes(t *testing.T) {
 	if err != nil {
 		t.Error("Error while getting cluster nodes")
 	}
-	if res.Result == nil {
-		t.Error("Expexted non empty result, but got empty result: ", res.Result)
+	if &res.Result == nil {
+		t.Error("Expected non empty result, but got empty result: ", res.Result)
 	}
 
 	if res.Result != nil {

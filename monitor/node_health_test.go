@@ -16,10 +16,10 @@ func TestGetNodeHealth(t *testing.T) {
 	if err != nil {
 		t.Error("Error while fetching Node Health")
 	}
-	if res == 0 {
-		t.Error("Expexted OK, but got empty result: ", res)
+	if &res == nil {
+		t.Error("Expected OK, but got empty result: ", res)
 	}
-	if res != 0 {
+	if &res != nil {
 		t.Log("Got Node Health", res)
 	}
 }

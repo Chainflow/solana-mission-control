@@ -16,10 +16,10 @@ func TestGetSlotLeader(t *testing.T) {
 	if err != nil {
 		t.Error("Error while fetching Slot Leader")
 	}
-	if res.Result == "" {
-		t.Error("Expexted non empty result, but got empty result: ", res.Result)
+	if &res == nil {
+		t.Error("Expected non empty result, but got empty result: ", res.Result)
 	}
-	if res.Result != "" {
+	if &res.Result != nil {
 		t.Log("Got Slot Leader", res.Result)
 	}
 }

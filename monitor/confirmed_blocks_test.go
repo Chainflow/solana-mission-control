@@ -16,10 +16,10 @@ func TestConfirmedBlocks(t *testing.T) {
 	if err != nil {
 		t.Error("Error while getting confirmed blocks at given range")
 	}
-	if res == nil {
-		t.Error("Expexted non empty result, but got empty result: ", res)
+	if &res == nil {
+		t.Error("Expected non empty result, but got empty result: ", res)
 	}
-	if res != nil {
+	if &res != nil {
 		t.Log("Got confirmed Blocks between given range : ", res)
 	}
 }

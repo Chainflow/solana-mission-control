@@ -18,11 +18,11 @@ func TestConfirmedValidatorBlock(t *testing.T) {
 	if err != nil {
 		t.Error("Error while getting confirmed block Information at given height")
 	}
-	if res.Result.BlockTime == 0 {
-		t.Error("Expexted non empty result, but got empty result: ", res)
+	if &res.Result == nil {
+		t.Error("Expected non empty result, but got empty result: ", res)
 	}
-	if res.Result.BlockTime != 0 {
-		t.Log("Got confirmed Block information : ", res)
+	if &res.Result != nil {
+		t.Log("Got confirmed Block information : ", res.Result)
 	}
 }
 
@@ -37,7 +37,7 @@ func TestConfirmedNetworkBlock(t *testing.T) {
 		t.Error("Error while getting network confirmed block Information at given heights")
 	}
 	if res.Result.BlockTime == 0 {
-		t.Error("Expexted non empty result, but got empty result: ", res)
+		t.Error("Expected non empty result, but got empty result: ", res)
 	}
 	if res.Result.BlockTime != 0 {
 		t.Log("Got network confirmed Block information : ", res)

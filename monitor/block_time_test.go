@@ -17,7 +17,7 @@ func TestBlockTime(t *testing.T) {
 		t.Error("Error while fetching block time")
 	}
 	if &res == nil {
-		t.Error("Expexted non empty result, but got empty result: ", res.Result)
+		t.Error("Expected non empty result, but got empty result: ", res.Result)
 	}
 	if res.Result != 0 {
 		t.Log("Got block time: ", res.Result)

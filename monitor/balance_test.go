@@ -17,7 +17,7 @@ func TestGetBalance(t *testing.T) {
 		t.Error("Error while fetching Account balance")
 	}
 	if res.Result.Value == 0 {
-		t.Error("Expexted non empty result, but got empty result: ", res.Result)
+		t.Error("Expected non empty result, but got empty result: ", res.Result)
 	}
 	if res.Result.Value != 0 {
 		t.Log("Got Account Balance: ", res.Result)
