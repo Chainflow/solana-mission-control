@@ -174,6 +174,8 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		epochLastSlot.Set(float64(lastSlot))
 		valBlockHeight.Set(float64(info.BlockHeight))
 
+		log.Printf("************** Block Height ********* : %d", info.BlockHeight)
+
 		// Calculate epoch difference of network and validator
 		diff := float64(resp.Result.Epoch) - float64(info.Epoch)
 		epochDifference.Set(diff) // set epoch diff to prometheus
@@ -197,8 +199,8 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 			}
 		}
 
-		// Calling command based alerting
-		monitor.TelegramAlerting(c.config)
+		// // Calling command based alerting
+		// monitor.TelegramAlerting(c.config)
 
 		// Check whether we need to fetch a new leader schedule
 		if epochNumber != info.Epoch {
