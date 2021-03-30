@@ -186,6 +186,11 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 			if err != nil {
 				log.Printf("Error while sending epoch diff alert: %v", err)
 			}
+			// send email alert
+			err = alerter.SendEmailAlert(fmt.Sprintf("Epoch Difference Alert : Difference b/w network and validator epoch has exceeded the configured thershold %d", cfg.AlertingThresholds.EpochDiffThreshold), cfg)
+			if err != nil {
+				log.Printf("Error while sending epoch diff alert: %v", err)
+			}
 		}
 
 		heightDiff := float64(resp.Result.BlockHeight) - float64(info.BlockHeight)
