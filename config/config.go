@@ -75,18 +75,21 @@ type (
 
 	// AlerterPreferences which holds individual alert settings to enable/disable particular alert
 	AlerterPreferences struct {
-		// DelegationAlerts is to disable/enable balance delegation alerts
+		// DelegationAlerts is to disable/enable balance delegation alerts, on enable sends alert when there are
+		// alters account balance
 		DelegationAlerts string `mapstructure:"delegation_alerts"`
-		// AccountBalanceChangeAlerts is to disable/enable Account balance change alerts, sends alert
+		// AccountBalanceChangeAlerts is to disable/enable Account balance change alerts, on enable sends alert
 		// when balance has dropped to balance threshold
 		AccountBalanceChangeAlerts string `mapstructure:"account_balance_change_alerts"`
 		// VotingPowerAlerts          string `mapstructure:"voting_power_alerts"`
-		// BlockDiffAlerts is to enable/disable block height difference alerts
+		// BlockDiffAlerts is to enable/disable block height difference alerts, on enable sends alert
+		// when difference meets threshold
 		BlockDiffAlerts string `mapstructure:"block_diff_alerts"`
-		// NodeHealthAlert is to enable/disable node Health status alert
+		// NodeHealthAlert is to enable/disable node Health status alert, on enable sends alerts
 		NodeHealthAlert string `mapstructure:"node_health_alert"`
 		// NodeStatusAlert            string `mapstructure:"node_status_alert"`
-		// EpochDiffAlerts is to enable/disable epoch difference alerts
+		// EpochDiffAlerts is to enable/disable epoch difference alerts, on enable sends alerts upon
+		// checking epoch difference threshold
 		EpochDiffAlerts string `mapstructure:"epoch_diff_alrets"`
 	}
 
@@ -96,7 +99,7 @@ type (
 		// BlockDiffThreshold is to send alerts when the difference b/w network and validator
 		// block height reaches the given threshold
 		BlockDiffThreshold int64 `mapstructure:"block_diff_threshold"`
-		// Alert when the validator identity balance is less than this amount of SOL
+		// AccountBalThreshold is to send Alert when the validator identity balance is less than this amount of SOL
 		AccountBalThreshold float64 `mapstructure:"account_bal_threshold"`
 		// EpochDiffThreahold is to send alerts when the difference b/w network an validator
 		// epoch reaches the given threshold
