@@ -61,7 +61,13 @@ func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 		if cBal < cfg.AlertingThresholds.AccountBalThreshold {
 			err = alerter.SendTelegramAlert(fmt.Sprintf("Account Balance Alert: Your account balance has dropped below configured threshold, current balance is : %f", cBal), cfg)
 			if err != nil {
-				log.Printf("Error while sending account balance change alert : %v", err)
+				log.Printf("Error while sending account balance change alert to telegram : %v", err)
+				return err
+			}
+
+			err = alerter.SendEmailAlert(fmt.Sprintf("Account Balance Alert: Your account balance has dropped below configured threshold, current balance is : %f", cBal), cfg)
+			if err != nil {
+				log.Printf("Error while sending account balance change alert to email: %v", err)
 				return err
 			}
 		}
@@ -79,15 +85,31 @@ func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 		if strings.EqualFold(cfg.AlerterPreferences.DelegationAlerts, "yes") {
 			diff := cBal - pBal
 			if diff > 0 {
+				// Alert to telegram
 				err = alerter.SendTelegramAlert(fmt.Sprintf("Delegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
 				if err != nil {
-					log.Printf("Error while sending delegation alert : %v", err)
+					log.Printf("Error while sending delegation alert to telegram : %v", err)
+					return err
+				}
+
+				// Alert to email
+				err = alerter.SendEmailAlert(fmt.Sprintf("Delegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
+				if err != nil {
+					log.Printf("Error while sending delegation alert to email : %v", err)
 					return err
 				}
 			} else {
+				// Alert to telegram
 				err = alerter.SendTelegramAlert(fmt.Sprintf("Undelegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
 				if err != nil {
-					log.Printf("Error while sending undelegation alert : %v", err)
+					log.Printf("Error while sending undelegation alert to telegram : %v", err)
+					return err
+				}
+
+				// Alert to email
+				err = alerter.SendEmailAlert(fmt.Sprintf("Undelegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
+				if err != nil {
+					log.Printf("Error while sending undelegation alert to email : %v", err)
 					return err
 				}
 			}
