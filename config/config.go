@@ -43,9 +43,9 @@ type (
 
 	// Endpoints defines multiple API base-urls to fetch the data
 	Endpoints struct {
-		// RPCEndPoint
+		// RPCEndPoint to fetch data
 		RPCEndpoint string `mapstructure:"rpc_endpoint"`
-		// NetworkRPC end point
+		// NetworkRPC end point to fetch data
 		NetworkRPC string `mapstructure:"network_rpc"`
 	}
 
@@ -75,17 +75,18 @@ type (
 
 	// AlerterPreferences which holds individual alert settings to enable/disable particular alert
 	AlerterPreferences struct {
-		// DelegationAlerts for balance delegation alerts
+		// DelegationAlerts is to disable/enable balance delegation alerts
 		DelegationAlerts string `mapstructure:"delegation_alerts"`
-		// AccountBalanceChangeAlerts for Account balance change alerts
+		// AccountBalanceChangeAlerts is to disable/enable Account balance change alerts, sends alert
+		// when balance has dropped to balance threshold
 		AccountBalanceChangeAlerts string `mapstructure:"account_balance_change_alerts"`
 		// VotingPowerAlerts          string `mapstructure:"voting_power_alerts"`
-		// BlockDiffAlerts is block height difference alerts
+		// BlockDiffAlerts is to enable/disable block height difference alerts
 		BlockDiffAlerts string `mapstructure:"block_diff_alerts"`
-		// NodeHealthAlert is node Health status alert
+		// NodeHealthAlert is to enable/disable node Health status alert
 		NodeHealthAlert string `mapstructure:"node_health_alert"`
 		// NodeStatusAlert            string `mapstructure:"node_status_alert"`
-		// EpochDiffAlerts for epoch difference alerts
+		// EpochDiffAlerts is to enable/disable epoch difference alerts
 		EpochDiffAlerts string `mapstructure:"epoch_diff_alrets"`
 	}
 
