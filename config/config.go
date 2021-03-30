@@ -43,22 +43,28 @@ type (
 
 	// Endpoints defines multiple API base-urls to fetch the data
 	Endpoints struct {
+		// RPCEndPoint
 		RPCEndpoint string `mapstructure:"rpc_endpoint"`
-		NetworkRPC  string `mapstructure:"network_rpc"`
+		// NetworkRPC end point
+		NetworkRPC string `mapstructure:"network_rpc"`
 	}
 
 	// ValDetails stores the validator meta details
 	ValDetails struct {
 		// ValidatorName is the moniker of your validator which will be used to display in alerts messages
 		ValidatorName string `mapstructure:"validator_name"`
-		PubKey        string `mapstructure:"pub_key"`
-		VoteKey       string `mapstructure:"vote_key"`
+		// PubKey of validator as base-58 encoded string
+		PubKey string `mapstructure:"pub_key"`
+		// VoteKey of validator as base-58 encoded string
+		VoteKey string `mapstructure:"vote_key"`
 	}
 
 	// EnableAlerts struct which holds options to enalbe/disable alerts
 	EnableAlerts struct {
+		// EnableTelegramAlerts to enable/disable telelegram alerts
 		EnableTelegramAlerts bool `mapstructure:"enable_telegram_alerts"`
-		EnableEmailAlerts    bool `mapstructure:"enable_email_alerts"`
+		// EnableTelegramAlerts to enable/disable emial alerts
+		EnableEmailAlerts bool `mapstructure:"enable_email_alerts"`
 	}
 
 	// RegularStatusAlerts defines time-slots to receive validator status alerts
@@ -69,12 +75,17 @@ type (
 
 	// AlerterPreferences which holds individual alert settings to enable/disable particular alert
 	AlerterPreferences struct {
-		DelegationAlerts           string `mapstructure:"delegation_alerts"`
+		// DelegationAlerts for balance delegation alerts
+		DelegationAlerts string `mapstructure:"delegation_alerts"`
+		// AccountBalanceChangeAlerts for Account balance change alerts
 		AccountBalanceChangeAlerts string `mapstructure:"account_balance_change_alerts"`
 		// VotingPowerAlerts          string `mapstructure:"voting_power_alerts"`
+		// BlockDiffAlerts is block height difference alerts
 		BlockDiffAlerts string `mapstructure:"block_diff_alerts"`
+		// NodeHealthAlert is node Health status alert
 		NodeHealthAlert string `mapstructure:"node_health_alert"`
 		// NodeStatusAlert            string `mapstructure:"node_status_alert"`
+		// EpochDiffAlerts for epoch difference alerts
 		EpochDiffAlerts string `mapstructure:"epoch_diff_alrets"`
 	}
 
@@ -86,7 +97,8 @@ type (
 		BlockDiffThreshold int64 `mapstructure:"block_diff_threshold"`
 		// Alert when the validator identity balance is less than this amount of SOL
 		AccountBalThreshold float64 `mapstructure:"account_bal_threshold"`
-
+		// EpochDiffThreahold is to send alerts when the difference b/w network an validator
+		// epoch reaches the given threshold
 		EpochDiffThreshold int64 `mapstructure:"epoch_diff_threshold"`
 	}
 
