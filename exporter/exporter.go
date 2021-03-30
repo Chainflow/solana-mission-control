@@ -361,9 +361,13 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 		if currentTime == statusAlertTime {
 			alreadySentAlert, _ := querier.AlertStatusCountFromPrometheus(c.config)
 			if alreadySentAlert == "false" {
-				err := alerter.SendTelegramAlert(msg, c.config)
-				if err != nil {
-					log.Printf("Error while sending vallidator status alert: %v", err)
+				telegramErr := alerter.SendTelegramAlert(msg, c.config)
+				emailErr := alerter.SendEmailAlert(msg, c.config)
+				if telegramErr != nil {
+					log.Printf("Error while sending vallidator status alert to telegram: %v", telegramErr)
+				}
+				if emailErr != nil {
+					log.Printf("Error while sending validator status alert to email: %v", emailErr)
 				}
 				ch <- prometheus.MustNewConstMetric(c.statusAlertCount, prometheus.GaugeValue,
 					count, "true")

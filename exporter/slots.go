@@ -184,12 +184,12 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 			// send alert
 			err = alerter.SendTelegramAlert(fmt.Sprintf("Epoch Difference Alert : Difference b/w network and validator epoch has exceeded the configured thershold %d", cfg.AlertingThresholds.EpochDiffThreshold), cfg)
 			if err != nil {
-				log.Printf("Error while sending epoch diff alert: %v", err)
+				log.Printf("Error while sending epoch diff alert to telegram: %v", err)
 			}
 			// send email alert
 			err = alerter.SendEmailAlert(fmt.Sprintf("Epoch Difference Alert : Difference b/w network and validator epoch has exceeded the configured thershold %d", cfg.AlertingThresholds.EpochDiffThreshold), cfg)
 			if err != nil {
-				log.Printf("Error while sending epoch diff alert: %v", err)
+				log.Printf("Error while sending epoch diff alert to email: %v", err)
 			}
 		}
 
@@ -200,7 +200,13 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 			// send alert
 			err = alerter.SendTelegramAlert(fmt.Sprintf("Block Difference Alert : Block difference b/w network and validator has exceeded &d", cfg.AlertingThresholds.BlockDiffThreshold), cfg)
 			if err != nil {
-				log.Printf("Error while sending block height diff alert: %v", err)
+				log.Printf("Error while sending block height diff alert to telegram: %v", err)
+			}
+
+			// send email alert
+			err = alerter.SendEmailAlert(fmt.Sprintf("Block Difference Alert : Block difference b/w network and validator has exceeded &d", cfg.AlertingThresholds.BlockDiffThreshold), cfg)
+			if err != nil {
+				log.Printf("Error while sending block height diff alert to email: %v", err)
 			}
 		}
 
