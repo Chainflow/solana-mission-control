@@ -76,7 +76,7 @@ type (
 	// AlerterPreferences which holds individual alert settings to enable/disable particular alert
 	AlerterPreferences struct {
 		// DelegationAlerts is to disable/enable balance delegation alerts, on enable sends alert when there are
-		// alters account balance
+		// alters in account balance
 		DelegationAlerts string `mapstructure:"delegation_alerts"`
 		// AccountBalanceChangeAlerts is to disable/enable Account balance change alerts, on enable sends alert
 		// when balance has dropped to balance threshold
