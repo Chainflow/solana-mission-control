@@ -405,8 +405,9 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.accountBalance, err)
 	} else {
-		s := strconv.FormatInt(bal.Result.Value, 10) // TODO : cross check the value
-		ch <- prometheus.MustNewConstMetric(c.accountBalance, prometheus.GaugeValue, 1, s)
+		b := float64(bal.Result.Value) / math.Pow(10, 9)
+		s := fmt.Sprintf("%.2f", b) // TODO : cross check the value
+		ch <- prometheus.MustNewConstMetric(c.accountBalance, prometheus.GaugeValue, b, s)
 	}
 
 	// get slot leader

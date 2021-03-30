@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
 	"strings"
@@ -55,17 +56,21 @@ func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 		return err
 	}
 
-	cBal := float64(currentBal)
+	// c := float64(currentBal) / math.Pow(10, 9)
+	c := fmt.Sprintf("%.2f", float64(currentBal)/math.Pow(10, 9))
+	cBal, _ := strconv.ParseFloat(c, 64)
+	current := c + "SOL"
+	previous := prevBal + "SOL"
 
 	if strings.EqualFold(cfg.AlerterPreferences.AccountBalanceChangeAlerts, "yes") {
 		if cBal < cfg.AlertingThresholds.AccountBalThreshold {
-			err = alerter.SendTelegramAlert(fmt.Sprintf("Account Balance Alert: Your account balance has dropped below configured threshold, current balance is : %f", cBal), cfg)
+			err = alerter.SendTelegramAlert(fmt.Sprintf("Account Balance Alert: Your account balance has dropped below configured threshold, current balance is : %s", current), cfg)
 			if err != nil {
 				log.Printf("Error while sending account balance change alert to telegram : %v", err)
 				return err
 			}
 
-			err = alerter.SendEmailAlert(fmt.Sprintf("Account Balance Alert: Your account balance has dropped below configured threshold, current balance is : %f", cBal), cfg)
+			err = alerter.SendEmailAlert(fmt.Sprintf("Account Balance Alert: Your account balance has dropped below configured threshold, current balance is : %s", current), cfg)
 			if err != nil {
 				log.Printf("Error while sending account balance change alert to email: %v", err)
 				return err
@@ -75,7 +80,6 @@ func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 
 	// Send delegation alerts
 	if prevBal != "" {
-
 		pBal, err := strconv.ParseFloat(prevBal, 64)
 		if err != nil {
 			log.Printf("Error while converting pBal to float64 : %v ", err)
@@ -86,28 +90,28 @@ func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 			diff := cBal - pBal
 			if diff > 0 {
 				// Alert to telegram
-				err = alerter.SendTelegramAlert(fmt.Sprintf("Delegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
+				err = alerter.SendTelegramAlert(fmt.Sprintf("Delegation Alert: Your account balance has changed form %s to %s", previous, current), cfg)
 				if err != nil {
 					log.Printf("Error while sending delegation alert to telegram : %v", err)
 					return err
 				}
 
 				// Alert to email
-				err = alerter.SendEmailAlert(fmt.Sprintf("Delegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
+				err = alerter.SendEmailAlert(fmt.Sprintf("Delegation Alert: Your account balance has changed form %s to %s", previous, current), cfg)
 				if err != nil {
 					log.Printf("Error while sending delegation alert to email : %v", err)
 					return err
 				}
-			} else {
+			} else if diff < 0 {
 				// Alert to telegram
-				err = alerter.SendTelegramAlert(fmt.Sprintf("Undelegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
+				err = alerter.SendTelegramAlert(fmt.Sprintf("Undelegation Alert: Your account balance has changed form %s to %s", previous, current), cfg)
 				if err != nil {
 					log.Printf("Error while sending undelegation alert to telegram : %v", err)
 					return err
 				}
 
 				// Alert to email
-				err = alerter.SendEmailAlert(fmt.Sprintf("Undelegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
+				err = alerter.SendEmailAlert(fmt.Sprintf("Undelegation Alert: Your account balance has changed form %s to %s", previous, current), cfg)
 				if err != nil {
 					log.Printf("Error while sending undelegation alert to email : %v", err)
 					return err
