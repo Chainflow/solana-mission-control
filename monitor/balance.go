@@ -3,7 +3,6 @@ package monitor
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"net/http"
 	"strconv"
@@ -11,6 +10,7 @@ import (
 
 	"github.com/PrathyushaLakkireddy/solana-prometheus/alerter"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
+	"github.com/PrathyushaLakkireddy/solana-prometheus/querier"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
@@ -46,59 +46,10 @@ func GetBalance(cfg *config.Config) (types.Balance, error) {
 	return result, nil
 }
 
-// GetIdentity returns the identity publickey for the current node on fail returns Error
-func GetIdentity(cfg *config.Config) (types.Identity, error) {
-	ops := types.HTTPOptions{
-		Endpoint: cfg.Endpoints.RPCEndpoint,
-		Method:   http.MethodPost,
-		Body:     types.Payload{Jsonrpc: "2.0", Method: "getIdentity", ID: 1},
-	}
-
-	var result types.Identity
-	resp, err := HitHTTPTarget(ops)
-	if err != nil {
-		log.Printf("Error: %v", err)
-		return result, err
-	}
-
-	err = json.Unmarshal(resp.Body, &result)
-	if err != nil {
-		log.Printf("Error: %v", err)
-		return result, err
-	}
-
-	return result, nil
-}
-
-// GetAccountBalFromDB get the account balance from DataBase
-func GetAccountBalFromDB(cfg *config.Config) (string, error) {
-	var result types.DBRes
-	var bal string
-	response, err := http.Get(fmt.Sprintf("%s/api/v1/query?query=solana_account_balance", cfg.Prometheus.PrometheusAddress))
-	if err != nil {
-		log.Printf("Error: %v", err)
-		return bal, err
-	}
-	responseData, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		log.Println(err)
-	}
-	json.Unmarshal(responseData, &result)
-	if err != nil {
-		log.Printf("Error: %v", err)
-		return bal, err
-	}
-	if len(result.Data.Result) > 0 {
-		bal = result.Data.Result[0].Metric.SolanaAccBalance
-	}
-
-	return bal, nil
-}
-
 // SendBalanceChangeAlert checks balance and DBbalance, If balance dropped to threshold,
 // sends Alerts to the validator
 func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
-	prevBal, err := GetAccountBalFromDB(cfg)
+	prevBal, err := querier.GetAccountBalFromDB(cfg)
 	if err != nil {
 		log.Printf("Error while getting bal from db : %v", err)
 		return err

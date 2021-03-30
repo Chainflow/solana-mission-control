@@ -71,9 +71,9 @@ type (
 	AlerterPreferences struct {
 		DelegationAlerts           string `mapstructure:"delegation_alerts"`
 		AccountBalanceChangeAlerts string `mapstructure:"account_balance_change_alerts"`
-		VotingPowerAlerts          string `mapstructure:"voting_power_alerts"`
-		BlockDiffAlerts            string `mapstructure:"block_diff_alerts"`
-		NodeHealthAlert            string `mapstructure:"node_health_alert"`
+		// VotingPowerAlerts          string `mapstructure:"voting_power_alerts"`
+		BlockDiffAlerts string `mapstructure:"block_diff_alerts"`
+		NodeHealthAlert string `mapstructure:"node_health_alert"`
 		// NodeStatusAlert            string `mapstructure:"node_status_alert"`
 		EpochDiffAlerts string `mapstructure:"epoch_diff_alrets"`
 	}

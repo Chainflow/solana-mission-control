@@ -11,6 +11,7 @@ import (
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
+	"github.com/PrathyushaLakkireddy/solana-prometheus/querier"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
 )
@@ -102,7 +103,7 @@ func GetHelp() string {
 func GetStatus(cfg *config.Config) string {
 	var msg string
 
-	status, err := GetValStatusFromDB(cfg)
+	status, err := querier.GetValStatusFromDB(cfg)
 	if err != nil {
 		log.Printf("Error while getting validator status from db : %v", err)
 	}
@@ -184,7 +185,7 @@ func GetEpochDetails(cfg *config.Config) string {
 func GetVoteCredits(cfg *config.Config) string {
 	var msg string
 
-	cCredits, pCredits, err := GetCredits(cfg)
+	cCredits, pCredits, err := querier.GetCredits(cfg)
 	if err != nil {
 		log.Printf("Error while getting vte credits from db : %v", err)
 	}

@@ -1,20 +1,18 @@
 package exporter
 
 import (
-	// "context"
 	"fmt"
 	"log"
 	"math"
 	"strconv"
 	"time"
 
-	// "github.com/certusone/solana_exporter/pkg/rpc"
 	"github.com/prometheus/client_golang/prometheus"
-	// "k8s.io/klog/v2"
 
 	"github.com/PrathyushaLakkireddy/solana-prometheus/alerter"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/monitor"
+	"github.com/PrathyushaLakkireddy/solana-prometheus/querier"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
 )
@@ -354,8 +352,8 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 
 	for _, statusAlertTime := range alertsArray {
 		if currentTime == statusAlertTime {
-			dbcount, _ := monitor.AlertStatusCountFromPrometheus(c.config)
-			if dbcount == "false" {
+			alreadySentAlert, _ := querier.AlertStatusCountFromPrometheus(c.config)
+			if alreadySentAlert == "false" {
 				err := alerter.SendTelegramAlert(msg, c.config)
 				if err != nil {
 					log.Printf("Error while sending vallidator status alert: %v", err)
@@ -369,10 +367,6 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 				return
 			}
 		}
-		// else {
-		// 	ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
-		// 		count, "0")
-		// }
 	}
 }
 
