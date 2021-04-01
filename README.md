@@ -155,7 +155,77 @@ The following list of metrics are displayed in this dashboard.
     
     Block Height - Validator:
        Displays the latest block height committed by the validator
-      
+    
+    Height Difference:
+       Displays Block Height Difference of network and validator's block height
+
+    Solana Blocktime:
+       Displays estimated production time of a confirmed block
+    
+    Vote Height - Network:
+       Displays the latest vote height of network
+    
+    Vote Height - Validator:
+       Displays the latest vote height committed by validator
+
+    Vote Height Difference:
+       Displays height difference of network and validator's vote height
+
+    Account Balance:
+       Displays Account Balance of validator in SOL's
+    
+    Solana current slot height:
+        Displays Current slot height 
+    
+    Confirmed Blocktime - Network:
+         Displays estimated production time of confirmed block of Network
+    
+    Confirmed Blocktime - Validator:
+         Displays estimated production time of confirmed block committed by validator
+        
+    Block Time Difference:
+        Difference between confirmation time of network and validator
+
+    Current Epoch - vote credits:
+        Displays current epoch vote credits of validator vote account
+
+    Previous Epoch - Vote credits:
+        Displays previous epoch vote credits of validator vote account
+    
+    Total valid slots:
+       Displays number of leader valid slots per leader
+    
+    Total skipped slots:
+       Displays number of leader skipped slots per leader
+
+- **Validator Details**
+
+   solana slot leader:
+      Displays current slot leader
+   
+   Transaction Count:
+      Displays current Transaction count from the ledger
+   
+   Validator last voted:
+      Displays Most recent slot voted on by this vote account
+   
+   Solana confirmed slot height:
+      Displays current slot height
+    
+   Current Active Validators:
+       Displays the number of current active validators, i.e validators who are voting 
+    
+   Delinquent validators:
+      Displays the number of delinquent validators, i.e validators who are jailed.
+
+   Confirmed epoch last slot:
+      Displays current epoch's last slot
+
+   Validator Root slot:
+      Displays Root slot per validator
+   
+    
+
 
 
 
