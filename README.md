@@ -223,6 +223,19 @@ The following list of metrics are displayed in this dashboard.
 
    Validator Root slot:
       Displays Root slot per validator
+
+## 2. System Monitoring Metrics
+
+These metrics are are collected by the node_exporter and displays all the metrics related to
+
+- CPU
+- Memory
+- Disk
+- Network traffic
+- System processes
+- Systemd
+- Storage
+- Hardware Misc
    
 ### 3. Summary Dashboard
 This dashboard displays a quick information summary of validator details and system metrics. It includes following details.
