@@ -92,4 +92,43 @@ $ cp example.config.toml config.toml
        
        Port in which prometheus will run, by default it will run on 9090 port
 
+After populating config.toml, check if you are running prometheus server in local
+
+## Grafana Dashboards
+
+Solana MOnitoring Tool provides three dashboards
+
+1. Validator Monitoring Metrics (These are the metrics which we have calculated and stored in prometheus)
+2. System Metrics (These are the metrics related to the system configuration)
+3. Summary (Which gives quick overview of validator and system metrics)
+
+### 1. Validator monitoring metricss
+
+The following list of metrics are displayed in this dashboard.
+
+- **Validator Details**
+
+  - validator public Key
+     
+      Node key of validator
+
+  - validator vote key
+
+      Vote Key of the validator
+
+- **Validator Information**
+
+    - Solana node version
+       
+       Current version of the solana
+
+    - solana node health
+       
+       current health of the node
+
+    
+      
+
+
+
       
