@@ -1,13 +1,13 @@
 # solana-prometheus
 
-# Get the code
+## Get the code
 ```bash
 $ git clone https://github.com/PrathyushaLakkireddy/solana-prometheus
 $ cd solana-prometheus
 $ cp example.config.toml config.toml
 ```
 
-# Configure the following variables in `config.toml`
+## Configure the following variables in `config.toml`
 - **[telegram]**
   - *tg_chat_id*
 
@@ -224,7 +224,7 @@ The following list of metrics are displayed in this dashboard.
    Validator Root slot:
       Displays Root slot per validator
 
-## 2. System Monitoring Metrics
+### 2. System Monitoring Metrics
 
 These metrics are are collected by the node_exporter and displays all the metrics related to
 
@@ -250,6 +250,12 @@ This dashboard displays a quick information summary of validator details and sys
 - Open your web browser and go to http://<your_ip>:3000/. `3000` is the default HTTP port that Grafana listens to if you haven’t configured a different port.
 - If you are a first time user type `admin` for the username and password in the login page.
 - You can change the password after login.
+
+### 2. Create Datasources
+
+- Before importing the dashboards you have to create datasources of Prometheuss.
+- To create datasoruces go to configuration and select Data Sources.
+- After that you can find Add data source, select Prometheus from Time series databases section.
 
 
 
