@@ -251,11 +251,25 @@ This dashboard displays a quick information summary of validator details and sys
 - If you are a first time user type `admin` for the username and password in the login page.
 - You can change the password after login.
 
-### 2. Create Datasources
+### 2. Create Datasource
 
 - Before importing the dashboards you have to create datasources of Prometheuss.
 - To create datasoruces go to configuration and select Data Sources.
 - After that you can find Add data source, select Prometheus from Time series databases section.
+
+### 3. Import the dashboards
+- To import the json file of the **validator monitoring metrics** click the *plus* button present on left hand side of the dashboard. Click on import and load the validator_monitoring_metrics.json present in the grafana_template folder. 
+
+- Select the datasources and click on import.
+
+- To import **system monitoring metrics** click the *plus* button present on left hand side of the dashboard. Click on import and load the system_monitoring_metrics.json present in the grafana_template folder.
+
+- While creating this dashboard if you face any issues at valueset, change it to empty and then click on import by selecting the datasources.
+
+- To import **summary**, click the *plus* button present on left hand side of the dashboard. Click on import and load the summary.json present in the grafana_template folder.
+
+- *For more info about grafana dashboard imports you can refer https://grafana.com/docs/grafana/latest/reference/export_import/*
+
 
 
 
