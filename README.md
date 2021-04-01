@@ -1,5 +1,24 @@
 # solana-prometheus
 
+### A - Install Grafana for Ubuntu
+Download the latest .deb file and extract it by using the following commands
+
+```sh
+$ cd $HOME
+$ sudo -S apt-get install -y adduser libfontconfig1
+$ wget https://dl.grafana.com/oss/release/grafana_6.7.2_amd64.deb
+$ sudo -S dpkg -i grafana_6.7.2_amd64.deb
+```
+
+Start the grafana server
+```sh
+$ sudo -S systemctl daemon-reload
+
+$ sudo -S systemctl start grafana-server
+
+Grafana will be running on port :3000 (ex:: https://localhost:3000)
+```
+
 ## Get the code
 ```bash
 $ git clone https://github.com/PrathyushaLakkireddy/solana-prometheus
@@ -280,7 +299,7 @@ This dashboard displays a quick information summary of validator details and sys
  - Alert when Epoch difference reaches to **epoch_diff_threshold**
  - Alert when there are alters in **Account Balance**
  - Alert when acount balance has dropped below to **account_bal_threshold**
- 
+
 
 
 
