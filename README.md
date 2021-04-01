@@ -106,7 +106,7 @@ Solana MOnitoring Tool provides three dashboards
 
 The following list of metrics are displayed in this dashboard.
 
-- **Validator Details**
+- **Validator Identity**
 
   Validator public Key:
     Node key of validator
@@ -224,8 +224,12 @@ The following list of metrics are displayed in this dashboard.
    Validator Root slot:
       Displays Root slot per validator
    
-    
+### 3. Summary Dashboard
+This dashboard displays a quick information summary of validator details and system metrics. It includes following details.
 
+- Validator identity (validator public key, validator vote key)
+- Validator summary (Voting power, Validator sttus,Node Health,Block Height Difference) are the metrics being displayed from Validator details.
+- CPU usage, RAM Usage, Memory usage and information about disk usage, Total RAM, CPU cores, server UPTime,CPU Basic, Memory Basic are the metrics being displayed from System details.
 
 
 
