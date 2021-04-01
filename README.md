@@ -271,6 +271,17 @@ This dashboard displays a quick information summary of validator details and sys
 - *For more info about grafana dashboard imports you can refer https://grafana.com/docs/grafana/latest/reference/export_import/*
 
 
+## Alerting (Telegram and Email)
+ A custom alerting module has been developed to alert on key validator health events. The module uses data from influxdb and trigger alerts based on user-configured thresholds.
+
+ - Alert when node health is **DOWN**
+ - Alert when validator is in **DELINQUNET** state
+ - Alert when Block difference meets **block_diff_threshold**
+ - Alert when Epoch difference reaches to **epoch_diff_threshold**
+ - Alert when there are alters in **Account Balance**
+ - Alert when acount balance has dropped below to **account_bal_threshold**
+ 
+
 
 
 
