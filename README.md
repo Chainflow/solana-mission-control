@@ -61,8 +61,35 @@ $ cp example.config.toml config.toml
        If you want to recieve alerts when there is a gap between your validator block height and network height then make it **yes** otherwise **no**
 
    - *epoch_diff_alrets*
-   
+
       If you want to recieve alerts when there is a gap between your validator epoch and network epoch then make it **yes** otherwise **no**
 
    - *delegation_alerts*
+
       Configure **yes** if you wish to get alerts about alters in account balance otherwise make it **no**
+
+- **[alerting_threholds]**
+
+   - *block_diff_threshold*
+
+      An Integer value to recieve block difference alerts, e.g. a value of 2 would alert you if your validator falls 2 or more blocks behind the network's current block height.
+
+    - *epoch_diff_threshold*
+       
+       An integer value to recieve epoch difference alerts, e.g. a value of 5 would alert you if your validator's epoch number and network's epoch difference is 5 or more.
+
+    - *account_bal_threshold*
+
+       An integer value to recieve account balance change alerts, e.g. if your account balance has dropped to given threshold value you will receive alerts.
+
+- **[prometheus]**
+
+    - *prometheus_address*
+       
+       Address of your lcd client (ex: http://localhost:9090)
+
+    - *listen_address*
+       
+       Port in which prometheus will run, by default it will run on 9090 port
+
+      
