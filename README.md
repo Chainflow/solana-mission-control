@@ -132,7 +132,37 @@ The following list of metrics are displayed in this dashboard.
     
     - Vote Account 
      
-         Shows information about whether validator is voting or not 
+         Shows information about whether the validator is voting or jailed
+    
+    - Validator Active stake
+
+         Displays Validator current active stake
+        
+    - Commision 
+
+        Validator's vote account commision
+
+- **validator Health**
+
+    - Network Epoch
+     
+       Displays network's epoch height 
+
+    - Validator Epoch
+
+       Displays validator' epoch height
+
+    - Epoch Difference
+
+       Difference between validator's and network's epoch
+
+    - Validator status
+
+       Shows validator's status whether the validator is voting or jailed
+
+- **Validator Performance**
+
+    - 
       
 
 
