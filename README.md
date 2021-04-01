@@ -18,15 +18,16 @@ $ sudo -S systemctl start grafana-server
 
 Grafana will be running on port :3000 (ex:: https://localhost:3000)
 ```
+## Install and configure the Validator Mission Control
 
-## Get the code
+### Get the code
 ```bash
 $ git clone https://github.com/PrathyushaLakkireddy/solana-prometheus
 $ cd solana-prometheus
 $ cp example.config.toml config.toml
 ```
 
-## Configure the following variables in `config.toml`
+### Configure the following variables in `config.toml`
 - **[telegram]**
   - *tg_chat_id*
 
