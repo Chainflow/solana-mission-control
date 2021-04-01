@@ -53,13 +53,16 @@ $ cp example.config.toml config.toml
 - **[alerter_preferences]**
 
    - *account_balance_change_alerts*
+
        Configure **yes** if you wish to get account balance change alerts otherwise make it **no** .
 
    - *block_diff_alerts*
+
        If you want to recieve alerts when there is a gap between your validator block height and network height then make it **yes** otherwise **no**
 
    - *epoch_diff_alrets*
+   
       If you want to recieve alerts when there is a gap between your validator epoch and network epoch then make it **yes** otherwise **no**
-      
+
    - *delegation_alerts*
       Configure **yes** if you wish to get alerts about alters in account balance otherwise make it **no**
