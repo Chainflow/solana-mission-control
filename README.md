@@ -231,6 +231,14 @@ This dashboard displays a quick information summary of validator details and sys
 - Validator summary (Voting power, Validator sttus,Node Health,Block Height Difference) are the metrics being displayed from Validator details.
 - CPU usage, RAM Usage, Memory usage and information about disk usage, Total RAM, CPU cores, server UPTime,CPU Basic, Memory Basic are the metrics being displayed from System details.
 
+## How to import these dashboards in your Grafana installation
+
+### 1. Login to your Grafana dashboard
+- Open your web browser and go to http://<your_ip>:3000/. `3000` is the default HTTP port that Grafana listens to if you haven’t configured a different port.
+- If you are a first time user type `admin` for the username and password in the login page.
+- You can change the password after login.
+
+
 
 
       
