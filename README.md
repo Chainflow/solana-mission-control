@@ -162,7 +162,11 @@ The following list of metrics are displayed in this dashboard.
 
 - **Validator Performance**
 
-    - 
+    - Block Height - Network: 
+         Displays the latest block height of a network
+    
+    Block Height - Validator:
+       Displays the latest block height committed by the validator
       
 
 
