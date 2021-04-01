@@ -126,7 +126,13 @@ The following list of metrics are displayed in this dashboard.
        
        current health of the node
 
+    - IP Address
+        
+        Gossip address of node
     
+    - Vote Account 
+     
+         Shows information about whether validator is voting or not 
       
 
 
