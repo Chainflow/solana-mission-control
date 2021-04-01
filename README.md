@@ -108,62 +108,50 @@ The following list of metrics are displayed in this dashboard.
 
 - **Validator Details**
 
-  - validator public Key
-     
-      Node key of validator
+  Validator public Key:
+    Node key of validator
 
-  - validator vote key
-
-      Vote Key of the validator
+  Validator vote key:
+     Vote Key of the validator
 
 - **Validator Information**
 
-    - Solana node version
-       
+    Solana node version:
        Current version of the solana
 
-    - solana node health
-       
-       current health of the node
+    Solana node health:
+        current health of the node
 
-    - IP Address
-        
+    IP Address:
         Gossip address of node
     
-    - Vote Account 
-     
-         Shows information about whether the validator is voting or jailed
+    Vote Account: 
+       Shows information about whether the validator is voting or jailed
     
-    - Validator Active stake
-
-         Displays Validator current active stake
+    Validator Active stake:
+        Displays Validator current active stake
         
-    - Commision 
-
-        Validator's vote account commision
+    Commision:
+      Validator's vote account commision
 
 - **validator Health**
 
-    - Network Epoch
-     
+    Network Epoch:
        Displays network's epoch height 
 
-    - Validator Epoch
-
+    Validator Epoch:
        Displays validator' epoch height
 
-    - Epoch Difference
-
+    Epoch Difference:
        Difference between validator's and network's epoch
 
-    - Validator status
-
-       Shows validator's status whether the validator is voting or jailed
+     Validator status:
+        Shows validator's status whether the validator is voting or jailed
 
 - **Validator Performance**
 
-    - Block Height - Network: 
-         Displays the latest block height of a network
+    Block Height - Network: 
+       Displays the latest block height of a network
     
     Block Height - Validator:
        Displays the latest block height committed by the validator
