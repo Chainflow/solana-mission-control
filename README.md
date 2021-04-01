@@ -8,7 +8,7 @@ $ cp example.config.toml config.toml
 ```
 
 # Configure the following variables in `config.toml`
-- *[telegram]*
+- **[telegram]**
   - *tg_chat_id*
 
     Telegram chat ID to receive Telegram alerts, required for Telegram alerting.
@@ -16,12 +16,12 @@ $ cp example.config.toml config.toml
   - *tg_bot_token*
 
     Telegram bot token, required for Telegram alerting. The bot should be added to the chat and should have send message permission.
-- *[Email]*
+- **[Email]**
 
   - *email_address*
 
     E-mail address to receive mail notifications, required for e-mail alerting.
-- *[validator_details]*
+- **[validator_details]**
 
    - *validator_name*
    
@@ -35,7 +35,7 @@ $ cp example.config.toml config.toml
    
       Vote key of validator, required for validator Identity.
     
-- *[enable_alerts]*
+- **[enable_alerts]**
 
    - *enable_telegram_alerts*
 
@@ -45,7 +45,7 @@ $ cp example.config.toml config.toml
 
       Configure **yes** if you wish to get email alerts otherwise make it **no** .
 
-- *[regular_status_alerts]*
+- **[regular_status_alerts]**
    - *alert_timings*
    
       Array of timestamps for alerting about the validator health, i.e. whether it's voting or jailed. You can get alerts based on the time which can be configured.
