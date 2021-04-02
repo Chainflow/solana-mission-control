@@ -16,7 +16,7 @@ import (
 )
 
 const (
-	slotPacerSchedule = 2 * time.Second
+	slotPacerSchedule = 500 * time.Millisecond
 )
 
 var (
@@ -166,7 +166,6 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		// Calculate first and last slot in epoch.
 		firstSlot := info.AbsoluteSlot - info.SlotIndex
 		lastSlot := firstSlot + info.SlotsInEpoch
-
 		confirmedSlotHeight.Set(float64(info.AbsoluteSlot))
 		currentEpochNumber.Set(float64(info.Epoch))
 		epochFirstSlot.Set(float64(firstSlot))
