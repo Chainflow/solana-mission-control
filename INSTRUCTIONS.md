@@ -200,7 +200,7 @@ $ cp example.config.toml config.toml
 
     - *epoch_diff_threshold*
        
-       An integer value to recieve epoch difference alerts, e.g. a value of 5 would alert you if your validator's epoch number and network's epoch difference is 5 or more.
+       An integer value to recieve epoch difference alerts, e.g. a value of 5 would alert you if difference between your validator's epoch number and network's epoch is 5 or more.
 
     - *account_bal_threshold*
 
