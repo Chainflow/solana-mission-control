@@ -18,6 +18,46 @@ $ sudo -S systemctl start grafana-server
 
 Grafana will be running on port :3000 (ex:: https://localhost:3000)
 ```
+
+### Install Prometheus
+
+```sh
+$ cd $HOME
+
+$ wget https://github.com/prometheus/prometheus/releases/download/v2.22.1/prometheus-2.22.1.linux-amd64.tar.gz
+
+$ tar -xvf prometheus-2.22.1.linux-amd64.tar.gz
+
+$ sudo cp prometheus-2.22.1.linux-amd64/prometheus $GOBIN
+
+$ sudo cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
+```
+- Add the following in prometheus.yml using your editor of choices
+
+```sh
+ scrape_configs:
+ 
+  - job_name: 'validator'
+
+    static_configs:
+    - targets: ['localhost:26660']
+
+  - job_name: 'node_exporter'
+
+    static_configs:
+    - targets: ['localhost:9100']
+    
+  - job_name: 'sentry-1'
+
+    static_configs:
+    - targets: ['<SENTRY1-IP>:26660']
+    
+  - job_name: 'sentry-2'
+
+    static_configs:
+    - targets: ['<SENTRY2-IP>:26660']
+```
+
 ## Install and configure the Validator Mission Control
 
 ### Get the code
@@ -26,7 +66,13 @@ $ git clone https://github.com/PrathyushaLakkireddy/solana-prometheus
 $ cd solana-prometheus
 $ cp example.config.toml config.toml
 ```
+**Note** If you don't have any sentries or have one please skip or specify only one `job_name`
 
+    - Setup Prometheus System service
+
+   ```bash
+   sudo nano /lib/systemd/system/prometheus.service
+   ```
 ### Configure the following variables in `config.toml`
 - **[telegram]**
   - *tg_chat_id*
