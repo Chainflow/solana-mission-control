@@ -57,6 +57,76 @@ $ sudo cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
     static_configs:
     - targets: ['<SENTRY2-IP>:26660']
 ```
+**Note** If you don't have any sentries or have one please skip or specify only one `job_name`
+
+    - Setup Prometheus System service
+
+   ```bash
+   sudo nano /lib/systemd/system/prometheus.service
+   ```
+- Copy-paste the following:
+   
+```sh
+[Unit]
+Description=Prometheus
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/home/ubuntu/go/bin/prometheus --config.file=/home/ubuntu/prometheus.yml
+Restart=always
+RestartSec=3
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target
+```
+- For the purpose of this guide it is assumed the `user` is `ubuntu`. If your user is   different please make the required changes above.
+     
+```sh 
+$ sudo systemctl daemon-reload
+$ sudo systemctl enable prometheus.service
+$ sudo systemctl start prometheus.service
+```
+
+### Install node exporter
+
+```sh
+$ cd $HOME
+$ curl -LO https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
+$ tar -xvf node_exporter-0.18.1.linux-amd64.tar.gz
+$ sudo cp node_exporter-0.18.1.linux-amd64/node_exporter $GOBIN
+```
+- Setup Node exporter service
+
+```bash 
+ sudo nano /lib/systemd/system/node_exporter.service
+ ```
+
+ Copy-paste the following:
+
+ ```sh
+ [Unit]
+Description=Node_exporter
+After=network-online.target
+
+[Service]
+Type=simple
+ExecStart=/home/ubuntu/go/bin/node_exporter
+Restart=always
+RestartSec=3
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target
+```
+For the purpose of this guide it is assumed the `user` is `ubuntu`. If your user is different please make the required changes above.
+
+```bash
+$ sudo systemctl daemon-reload
+$ sudo systemctl enable node_exporter.service
+$ sudo systemctl start node_exporter.service
+```
 
 ## Install and configure the Validator Mission Control
 
@@ -66,13 +136,7 @@ $ git clone https://github.com/PrathyushaLakkireddy/solana-prometheus
 $ cd solana-prometheus
 $ cp example.config.toml config.toml
 ```
-**Note** If you don't have any sentries or have one please skip or specify only one `job_name`
 
-    - Setup Prometheus System service
-
-   ```bash
-   sudo nano /lib/systemd/system/prometheus.service
-   ```
 ### Configure the following variables in `config.toml`
 - **[telegram]**
   - *tg_chat_id*
