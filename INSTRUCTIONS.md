@@ -1,5 +1,13 @@
 # solana-prometheus
 
+## Install Prerequisites
+
+- **Go 13.x+**
+- **Grafana 6.7+**
+- **Prometheus**
+- **Node Exporter**
+
+
 ### A - Install Grafana for Ubuntu
 Download the latest .deb file and extract it by using the following commands
 
