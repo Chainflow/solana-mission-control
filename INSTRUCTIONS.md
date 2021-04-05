@@ -220,7 +220,7 @@ After populating config.toml, check if you are running prometheus server in loca
 
 ## Grafana Dashboards
 
-Solana MOnitoring Tool provides three dashboards
+Solana Monitoring Tool provides three dashboards
 
 1. Validator Monitoring Metrics (These are the metrics which we have calculated and stored in prometheus)
 2. System Metrics (These are the metrics related to the system configuration)
@@ -256,7 +256,7 @@ The following list of metrics are displayed in this dashboard.
         Displays Validator current active stake
         
     Commision:
-      Validator's vote account commision
+      Validator's vote account commision, percentage (0-100) of rewards payout owed to the vote account.
 
 - **validator Health**
 
@@ -264,7 +264,7 @@ The following list of metrics are displayed in this dashboard.
        Displays network's epoch height 
 
     Validator Epoch:
-       Displays validator' epoch height
+       Displays validator's epoch height
 
     Epoch Difference:
        Difference between validator's and network's epoch
@@ -311,10 +311,10 @@ The following list of metrics are displayed in this dashboard.
         Difference between confirmation time of network and validator
 
     Current Epoch - vote credits:
-        Displays current epoch vote credits of validator vote account
+        Displays total current epoch vote credits of validator vote account
 
     Previous Epoch - Vote credits:
-        Displays previous epoch vote credits of validator vote account
+        Displays total previous epoch vote credits of validator vote account
     
     Total valid slots:
        Displays number of leader valid slots per leader
@@ -325,7 +325,7 @@ The following list of metrics are displayed in this dashboard.
 - **Validator Details**
 
    solana slot leader:
-      Displays current slot leader
+      Displays current slot leader address
    
    Transaction Count:
       Displays current Transaction count from the ledger
