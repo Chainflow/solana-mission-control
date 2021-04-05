@@ -1,5 +1,7 @@
 # solana-prometheus
 
+Solana prometheus monitoring tool provides a comprehensive set of metrics and alerts for solana validator node operators. We utilized the power of Grafana + Node exporter and extended the monitoring & alerting with a custom built go server. It also sends emergency alerts and calls to you based on your configuration.
+
 ## Install Prerequisites
 
 - **Go 14.x+**
