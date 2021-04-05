@@ -4,7 +4,7 @@
 
 Monitoring is provided via three customized Grafana dashboards.  The dashboards provide consolidated, user-friendly, yet comprehensive views of a validator infrastucture's health.
 
-Scroll past the dashboard descriptions to find a demo system link to see Validator Mission Control in action 👇
+Scroll past the dashboard descriptions to find a demo system link to see Solana Monitoring Tool in action 👇
 
 ### 1 - Summary Dashboard
 
@@ -27,7 +27,7 @@ This view provides a comprehensive look at validator details and performance, ex
 It shows you -
 
 * Validator identity 
-* Validator information includes node version, node health, IP Address, validator voting or not, Active stake, commision.
+* Validator information includes node version, node health, IP Address, validator voting or not, validator's Active stake and commision.
 * Validator Health includes validator and network epoch height, difference between validator and network epoch height, validator status
 * Validator Performance which includes
     - Network and validator block height 
