@@ -59,7 +59,7 @@ $ sudo cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
 ```
 **Note** If you don't have any sentries or have one please skip or specify only one `job_name`
 
-    - Setup Prometheus System service
+   Setup Prometheus System service
 
    ```bash
    sudo nano /lib/systemd/system/prometheus.service
