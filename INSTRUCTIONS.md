@@ -97,7 +97,8 @@ $ curl -LO https://github.com/prometheus/node_exporter/releases/download/v0.18.1
 $ tar -xvf node_exporter-0.18.1.linux-amd64.tar.gz
 $ sudo cp node_exporter-0.18.1.linux-amd64/node_exporter $GOBIN
 ```
-- Setup Node exporter service
+
+Setup Node exporter service
 
 ```bash 
  sudo nano /lib/systemd/system/node_exporter.service
