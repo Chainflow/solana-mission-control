@@ -406,7 +406,8 @@ This dashboard displays a quick information summary of validator details and sys
  - Alert when acount balance has dropped below to **account_bal_threshold**
 
 ## Telegram Commands
-Telegram commands are used to query metric information on your telegram bot accounts
+Telegram commands are used to query metric information on your telegram bot account
+
 List of available Telegram Commands
   - **/status** - status command returns validator status, current block height and network block height
   - **/node** - return status of caught-up
