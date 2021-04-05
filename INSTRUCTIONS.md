@@ -2,7 +2,7 @@
 
 ## Install Prerequisites
 
-- **Go 13.x+**
+- **Go 14.x+**
 - **Grafana 6.7+**
 - **Prometheus**
 - **Node Exporter**
@@ -13,9 +13,9 @@ Download the latest .deb file and extract it by using the following commands
 
 ```sh
 $ cd $HOME
-$ sudo -S apt-get install -y adduser libfontconfig1
-$ wget https://dl.grafana.com/oss/release/grafana_6.7.2_amd64.deb
-$ sudo -S dpkg -i grafana_6.7.2_amd64.deb
+$ sudo apt-get install -y adduser libfontconfig1
+$ wget https://dl.grafana.com/oss/release/grafana_7.5.2_amd64.deb
+$ sudo dpkg -i grafana_7.5.2_amd64.deb
 ```
 
 Start the grafana server
@@ -44,26 +44,12 @@ $ sudo cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
 
 ```sh
  scrape_configs:
- 
-  - job_name: 'validator'
-
-    static_configs:
-    - targets: ['localhost:26660']
 
   - job_name: 'node_exporter'
 
     static_configs:
     - targets: ['localhost:9100']
     
-  - job_name: 'sentry-1'
-
-    static_configs:
-    - targets: ['<SENTRY1-IP>:26660']
-    
-  - job_name: 'sentry-2'
-
-    static_configs:
-    - targets: ['<SENTRY2-IP>:26660']
 ```
 **Note** If you don't have any sentries or have one please skip or specify only one `job_name`
 
