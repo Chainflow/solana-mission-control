@@ -123,7 +123,7 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl enable node_exporter.service
 $ sudo systemctl start node_exporter.service
 ```
-Click [here](./custom-port) to setup the customization ports for Grafana, Prometheus and Node Exporter. 
+ 
 ## Install and configure the Validator Mission Control
 
 ### Get the code
