@@ -1,3 +1,11 @@
+
+## Monitoring 
+
+Monitoring is provided via three customized Grafana dashboards.  The dashboards provide consolidated, user-friendly, yet comprehensive views of a validator infrastucture's health.
+
+Scroll past the dashboard descriptions to find a demo system link to see Solana Monitoring Tool in action 👇
+
+
 ### 1. Validator monitoring metricss
 
 The following list of metrics are displayed in this dashboard.
@@ -120,7 +128,11 @@ The following list of metrics are displayed in this dashboard.
    Validator Root slot:
       Displays Root slot per validator
 
+**Note**: The above mentioned metrics will be calculated and displayed according to the validator address which will be configured in config.toml.      
+
 ### 2. System Monitoring Metrics
+
+This view provides a comprehensive look at system performance metrics, expanding on the summary dashboard. Here's you'll find all the system metrics you'd expect to see in a comprehensive system monitoring tool.
 
 These metrics are are collected by the node_exporter and displays all the metrics related to
 
@@ -134,6 +146,7 @@ These metrics are are collected by the node_exporter and displays all the metric
 - Hardware Misc
    
 ### 3. Summary Dashboard
+
 This dashboard displays a quick information summary of validator details and system metrics. It includes following details.
 
 - Validator identity (validator public key, validator vote key)
