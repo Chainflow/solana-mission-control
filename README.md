@@ -72,9 +72,3 @@ Here's the full list of alerts -
 * Alert when there are alters in **Account Balance**
 * Alert when acount balance has dropped below to **account_bal_threshold**
 
-
-## Getting Started
-
-[Setup Instructions](./INSTRUCTIONS.md)
-
-Click [here](./custom-port) to setup the customized ports for Grafana, Prometheus and Node Exporter.
