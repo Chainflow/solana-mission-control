@@ -5,7 +5,7 @@ Solana prometheus monitoring tool provides a comprehensive set of metrics and al
 ## Install Prerequisites
 
 - **Go 14.x+**
-- **Grafana 6.7+**
+- **Grafana 7.x+**
 - **Prometheus**
 - **Node Exporter**
 
@@ -123,7 +123,7 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl enable node_exporter.service
 $ sudo systemctl start node_exporter.service
 ```
-
+Click [here] to setup the customization ports for Grafana, Prometheus and Node Exporter. (./custom-port.md)
 ## Install and configure the Validator Mission Control
 
 ### Get the code
