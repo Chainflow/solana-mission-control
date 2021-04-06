@@ -76,4 +76,5 @@ Here's the full list of alerts -
 ## Getting Started
 
 [Setup Instructions](./INSTRUCTIONS.md)
+
 Click [here](./custom-port) to setup the customization ports for Grafana, Prometheus and Node Exporter.
