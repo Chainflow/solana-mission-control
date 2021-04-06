@@ -1,11 +1,3 @@
-## Install Prerequisites
-
-- **Go 14.x+**
-- **Grafana 7.x+**
-- **Prometheus**
-- **Node Exporter**
-
-
 ### A - Install Grafana for Ubuntu
 Download the latest .deb file and extract it by using the following commands
 
