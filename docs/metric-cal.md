@@ -12,29 +12,29 @@
 
     Solana node version: Returns the current solana versions running on the node, result feild is `solana-core` from  `getVersion` method
 
-    Solana node health: Checking wether solana is running active on this port, node status is marked as **UP** or else **DOWN** , result got by calling method `getHealth`
+    Solana node health: Checking wether solana is running active on this port, if it active node status is marked as **UP** or else **DOWN** , result got by calling method `getHealth`.
 
-    IP Address:  Gossip network address for the node,  result is got from the feild of `gossip` from method `getClusterNodes`
+    IP Address:  Gossip network address for the node, result is got from the feild of `gossip` from method `getClusterNodes`
     
-    Vote Account: If the valiadtor is a non deliquent and Epochvoteaccount is true and active stake is non-zero then validator is **voting** or else marked as **jailed**, epochvoteaccount and activestake calculated byb calling method `getVoteAccounts`
+    Vote Account: If the valiadtor is a non deliquent and Epochvoteaccount is true and active stake is non-zero then validator is **voting** or else marked as **jailed**, epochvoteaccount and activestake calculated from method `getVoteAccounts`.
     
-    Validator Active stake: The stake, delegated to this vote account and active in this epoch calculated by `activatedStake` feild from method `getVoteAccounts`
+    Validator Active stake: The stake, delegated to this vote account and active in this epoch calculated by `activatedStake` feild from method `getVoteAccounts`.
         
-    Commision: Validator's vote account commision, percentage (0-100) of rewards payout owed to the vote account, result feild is `commission` from method `getVoteAccounts`
+    Commision: Validator's vote account commision, percentage (0-100) of rewards payout owed to the vote account, result feild is `commission` from method `getVoteAccounts`.
 
 - **validator Health**
 
-    Network Epoch: Current network's  epoch height, calculated by calling the method `getEpochInfo`, result feild is `epoch`
+    Network Epoch: Current network's  epoch height, calculated by calling the method `getEpochInfo`, the result presented in the feild of `epoch`.
 
-    Validator Epoch: Current validator's epoch height,  calculated by calling the method `getEpochInfo`, result feild is `epoch`
+    Validator Epoch: Current validator's epoch height,  calculated by calling the method `getEpochInfo`, result feild is `epoch`.
 
-    Epoch Difference: Epoch Difference is calulated by subtracting validator's epoch height from network's epoch height
+    Epoch Difference: Epoch Difference is calulated by subtracting validator's epoch height from network's epoch height.
    
      Validator status: If the valiadtor is a non deliquent and Epochvoteaccount is true and active stake is non-zero then validator is **voting** or else marked as **jailed**, epochvoteaccount and activestake calculated byb calling method `getVoteAccounts`.
 
 - **Validator Performance**
 
-    Block Height - Network: The latest block height of network, result field is `blockHeight` got by calling `getEpochInfo` method.
+    Block Height - Network: The latest block height of network, result field is `blockHeight` got from `getEpochInfo` method.
     
     Block Height - Validator: The latest block height committed by the validator, result field is `blockHeight` got by calling `getEpochInfo` method.
     
@@ -48,17 +48,17 @@
 
     Vote Height Difference: Calculated by subratcting validator's vote height from network's vote height
 
-    Account Balance: Account balance of the validator, result got from method `getBalance`
+    Account Balance: Account balance of the validator, result got from method `getBalance`.
     
     Current slot height: Returns the current slot the node is processing, calculated by calling method `getSlot`.
     
-    Confirmed Blocktime - Network: Calculated from `getConfirmedBlock` takes slot height and returns estimated production time of confirmed block of Network.
+    Confirmed Blocktime - Network: Calculated from `getConfirmedBlock` takes slot height as parameter and returns estimated production time of confirmed block of Network.
 
-    Confirmed Blocktime - Validator: Calculated from  method `getConfirmedBlock` takes slot height and returns estimated production time of confirmed block of Validator. 
+    Confirmed Blocktime - Validator: Calculated from  method `getConfirmedBlock` takes slot height as parameter and returns estimated production time of confirmed block of Validator. 
     
     Block Time Difference: Calculated by subtracting confirmed blocktime of validator from confirmed blocktime of validator.
 
-    Current Epoch - vote credits: Total current epoch vote credits of validator's vote account,  calculated from method `getVoteAccounts`, result field `epochCredits` has array of vote credits result is sum of all current epoch vote credits.
+    Current Epoch - vote credits: Total current epoch vote credits of validator's vote account,  calculated from method `getVoteAccounts`, result field `epochCredits` has array of vote credits result is sum of all the current epoch vote credits.
 
     Previous Epoch - Vote credits: Total previous epoch vote credits of validator's vote account,  calculated from method `getVoteAccounts`, result field `epochCredits` has array of vote credits, result is sum of all previous epoch vote credits.
 
