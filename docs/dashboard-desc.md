@@ -150,5 +150,8 @@ These metrics are are collected by the node_exporter and displays all the metric
 This dashboard displays a quick information summary of validator details and system metrics. It includes following details.
 
 - Validator identity (validator public key, validator vote key)
-- Validator summary (Voting power, Validator sttus,Node Health,Block Height Difference) are the metrics being displayed from Validator details.
-- CPU usage, RAM Usage, Memory usage and information about disk usage, Total RAM, CPU cores, server UPTime,CPU Basic, Memory Basic are the metrics being displayed from System details.
+- Validator summary which includes  
+         Voting Account, Validator status,Node status,
+         Block Height - Network, Block Height - Validator, Block Height Difference 
+         Validator Commision, Active stake, Current Epoch Vote Credits
+- Server Uptime, CPU Busy, RAM Used, CPU, Memory Stake, Network Traffic, Disk Space Used, Disk IOps, I/O usage Read/Write, I/O Usage Times are the metrics being displayed from System details.
