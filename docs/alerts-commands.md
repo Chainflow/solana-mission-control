@@ -1,12 +1,13 @@
 ## Alerting (Telegram and Email)
  A custom alerting module has been developed to alert on key validator health events. The module uses data from prometheus and trigger alerts based on user-configured thresholds.
 
+ Here are the list of Alerts
  - Alert when node health is **DOWN**
  - Alert when validator is in **DELINQUNET** state
  - Alert when Block difference meets or exceedes **block_diff_threshold** which is user configured in *config.toml*
  - Alert when Epoch difference reaches or exceedes **epoch_diff_threshold** which is user configured in *config.toml*
  - Alert when Account balance has dropped from previous **Account Balance** to current **Account_Balance** in SOL's.
- - Alert when acount balance has dropped below to **account_bal_threshold**
+ - Alert when acount balance has dropped below to **account_bal_threshold** which is user configured in *config.toml*
 
 ## Telegram Commands
 Telegram commands will be used to get a quick information about your solana node. Based on the commands you will get alerts to your account.
