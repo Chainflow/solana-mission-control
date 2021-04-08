@@ -13,7 +13,7 @@ The following list of metrics are displayed in this dashboard.
 - **Validator Identity**
 
   Validator public Key:
-    Node key of validator
+    Node public key of the validator
 
   Validator vote key:
      Vote Key of the validator
@@ -24,16 +24,16 @@ The following list of metrics are displayed in this dashboard.
        Current version of the solana
 
     Solana node health:
-        current health of the node
+        current health of the solana node, if it is running fine it marked as **UP** or else marked as **DOWN**
 
     IP Address:
-        Gossip address of node
+        Gossip network address for the node
     
     Vote Account: 
-       Shows information about whether the validator is voting or jailed
+       Shows information about whether the validator is voting or jailed, If the validator is voting account it marked as **YES** or else **NO**
     
     Validator Active stake:
-        Displays Validator current active stake
+        Displays the stake, delegated to this vote account and active in this epoch
         
     Commision:
       Validator's vote account commision, percentage (0-100) of rewards payout owed to the vote account.
@@ -47,10 +47,10 @@ The following list of metrics are displayed in this dashboard.
        Displays validator's epoch height
 
     Epoch Difference:
-       Difference between validator's and network's epoch
+       Difference between validator's and network's epoch height
 
      Validator status:
-        Shows validator's status whether the validator is voting or jailed
+        Shows validator's status whether the validator is voting or jailed, If the validator is voting then it displayed as **VOTING** or else displayed as **JAILED**
 
 - **Validator Performance**
 
@@ -105,13 +105,13 @@ The following list of metrics are displayed in this dashboard.
 - **Validator Details**
 
    solana slot leader:
-      Displays current slot leader address
+      Displays current slot leader address as base-58 encoded string 
    
    Transaction Count:
-      Displays current Transaction count from the ledger
+      Displays current total transaction count from the ledger
    
    Validator last voted:
-      Displays Most recent slot voted on by this vote account
+      Displays most recent slot voted on by this vote account
    
    Solana confirmed slot height:
       Displays current slot height
