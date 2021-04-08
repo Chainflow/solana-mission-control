@@ -61,7 +61,7 @@
 
    - *delegation_alerts*
 
-      Configure **yes** if you wish to get alerts about alters in account balance otherwise make it **no**
+      Configure **yes** if you wish to get alerts about alters when current account balance has dropped below to previous account balance otherwise make it **no**
 
 - **[alerting_threholds]**
 
