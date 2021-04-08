@@ -12,6 +12,10 @@
   - *email_address*
 
     E-mail address to receive mail notifications, required for e-mail alerting.
+   
+  - *sendgrid_token*
+
+     Sendgrid mail service api token, required for e-mail alerting.
 - **[validator_details]**
 
    - *validator_name*
@@ -20,7 +24,7 @@
 
    - *pub_key*
   
-      Public Node key of the validator, which will be used to get validator identity and other validator metrics like commision,validator status etc...
+      Node public key of the validator, which will be used to get validator identity and other validator metrics like commision,validator status etc...
 
    - *vote_key*
    
@@ -77,8 +81,9 @@
 
     - *prometheus_address*
        
-       Address of your lcd client (ex: http://localhost:9090)
+       Prometheus listening address (ex: http://localhost:9090)
 
     - *listen_address*
        
-       Port in which prometheus will run, by default it will run on 9090 port
+       Port in which prometheus server will run, by default it will run on 9090 port, (ex: http://localhost:1234/metrics) shows all the metrics which are stored in prometheus database.
+

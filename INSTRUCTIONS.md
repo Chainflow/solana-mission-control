@@ -1,6 +1,6 @@
 # solana-prometheus
 
-Solana prometheus monitoring tool provides a comprehensive set of metrics and alerts for solana validator node operators. We utilized the power of Grafana + Node exporter and extended the monitoring & alerting with a custom built go server. It also sends emergency alerts and calls to you based on your configuration.
+Solana prometheus monitoring tool provides a comprehensive set of metrics and alerts for solana validator node operators. We utilized the power of Grafana + Node exporter and extended the monitoring & alerting with a custom built go server.
 
 ## Install Prerequisites
 
@@ -26,13 +26,13 @@ Installation of the tool is completed lets configure the Grafana dashboards.
 
 ### Grafana Dashboards
 
-The repo provides five dashboards
+The repo provides three dashboards
 
 1. Validator Monitoring Metrics - Displays the validator metrics which are calculated and stored in prometheus.
 2. System Metrics - Displays the metrics related to your validator server on which this tool is hosted on.
-3. Summary - Displays a quick overview of heimdall, bor and system metrics.
+3. Summary - Displays a quick overview of validator monitoring metrics and system metrics.
 
-Information on all the dashboards can be found [here](./docs/dashboard-desc.md).
+Information of all the dashboards can be found [here](./docs/dashboard-desc.md).
 
 ## How to import these dashboards in your Grafana installation
 
@@ -43,11 +43,18 @@ Information on all the dashboards can be found [here](./docs/dashboard-desc.md).
 
 ### 2. Create Datasource
 
-- Before importing the dashboards you have to create datasources of Prometheuss.
+- Before importing the dashboards you have to create datasources of `Prometheus`.
+
 - To create datasoruces go to configuration and select Data Sources.
-- After that you can find Add data source, select Prometheus from Time series databases section.
+
+- Click on Add data source and select `Prometheus` from Time series databases section.
+
+- Replace the URL with http://localhost:9090. 
+
+- Click on Save & Test . Now you have a working Datasource of Prometheus.
 
 ### 3. Import the dashboards
+
 - To import the json file of the **validator monitoring metrics** click the *plus* button present on left hand side of the dashboard. Click on import and load the validator_monitoring_metrics.json present in the grafana_template folder. 
 
 - Select the datasources and click on import.

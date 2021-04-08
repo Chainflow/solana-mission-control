@@ -4,7 +4,7 @@
 
 - **Validator Identity**
 
-  Validator public Key: Public Node key of the validator as base-58 encoded public key 
+  Validator public Key: Node public key of the validator as base-58 encoded public key 
 
   Validator vote key: Vote Key of the validator as base-58 encoded pubKey
 
