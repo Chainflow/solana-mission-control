@@ -116,6 +116,8 @@ Copy paste the following in prometheus.yml.
       static_configs:
       - targets: [localhost:9100]
 ```
+Start Node exporter
+
 ```bash
 $ sudo systemctl daemon-reload
 $ sudo systemctl enable node_exporter.service
