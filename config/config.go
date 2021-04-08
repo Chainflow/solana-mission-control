@@ -43,7 +43,7 @@ type (
 
 	// Endpoints defines multiple API base-urls to fetch the data
 	Endpoints struct {
-		// RPCEndPoint is used to gather information about validator active, account balance, commission rate and etc...
+		// RPCEndPoint is used to gather information about validator active, account balance, commission rate and etc.
 		RPCEndpoint string `mapstructure:"rpc_endpoint"`
 		// NetworkRPC is used to gather information about validator
 		NetworkRPC string `mapstructure:"network_rpc"`
@@ -69,40 +69,40 @@ type (
 
 	// RegularStatusAlerts defines time-slots to receive validator status alerts
 	RegularStatusAlerts struct {
-		// AlertTimings is the array of time slots to send validator status alerts
+		// AlertTimings is the array of time slots to send validator status alerts at that particular timings
 		AlertTimings []string `mapstructure:"alert_timings"`
 	}
 
 	// AlerterPreferences which holds individual alert settings which takes an option to  enable/disable particular alert
 	AlerterPreferences struct {
-		// DelegationAlerts which takes an option to disable/enable balance delegation alerts, on enable sends alert when there are
-		// alters in account balance
+		// DelegationAlerts which takes an option to disable/enable balance delegation alerts, on enable sends alert when current
+		// account balance has dropped below to previous account balance.
 		DelegationAlerts string `mapstructure:"delegation_alerts"`
 		// AccountBalanceChangeAlerts which takes an option to disable/enable Account balance change alerts, on enable sends alert
 		// when balance has dropped to balance threshold
 		AccountBalanceChangeAlerts string `mapstructure:"account_balance_change_alerts"`
 		// VotingPowerAlerts          string `mapstructure:"voting_power_alerts"`
-		// BlockDiffAlerts is to enable/disable block height difference alerts, on enable sends alert
-		// when difference meets threshold
+		// BlockDiffAlerts which takes an option to enable/disable block height difference alerts, on enable sends alert
+		// when difference meets or exceedes block difference threshold
 		BlockDiffAlerts string `mapstructure:"block_diff_alerts"`
 		// NodeHealthAlert which takes an option to  enable/disable node Health status alert, on enable sends alerts
 		NodeHealthAlert string `mapstructure:"node_health_alert"`
 		// NodeStatusAlert            string `mapstructure:"node_status_alert"`
-		// EpochDiffAlerts which takes an option to enable/disable epoch difference alerts, on enable sends alerts upon
-		// checking epoch difference threshold
+		// EpochDiffAlerts which takes an option to enable/disable epoch difference alerts, on enable sends alerts if
+		// difference reaches or exceedes epoch difference threshold
 		EpochDiffAlerts string `mapstructure:"epoch_diff_alrets"`
 	}
 
 	//  AlertingThreshold defines threshold condition for different alert-cases.
 	//`Alerter` will send alerts if the condition reaches the threshold
 	AlertingThreshold struct {
-		// BlockDiffThreshold is to send alerts when the difference b/w network and validator
-		// block height reaches to the given threshold
+		// BlockDiffThreshold is to send alerts when the difference b/w network and validator's
+		// block height reaches or exceedes to block difference threshold
 		BlockDiffThreshold int64 `mapstructure:"block_diff_threshold"`
-		// AccountBalThreshold is to send Alert when the validator balance is dropped below to this threshold
+		// AccountBalThreshold is to send Alert when the validator balance has dropped below to this threshold
 		AccountBalThreshold float64 `mapstructure:"account_bal_threshold"`
-		// EpochDiffThreahold is to send alerts when the difference b/w network and validator's
-		// epoch reaches to given threshold
+		// EpochDiffThreahold option is to send alerts when the difference b/w network and validator's
+		// epoch reaches or exceedes to epoch difference threshold
 		EpochDiffThreshold int64 `mapstructure:"epoch_diff_threshold"`
 	}
 

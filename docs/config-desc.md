@@ -20,7 +20,7 @@
 
    - *validator_name*
    
-       Moniker of your validator,to get it displayed in alerts.
+       valiadtor_name is the moniker of your validator which will be used to display in alerts messages.
 
    - *pub_key*
   
@@ -80,10 +80,10 @@
 - **[prometheus]**
 
     - *prometheus_address*
-       
-       Prometheus listening address (ex: http://localhost:9090)
+
+       PrometheusAddress to connect to prormetheus where it has running, by default prometheus listening address (ex: http://localhost:9090)
 
     - *listen_address*
        
-       Port in which prometheus server will run, by default it will run on 9090 port, (ex: http://localhost:1234/metrics) shows all the metrics which are stored in prometheus database.
+       Port in which prometheus server will run,and export metrics on this port, (ex: http://localhost:1234/metrics) shows all the metrics which are stored in prometheus database, by default it will run on 9090 port.
 
