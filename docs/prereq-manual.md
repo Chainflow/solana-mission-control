@@ -110,10 +110,12 @@ For the purpose of this guide it is assumed the `user` is `ubuntu`. If your user
 
 Copy paste the following in prometheus.yml.
 
+```sh
   - job_name: 'node_exporter'
 
       static_configs:
       - targets: [localhost:9100]
+```
 ```bash
 $ sudo systemctl daemon-reload
 $ sudo systemctl enable node_exporter.service
