@@ -35,10 +35,10 @@ $ sudo cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
 ```sh
  scrape_configs:
 
-  - job_name: 'node_exporter'
+  - job_name: 'prometheus'
 
     static_configs:
-    - targets: ['localhost:9100']
+    - targets: ['localhost:9090']
     
 ```
 
@@ -106,6 +106,14 @@ WantedBy=multi-user.target
 ```
 For the purpose of this guide it is assumed the `user` is `ubuntu`. If your user is different please make the required changes above.
 
+- **Note**:  Do not forget to setup node exporter configuration in prometheus.yml file.
+Copy paste the following in prometheus.yml.
+
+- job_name: 'node_exporter'
+
+    static_configs:
+    - targets: [localhost:9100]
+    
 ```bash
 $ sudo systemctl daemon-reload
 $ sudo systemctl enable node_exporter.service
