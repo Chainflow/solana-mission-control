@@ -10,17 +10,17 @@
 
 - **Validator Information**
 
-    Solana node version: Returns the current solana versions running on the node, result feild is `solana-core` from  `getVersion` method
+    Solana node version: Returns the current solana versions running on the node, result feild is `solana-core` from `getVersion` method
 
-    Solana node health: Checking wether solana is running active on this port, if it active node status is marked as **UP** or else **DOWN** , result got by calling method `getHealth`.
+    Solana node health: Checking wether solana is running active on this port or not, if it is active node status will be  marked as **UP** or else **DOWN** , result got from method `getHealth`.
 
-    IP Address:  Gossip network address for the node, result is got from the feild of `gossip` from method `getClusterNodes`
+    IP Address: Gossip network address for the node, result is got from the feild of `gossip` from the method `getClusterNodes`.
     
-    Vote Account: If the valiadtor is a non deliquent and Epochvoteaccount is true and active stake is non-zero then validator is **voting** or else marked as **jailed**, epochvoteaccount and activestake calculated from method `getVoteAccounts`.
+    Vote Account: If the valiadtor is a non deliquent, Epochvoteaccount is true and active stake is non-zero then vote account is marked as **yes** or else marked as **no**, epochvoteaccount and activestake calculated from method `getVoteAccounts`.
     
     Validator Active stake: The stake, delegated to this vote account and active in this epoch calculated by `activatedStake` feild from method `getVoteAccounts`.
         
-    Commision: Validator's vote account commision, percentage (0-100) of rewards payout owed to the vote account, result feild is `commission` from method `getVoteAccounts`.
+    Commision: Validator's vote account commision, percentage (0-100) of rewards payout owed to the vote account, result feild is `commission` from the method `getVoteAccounts`.
 
 - **validator Health**
 
@@ -36,9 +36,9 @@
 
     Block Height - Network: The latest block height of network, result field is `blockHeight` got from `getEpochInfo` method.
     
-    Block Height - Validator: The latest block height committed by the validator, result field is `blockHeight` got by calling `getEpochInfo` method.
+    Block Height - Validator: The latest block height committed by the validator, result field is `blockHeight` got from `getEpochInfo` method.
     
-    Height Difference: Calculated by subtracting the vaidator block height from network block height
+    Height Difference: Calculated by subtracting the vaidator's block height from network's block height
 
     Solana Blocktime: Difference between current and previous block time, Calculate previous and current block time by using the method `getBlockTIme`.
     
@@ -56,25 +56,25 @@
 
     Confirmed Blocktime - Validator: Calculated from  method `getConfirmedBlock` takes slot height as parameter and returns estimated production time of confirmed block of Validator. 
     
-    Block Time Difference: Calculated by subtracting confirmed blocktime of validator from confirmed blocktime of validator.
+    Block Time Difference: Calculated by subtracting confirmed blocktime of network from confirmed blocktime of validator.
 
-    Current Epoch - vote credits: Total current epoch vote credits of validator's vote account,  calculated from method `getVoteAccounts`, result field `epochCredits` has array of vote credits result is sum of all the current epoch vote credits.
+    Current Epoch - vote credits: Total current epoch vote credits of validator's vote account,  calculated from method `getVoteAccounts`, result field `epochCredits` has array of vote credits, result is sum of all the current epoch vote credits.
 
     Previous Epoch - Vote credits: Total previous epoch vote credits of validator's vote account,  calculated from method `getVoteAccounts`, result field `epochCredits` has array of vote credits, result is sum of all previous epoch vote credits.
 
     Total valid slots: number of leader valid slots per leader, If the block present in Confirmed Blocks it counted as valid slot. Confirmed Blocks calculated from method `getConfirmedBlocks`.
     
-    Total skipped slots: number of leader skipped slots per leader, If the block is not presented in Confirmed Blocks it counted as skipped slot.
+    Total skipped slots: number of leader skipped slots per leader, If the block is not presented in Confirmed Blocks it counted as skipped slot, Confirmed Blocks calculated from method `getConfirmedBlocks`.
 
 - **Validator Details**
 
-   solana slot leader: Current slot leader address as base-58 enocoded address, result got from method `getSlotLeader`.
+   solana slot leader: Current slot leader address as base-58 enocoded string, result got from method `getSlotLeader`.
    
    Transaction Count: Total number of transactions presented in ledger, Calculated from method `getTransactionCount`.
 
    Validator last voted: Most recent slot voted on by this vote account, got result field `LastVote` from method `getVoteAccounts`.
    
-   Solana confirmed slot height: Current slot height, result feild `AbsoluteSlot` from method `getEpochInfo`
+   Solana confirmed slot height: Current slot height, result feild is `AbsoluteSlot` from method `getEpochInfo`
     
    Current Active Validators: calculates from the method `getVoteAccounts` returns array of current and delinquent validators, current active validators are the sum of current active validators, i.e validators who are voting.
     
