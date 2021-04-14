@@ -79,6 +79,7 @@ echo "
     static_configs:
     - targets: [localhost:9100]" >> "$HOME/prometheus.yml"
 
+
 echo "------- Setup prometheus system service -------"
 
 echo "[Unit]
@@ -133,6 +134,6 @@ sudo systemctl start node_exporter.service
 
 echo "---- Cleaning .dep .tar.gz files of grafana, prometheus and node exporter --------"
 
-rm influxdb_1.8.3_amd64.deb grafana_7.3.1_amd64.deb node_exporter-0.18.1.linux-amd64.tar.gz prometheus-2.22.1.linux-amd64.tar.gz
+rm grafana_7.3.1_amd64.deb node_exporter-0.18.1.linux-amd64.tar.gz prometheus-2.22.1.linux-amd64.tar.gz
 
 echo "** Done with prerequisite installtion **"
