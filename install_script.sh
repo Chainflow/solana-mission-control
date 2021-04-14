@@ -71,12 +71,13 @@ cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
 echo "------- Edit prometheus.yml --------------"
 
 echo "
-  - job_name: 'validator'
+  
+  - job_name: 'prometheus'
     static_configs:
-    - targets: ['localhost:26660']
+    - targets: ['localhost:9090']
   - job_name: 'node_exporter'
     static_configs:
-    - targets: ['localhost:9100']" >> "$HOME/prometheus.yml"
+    - targets: [localhost:9100]" >> "$HOME/prometheus.yml"
 
 if [ -z "${SENTRY1}" ];
 then
