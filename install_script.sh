@@ -79,26 +79,6 @@ echo "
     static_configs:
     - targets: [localhost:9100]" >> "$HOME/prometheus.yml"
 
-if [ -z "${SENTRY1}" ];
-then
-   echo "-----Sentry-1 IP is empty, so not writing into prometheus.yml--------"
-else 
-  echo "
-  - job_name: 'sentry-1'
-    static_configs:
-    - targets: ['$SENTRY1:26660']" >> "$HOME/prometheus.yml"
-fi
-
-if [ -z "${SENTRY2}" ];
-then
-  echo "-----Sentry-2 IP is empty, so not writing into prometheus.yml--------"
-else
-  echo "
-  - job_name: 'sentry-2'
-    static_configs:
-    - targets: ['$SENTRY2:26660']" >> "$HOME/prometheus.yml"
-fi
-
 echo "------- Setup prometheus system service -------"
 
 echo "[Unit]
@@ -151,7 +131,7 @@ sudo systemctl enable node_exporter.service
 
 sudo systemctl start node_exporter.service
 
-echo "---- Cleaning .dep .tar.gz files of grafana, prometheus, influxdb and node exporter --------"
+echo "---- Cleaning .dep .tar.gz files of grafana, prometheus and node exporter --------"
 
 rm influxdb_1.8.3_amd64.deb grafana_7.3.1_amd64.deb node_exporter-0.18.1.linux-amd64.tar.gz prometheus-2.22.1.linux-amd64.tar.gz
 
