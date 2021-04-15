@@ -3,6 +3,7 @@ package exporter
 import (
 	"fmt"
 	"log"
+	"math"
 	"strings"
 	"time"
 
@@ -124,13 +125,13 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		<-ticker.C
 
 		// Get account balance
-		// bal, err := monitor.GetBalance(cfg)
-		// if err != nil {
-		// 	log.Printf("Error while getting account balance : %v", err)
-		// 	continue
-		// }
+		bal, err := monitor.GetBalance(cfg)
+		if err != nil {
+			log.Printf("Error while getting account balance : %v", err)
+			continue
+		}
 
-		// balance.Set(float64(bal.Result.Value) / math.Pow(10, 9))
+		balance.Set(float64(bal.Result.Value) / math.Pow(10, 9))
 
 		// Get Node Health
 		h, err := monitor.GetNodeHealth(cfg)
