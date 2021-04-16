@@ -1,46 +1,38 @@
 [rpc_and_lcd_endpoints]
-#rpc_endpoint = "https://testnet.solana.com"
 rpc_endpoint = "https://api.mainnet-beta.solana.com"
 network_rpc = "https://api.mainnet-beta.solana.com"
 
 [validator_details]
 validator_name = "witval"
-pub_key = "ChorusmmK7i1AxXeiTtQgQZhQNiXYU84ULeaYF1EH15n"
-vote_key = "2oxQJ1qpgUZU9JU84BHaoM1GzHkYfRDgDQY9dpH5mgGn"
+pub_key = "DWvDTSh3qfn88UoQTEKRV2JnLt5jtJAVoiCo3ivtMwXP"
+vote_key = ""
 
 [enable_alerts]
-enable_telegram_alerts = false
+enable_telegram_alerts = true
 enable_email_alerts = false
 
 [regular_status_alerts]
 alert_timings = ["02:30PM","12:18PM","12:19PM","02:33PM"]
 
 [alerter_preferences]
-balance_change_alerts = "yes"
-voting_power_alerts = "yes"
-proposal_alerts = "yes"
+delegation_alerts = "yes"
+account_balance_change_alerts = "yes"
 block_diff_alerts = "yes"
-missed_block_alerts = "yes"
-num_peers_alerts = "yes"
-node_sync_alert = "yes"
-node_status_alert = "yes"
-eth_low_balance_alert = "yes"
+node_health_alert = "yes"
+epoch_diff_alrets = "yes"
 
 [alerting_threholds]
-num_peers_threshold = 0
-missed_blocks_threshold = 10
 block_diff_threshold = 10
-eth_balance_threshold = 0.1
+account_bal_threshold = 0.1
+epoch_diff_threshold = 10
 
 [scraper]
 rate = "540000s"
-validator_rate = "60s"
-contract_rate = "300s"
 tg_commnads_rate = "2s"
 
 [telegram]
-tg_chat_id = 228281095
-tg_bot_token = "1117273891:AAEtr3ZU5x4JRj5YSu1fPF0T4xj-UI"
+tg_chat_id = 228288205
+tg_bot_token = "1117273891:AAEtr3ZU5x4JRj5YSF4LBeu1fPF0T4xj-UI"
 
 [sendgrid]
 sendgrid_token = "SG.J4dl16RST9OM9Nc2Tbvh6A.L_FPSzlqvBesPPQP72hATEt5Hs8TUzo9Dl3ohG8Rk"

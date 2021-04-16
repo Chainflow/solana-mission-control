@@ -8,7 +8,6 @@ echo "--------- Cloning solana-monitoring-tool -----------"
 
 git clone https://github.com/PrathyushaLakkireddy/solana-prometheus.git
 
-
 cd solana-prometheus
 
 cp example.config.toml config.toml
