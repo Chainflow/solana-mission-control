@@ -9,18 +9,96 @@ Solana prometheus monitoring tool provides a comprehensive set of metrics and al
 - **Prometheus**
 - **Node Exporter**
 
-To install the prerequistes please follow this [guide](./docs/prereq-manual.md).
+### Prerequisite Installation
+
+There are two ways of installing the prerequisites:-
+
+   1. Installation script
+   2. Manual installation
+
+Either of the two methods can be used to install the required prerequisites. It is not necessary to do both.
+
+**1) Installation script**
+
+   - Script downloads and installs grafana, prometheus and node exporter and starts the respective servers.
+   - It also downloads go if it's not already installed.
+   - The script takes env variables and writes them to `config.toml` file.
+   
+   - You can find the script [here](./scripts/install_script.sh)
+   - Execute the script using the following command:
+
+   ```sh
+   curl -s -L https://github.com/PrathyushaLakkireddy/solana-prometheus/blob/tulasi/test_scripts/scripts/install_script.sh | bash
+   ```
+   Source your `.bashrc` after executing the script
+
+   ```sh
+   source ~/.bashrc
+   ```
+   **Note**: This script installs the prerewuisites an enables them to run on their default ports ie. `Grafana` by default runs on port 3000, `prometheus` by default runs on port 9090 and `Node Exporter` by default runs on port 9100. If you want to change the defaults ports please follow thes [Instructions](./scripts/custom-port.md)
+
+   You can view the logs by executing the following commands:
+   ```bash
+   journalctl -u grafana-server -f
+
+   journalctl -u prometheus.service -f
+
+   journalctl -u node_exporter.service -f
+   ```
+
+**2) Manual installation**
+
+To manually install the prerequisites please follow this [guide](./docs/prereq-manual.md).
 
  
 ## Install and configure the Solana Monitoring Tool
 
-### Get the code
+There are two ways of installing the tool:-
+
+    1.Installation script
+    2. Manual installation
+Either of the two methods can be used to install the tool. It is not necessary to do both.
+
+**1) Installation script**
+
+  - It clones and sets up the monitoring tool as a system service.
+  - Please export the following enc variables first as they will be used to initialize the `config.toml` file for the tool.
+  ```sh
+  cd $HOME
+  export RPC_ENDPOINT="<validator-endpoint>" # Ex - export RPC_ENDPOINT="https://api.xxxxxxxxxxxxxxxxxxxx.com"
+  export NETWORK_RPC="<network-endpoint>" # Ex - export NETWORK_RPC="https://api.xxxxxxxxxxxxxxxxxxxx.com"
+  export VALIDATOR_NAME="<moniker>" # Your validator name
+  export PUB_KEY="<node-Public-key>"  # Ex - export PUB_KEY="GhorusmmK7i1AxXeiTtQgQZhQNiXYU84ULeaYF1EH1nn"
+  export VOTE_KEY="<vote-key>" # Ex - export VOTE_KEY="2oxQJ1qpgUZU9JU84BHaoM1GzHkYfRDgDQY9dpH5mghh"
+  export TELEGRAM_CHAT_ID=<id> # Ex - export TELEGRAM_CHAT_ID=22828812
+  export TELEGRAM_BOT_TOKEN="<token>" # Ex - TELEGRAM_BOT_TOKEN="1117273891:AAEtr3ZU5x4JRj5YSF5LBeu1fPF0T4xj-UI"
+
+- **Note**: if you don't want telegram notifications you can skip exporting `TELEGRAM_CHAT_ID` and `TELEGRAM_BOT_TOKEN` but the rest are mandatory.
+- You can find the tool installation script [here](./scripts/tool_installation.sh)
+- Run the script using the following command
+
+```sh
+   curl -s -L https://github.com/PrathyushaLakkireddy/solana-prometheus/blob/tulasi/test_scripts/scripts/tool_installation.sh | bash
+```
+You can check the logsof tool using:
+```sh
+   journalctl -u solana_prometheus.service
+```
+### 2) Manual installation
+```sh
+
 ```bash
 $ git clone https://github.com/PrathyushaLakkireddy/solana-prometheus
 $ cd solana-prometheus
 $ cp example.config.toml config.toml
 ```
 Edit the `config.toml` with your changes. Information on all the fields in `config.toml` can be found [here](./docs/config-desc.md)
+
+- Build and run the monitoring binary
+
+```sh
+   $ go build -o solana-prometheus && ./solana-prometheus
+```
 
 Installation of the tool is completed lets configure the Grafana dashboards.
 
