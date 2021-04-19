@@ -28,7 +28,7 @@ Either of the two methods can be used to install the required prerequisites. It 
    - Execute the script using the following command:
 
    ```sh
-   curl -s -L https://github.com/PrathyushaLakkireddy/solana-prometheus/blob/tulasi/test_scripts/scripts/install_script.sh | bash
+   curl -s -L https://github.com/PrathyushaLakkireddy/solana-prometheus/tree/main/scripts/install_script.sh | bash
    ```
    Source your `.bashrc` after executing the script
 
@@ -78,7 +78,7 @@ Either of the two methods can be used to install the tool. It is not necessary t
 - Run the script using the following command
 
 ```sh
-   curl -s -L https://github.com/PrathyushaLakkireddy/solana-prometheus/blob/tulasi/test_scripts/scripts/tool_installation.sh | bash
+   curl -s -L https://github.com/PrathyushaLakkireddy/solana-prometheus/tree/main/scripts/scripts/tool_installation.sh | bash
 ```
 You can check the logs of tool using:
 ```sh

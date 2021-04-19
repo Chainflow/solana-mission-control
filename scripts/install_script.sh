@@ -18,7 +18,7 @@ else
   sudo apt install build-essential jq -y
 
   wget https://dl.google.com/go/go1.16.3.linux-amd64.tar.gz
-  tar -xvf go1.15.5.linux-amd64.tar.gz
+  tar -xvf go1.16.3.linux-amd64.tar.gz
   sudo mv go /usr/local
 
   echo "------ Update bashrc ---------------"
@@ -62,9 +62,9 @@ tar -xvf prometheus-2.22.1.linux-amd64.tar.gz
 
 tar -xvf prometheus-2.22.1.linux-amd64.tar.gz
 
-cp prometheus-2.22.1.linux-amd64/prometheus $GOBIN
+sudo cp prometheus-2.22.1.linux-amd64/prometheus $GOBIN
 
-cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
+sudo cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
 
 
 echo "------- Edit prometheus.yml --------------"
@@ -76,7 +76,7 @@ echo "
     - targets: ['localhost:9090']
   - job_name: 'node_exporter'
     static_configs:
-    - targets: [localhost:9100]" >> "$HOME/prometheus.yml"
+    - targets: [localhost:9100]" >> sudo "$HOME/prometheus.yml"
 
 
 echo "------- Setup prometheus system service -------"
@@ -107,7 +107,7 @@ curl -LO https://github.com/prometheus/node_exporter/releases/download/v0.18.1/n
 
 tar -xvf node_exporter-0.18.1.linux-amd64.tar.gz
 
-cp node_exporter-0.18.1.linux-amd64/node_exporter $GOBIN
+sudo cp node_exporter-0.18.1.linux-amd64/node_exporter $GOBIN
 
 echo "---------- Setup Prometheus Node exporter service -----------"
 
@@ -133,6 +133,6 @@ sudo systemctl start node_exporter.service
 
 echo "---- Cleaning .dep .tar.gz files of grafana, prometheus and node exporter --------"
 
-rm grafana_7.3.1_amd64.deb node_exporter-0.18.1.linux-amd64.tar.gz prometheus-2.22.1.linux-amd64.tar.gz
+rm grafana_7.5.2_amd64.deb node_exporter-0.18.1.linux-amd64.tar.gz prometheus-2.22.1.linux-amd64.tar.gz
 
 echo "** Done with prerequisite installtion **"
