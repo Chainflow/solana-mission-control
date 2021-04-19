@@ -35,7 +35,7 @@ Either of the two methods can be used to install the required prerequisites. It 
    ```sh
    source ~/.bashrc
    ```
-   **Note**: This script installs the prerequisites an enables them to run on their default ports ie. `Grafana` by default runs on port 3000, `prometheus` by default runs on port 9090 and `Node Exporter` by default runs on port 9100. If you want to change the defaults ports please follow thes [Instructions](./scripts/custom-port.md)
+   **Note**: This script installs the prerequisites and enables them to run on their default ports ie. `Grafana` by default runs on port 3000, `prometheus` by default runs on port 9090 and `Node Exporter` by default runs on port 9100. If you want to change the defaults ports please follow these [Instructions](./docs/custom-port.md)
 
    You can view the logs by executing the following commands:
    ```bash
@@ -62,7 +62,7 @@ Either of the two methods can be used to install the tool. It is not necessary t
 **1) Installation script**
 
   - It clones and sets up the monitoring tool as a system service.
-  - Please export the following enc variables first as they will be used to initialize the `config.toml` file for the tool.
+  - Please export the following env variables first as they will be used to initialize the `config.toml` file for the tool.
   ```sh
   cd $HOME
   export RPC_ENDPOINT="<validator-endpoint>" # Ex - export RPC_ENDPOINT="https://api.xxxxxxxxxxxxxxxxxxxx.com"
@@ -72,7 +72,7 @@ Either of the two methods can be used to install the tool. It is not necessary t
   export VOTE_KEY="<vote-key>" # Ex - export VOTE_KEY="2oxQJ1qpgUZU9JU84BHaoM1GzHkYfRDgDQY9dpH5mghh"
   export TELEGRAM_CHAT_ID=<id> # Ex - export TELEGRAM_CHAT_ID=22828812
   export TELEGRAM_BOT_TOKEN="<token>" # Ex - TELEGRAM_BOT_TOKEN="1117273891:AAEtr3ZU5x4JRj5YSF5LBeu1fPF0T4xj-UI"
-
+```
 - **Note**: if you don't want telegram notifications you can skip exporting `TELEGRAM_CHAT_ID` and `TELEGRAM_BOT_TOKEN` but the rest are mandatory.
 - You can find the tool installation script [here](./scripts/tool_installation.sh)
 - Run the script using the following command
@@ -80,7 +80,7 @@ Either of the two methods can be used to install the tool. It is not necessary t
 ```sh
    curl -s -L https://github.com/PrathyushaLakkireddy/solana-prometheus/blob/tulasi/test_scripts/scripts/tool_installation.sh | bash
 ```
-You can check the logsof tool using:
+You can check the logs of tool using:
 ```sh
    journalctl -u solana_prometheus.service
 ```
