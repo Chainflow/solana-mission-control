@@ -55,8 +55,8 @@ To manually install the prerequisites please follow this [guide](./docs/prereq-m
 
 There are two ways of installing the tool:-
 
-    1.Installation script
-    2. Manual installation
+1. Installation script
+2. Manual installation
 Either of the two methods can be used to install the tool. It is not necessary to do both.
 
 **1) Installation script**
