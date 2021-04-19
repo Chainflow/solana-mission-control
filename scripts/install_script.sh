@@ -2,7 +2,6 @@
 
 set -e
 
-
 cd $HOME
 
 echo "------ checking for go, if it's not installed then it will be installed here -----"
