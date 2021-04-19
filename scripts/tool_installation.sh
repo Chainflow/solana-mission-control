@@ -17,8 +17,6 @@ cd $HOME
 echo "------ Updatig config fields with exported values -------"
 
 
-
-
 sed -i '/rpc_endpoint =/c\rpc_endpoint = "'"$RPC_ENDPOINT"'"' ~/solana-prometheus/config.toml
 
 sed -i '/network_rpc =/c\network_rpc = "'"$NETWORK_RPC"'"' ~/solana-prometheus/config.toml

@@ -35,7 +35,7 @@ Either of the two methods can be used to install the required prerequisites. It 
    ```sh
    source ~/.bashrc
    ```
-   **Note**: This script installs the prerewuisites an enables them to run on their default ports ie. `Grafana` by default runs on port 3000, `prometheus` by default runs on port 9090 and `Node Exporter` by default runs on port 9100. If you want to change the defaults ports please follow thes [Instructions](./scripts/custom-port.md)
+   **Note**: This script installs the prerequisites an enables them to run on their default ports ie. `Grafana` by default runs on port 3000, `prometheus` by default runs on port 9090 and `Node Exporter` by default runs on port 9100. If you want to change the defaults ports please follow thes [Instructions](./scripts/custom-port.md)
 
    You can view the logs by executing the following commands:
    ```bash
@@ -85,7 +85,6 @@ You can check the logsof tool using:
    journalctl -u solana_prometheus.service
 ```
 ### 2) Manual installation
-```sh
 
 ```bash
 $ git clone https://github.com/PrathyushaLakkireddy/solana-prometheus
