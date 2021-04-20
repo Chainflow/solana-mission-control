@@ -12,9 +12,9 @@ The following list of metrics are displayed in this dashboard.
 
 - **Validator Identity**
 
-  Validator public Key: Node public key of the validator
+  **Validator public Key**: Node public key of the validator
 
-  Validator vote key: Vote Key of the validator
+  **Validator vote key**: Vote Key of the validator
 
 - **Validator Information**
 
