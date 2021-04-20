@@ -1,6 +1,6 @@
 [rpc_and_lcd_endpoints]
-rpc_endpoint = "https://api.mainnet-beta.solana.com"
-network_rpc = "https://api.mainnet-beta.solana.com"
+rpc_endpoint = "https://testnet.solana.com"
+network_rpc = "https://testnet.solana.com"
 
 [validator_details]
 validator_name = "witval"
