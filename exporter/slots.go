@@ -3,6 +3,7 @@ package exporter
 import (
 	"fmt"
 	"log"
+	"math"
 	"strings"
 	"time"
 
@@ -16,7 +17,7 @@ import (
 )
 
 const (
-	slotPacerSchedule = 2 * time.Second
+	slotPacerSchedule = 500 * time.Millisecond
 )
 
 var (
@@ -124,13 +125,13 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		<-ticker.C
 
 		// Get account balance
-		// bal, err := monitor.GetBalance(cfg)
-		// if err != nil {
-		// 	log.Printf("Error while getting account balance : %v", err)
-		// 	continue
-		// }
+		bal, err := monitor.GetBalance(cfg)
+		if err != nil {
+			log.Printf("Error while getting account balance : %v", err)
+			continue
+		}
 
-		// balance.Set(float64(bal.Result.Value) / math.Pow(10, 9))
+		balance.Set(float64(bal.Result.Value) / math.Pow(10, 9))
 
 		// Get Node Health
 		h, err := monitor.GetNodeHealth(cfg)
@@ -166,7 +167,6 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		// Calculate first and last slot in epoch.
 		firstSlot := info.AbsoluteSlot - info.SlotIndex
 		lastSlot := firstSlot + info.SlotsInEpoch
-
 		confirmedSlotHeight.Set(float64(info.AbsoluteSlot))
 		currentEpochNumber.Set(float64(info.Epoch))
 		epochFirstSlot.Set(float64(firstSlot))
@@ -183,7 +183,12 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 			// send alert
 			err = alerter.SendTelegramAlert(fmt.Sprintf("Epoch Difference Alert : Difference b/w network and validator epoch has exceeded the configured thershold %d", cfg.AlertingThresholds.EpochDiffThreshold), cfg)
 			if err != nil {
-				log.Printf("Error while sending epoch diff alert: %v", err)
+				log.Printf("Error while sending epoch diff alert to telegram: %v", err)
+			}
+			// send email alert
+			err = alerter.SendEmailAlert(fmt.Sprintf("Epoch Difference Alert : Difference b/w network and validator epoch has exceeded the configured thershold %d", cfg.AlertingThresholds.EpochDiffThreshold), cfg)
+			if err != nil {
+				log.Printf("Error while sending epoch diff alert to email: %v", err)
 			}
 		}
 
@@ -194,7 +199,13 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 			// send alert
 			err = alerter.SendTelegramAlert(fmt.Sprintf("Block Difference Alert : Block difference b/w network and validator has exceeded &d", cfg.AlertingThresholds.BlockDiffThreshold), cfg)
 			if err != nil {
-				log.Printf("Error while sending block height diff alert: %v", err)
+				log.Printf("Error while sending block height diff alert to telegram: %v", err)
+			}
+
+			// send email alert
+			err = alerter.SendEmailAlert(fmt.Sprintf("Block Difference Alert : Block difference b/w network and validator has exceeded &d", cfg.AlertingThresholds.BlockDiffThreshold), cfg)
+			if err != nil {
+				log.Printf("Error while sending block height diff alert to email: %v", err)
 			}
 		}
 

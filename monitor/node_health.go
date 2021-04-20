@@ -44,7 +44,11 @@ func GetNodeHealth(cfg *config.Config) (float64, error) {
 			if strings.EqualFold(cfg.AlerterPreferences.NodeHealthAlert, "yes") {
 				err = alerter.SendTelegramAlert(fmt.Sprintf("Your node is not running"), cfg)
 				if err != nil {
-					log.Printf("Error while sending node health alert: %v", err)
+					log.Printf("Error while sending node health alert to telegram: %v", err)
+				}
+				err = alerter.SendEmailAlert(fmt.Sprintf("Your node is not running"), cfg)
+				if err != nil {
+					log.Printf("Error while sending node health alert to email: %v", err)
 				}
 				h = 0
 			}
