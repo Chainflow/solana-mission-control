@@ -68,7 +68,7 @@ Either of the two methods can be used to install the tool. It is not necessary t
   export RPC_ENDPOINT="<validator-endpoint>" # Ex - export RPC_ENDPOINT="https://api.xxxxxxxxxxxxxxxxxxxx.com"
   export NETWORK_RPC="<network-endpoint>" # Ex - export NETWORK_RPC="https://api.xxxxxxxxxxxxxxxxxxxx.com"
   export VALIDATOR_NAME="<moniker>" # Your validator name
-  export PUB_KEY="<node-Public-key>"  # Ex - export PUB_KEY="GhorusmmK7i1AxXeiTtQgQZhQNiXYU84ULeaYF1EH1nn"
+  export PUB_KEY="<node-Public-key>"  # Ex - export PUB_KEY="valmmK7i1AxXeiTtQgQZhQNiXYU84ULeaYF1EH1pa"
   export VOTE_KEY="<vote-key>" # Ex - export VOTE_KEY="2oxQJ1qpgUZU9JU84BHaoM1GzHkYfRDgDQY9dpH5mghh"
   export TELEGRAM_CHAT_ID=<id> # Ex - export TELEGRAM_CHAT_ID=22828812
   export TELEGRAM_BOT_TOKEN="<token>" # Ex - TELEGRAM_BOT_TOKEN="1117273891:AAEtr3ZU5x4JRj5YSF5LBeu1fPF0T4xj-UI"
@@ -93,7 +93,29 @@ $ cp example.config.toml config.toml
 ```
 Edit the `config.toml` with your changes. Information on all the fields in `config.toml` can be found [here](./docs/config-desc.md)
 
-- Build and run the monitoring binary
+Note : Before running this monitoring binary, you need to add below configuration to prometheus.yml, which you have configured while installing prometheus.
+
+```
+- Add the following in prometheus.yml using your editor of choices
+
+```sh
+ scrape_configs:
+
+  - job_name: 'Solana'
+
+    static_configs:
+    - targets: ['localhost:1234']
+
+```
+
+Then, restart the prometheus serivce
+
+```sh 
+$ sudo systemctl daemon-reload
+$ sudo systemctl start prometheus.service
+```
+
+- Now you can build and run the monitoring binary
 
 ```sh
    $ go build -o solana-prometheus && ./solana-prometheus
