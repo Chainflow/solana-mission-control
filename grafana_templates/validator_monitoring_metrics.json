@@ -1,46 +1,4 @@
 {
-  "__inputs": [
-    {
-      "name": "DS_PROMETHEUS",
-      "label": "Prometheus",
-      "description": "",
-      "type": "datasource",
-      "pluginId": "prometheus",
-      "pluginName": "Prometheus"
-    }
-  ],
-  "__requires": [
-    {
-      "type": "panel",
-      "id": "gauge",
-      "name": "Gauge",
-      "version": ""
-    },
-    {
-      "type": "grafana",
-      "id": "grafana",
-      "name": "Grafana",
-      "version": "7.5.2"
-    },
-    {
-      "type": "panel",
-      "id": "graph",
-      "name": "Graph",
-      "version": ""
-    },
-    {
-      "type": "datasource",
-      "id": "prometheus",
-      "name": "Prometheus",
-      "version": "1.0.0"
-    },
-    {
-      "type": "panel",
-      "id": "singlestat",
-      "name": "Singlestat",
-      "version": ""
-    }
-  ],
   "annotations": {
     "list": [
       {
@@ -58,12 +16,12 @@
   "editable": true,
   "gnetId": null,
   "graphTooltip": 0,
-  "id": null,
+  "id": 3,
   "links": [],
   "panels": [
     {
       "collapsed": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -84,7 +42,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "decimals": null,
       "fieldConfig": {
         "defaults": {},
@@ -180,7 +138,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "decimals": null,
       "fieldConfig": {
         "defaults": {},
@@ -269,7 +227,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -291,7 +249,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -375,7 +333,7 @@
     },
     {
       "cacheTimeout": null,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "mappings": [
@@ -457,7 +415,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -545,7 +503,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -633,7 +591,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -728,7 +686,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -805,7 +763,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -826,7 +784,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "decimals": null,
       "fieldConfig": {
         "defaults": {},
@@ -922,7 +880,7 @@
         "#F2CC0C",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1011,7 +969,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1100,7 +1058,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1185,7 +1143,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -1282,7 +1240,7 @@
       "cacheTimeout": null,
       "dashLength": 10,
       "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {
           "links": []
@@ -1382,7 +1340,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1470,7 +1428,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1558,7 +1516,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1646,7 +1604,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1734,7 +1692,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1822,7 +1780,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -1910,7 +1868,7 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
@@ -1931,7 +1889,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -2020,7 +1978,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -2103,6 +2061,7 @@
     {
       "cacheTimeout": null,
       "colorBackground": false,
+      "colorPostfix": false,
       "colorPrefix": false,
       "colorValue": true,
       "colors": [
@@ -2110,7 +2069,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {},
@@ -2170,8 +2129,9 @@
       "tableColumn": "",
       "targets": [
         {
+          "exemplar": true,
           "expr": "account_balance",
-          "instant": true,
+          "instant": false,
           "interval": "",
           "legendFormat": "",
           "refId": "A"
@@ -2180,7 +2140,7 @@
       "thresholds": "",
       "timeFrom": null,
       "timeShift": null,
-      "title": "Account Balance",
+      "title": "Identity Account Balance",
       "transformations": [
         {
           "id": "filterByRefId",
@@ -2188,7 +2148,7 @@
         }
       ],
       "type": "singlestat",
-      "valueFontSize": "80%",
+      "valueFontSize": "70%",
       "valueMaps": [
         {
           "op": "=",
@@ -2201,13 +2161,14 @@
     {
       "cacheTimeout": null,
       "colorBackground": false,
+      "colorPrefix": false,
       "colorValue": true,
       "colors": [
         "#299c46",
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "description": "",
       "fieldConfig": {
         "defaults": {},
@@ -2227,7 +2188,7 @@
         "x": 18,
         "y": 26
       },
-      "id": 14,
+      "id": 73,
       "interval": null,
       "links": [],
       "mappingType": 1,
@@ -2245,10 +2206,10 @@
       "nullPointMode": "connected",
       "nullText": null,
       "pluginVersion": "6.7.2",
-      "postfix": "",
-      "postfixFontSize": "50%",
+      "postfix": " SOL ",
+      "postfixFontSize": "70%",
       "prefix": "",
-      "prefixFontSize": "50%",
+      "prefixFontSize": "70%",
       "rangeMaps": [
         {
           "from": "null",
@@ -2259,7 +2220,7 @@
       "sparkline": {
         "fillColor": "rgba(31, 118, 189, 0.18)",
         "full": false,
-        "lineColor": "rgb(45, 107, 35)",
+        "lineColor": "rgb(38, 120, 30)",
         "show": false,
         "ymax": null,
         "ymin": null
@@ -2267,19 +2228,26 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "solana_current_slot",
-          "instant": true,
+          "exemplar": true,
+          "expr": "solana_vote_account_balance",
+          "instant": false,
           "interval": "",
-          "legendFormat": "{{solana_current_slot}}",
+          "legendFormat": "{{solana_vote_acc_bal}}",
           "refId": "A"
         }
       ],
       "thresholds": "",
       "timeFrom": null,
       "timeShift": null,
-      "title": "solana current slot height",
+      "title": "Vote Account Balance",
+      "transformations": [
+        {
+          "id": "filterByRefId",
+          "options": {}
+        }
+      ],
       "type": "singlestat",
-      "valueFontSize": "80%",
+      "valueFontSize": "70%",
       "valueMaps": [
         {
           "op": "=",
@@ -2287,7 +2255,7 @@
           "value": "null"
         }
       ],
-      "valueName": "name"
+      "valueName": "current"
     },
     {
       "cacheTimeout": null,
@@ -2298,7 +2266,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -2388,7 +2356,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -2478,7 +2446,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -2568,7 +2536,8 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
+      "description": "",
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -2586,6 +2555,96 @@
         "w": 6,
         "x": 18,
         "y": 29
+      },
+      "id": 14,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "pluginVersion": "6.7.2",
+      "postfix": "",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "rgb(45, 107, 35)",
+        "show": false,
+        "ymax": null,
+        "ymin": null
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "expr": "solana_current_slot",
+          "instant": true,
+          "interval": "",
+          "legendFormat": "{{solana_current_slot}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "solana current slot height",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "name"
+    },
+    {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": true,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": null,
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 0,
+        "y": 32
       },
       "id": 32,
       "interval": null,
@@ -2649,12 +2708,12 @@
     },
     {
       "collapsed": false,
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "gridPos": {
         "h": 1,
         "w": 24,
         "x": 0,
-        "y": 32
+        "y": 35
       },
       "id": 54,
       "panels": [],
@@ -2670,7 +2729,7 @@
         "#73BF69",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "decimals": null,
       "fieldConfig": {
         "defaults": {},
@@ -2688,7 +2747,7 @@
         "h": 2,
         "w": 12,
         "x": 0,
-        "y": 33
+        "y": 36
       },
       "id": 24,
       "interval": null,
@@ -2766,7 +2825,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -2783,7 +2842,7 @@
         "h": 4,
         "w": 5,
         "x": 12,
-        "y": 33
+        "y": 36
       },
       "id": 30,
       "interval": null,
@@ -2854,7 +2913,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -2871,7 +2930,7 @@
         "h": 3,
         "w": 6,
         "x": 0,
-        "y": 35
+        "y": 38
       },
       "id": 38,
       "interval": null,
@@ -2943,7 +3002,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -2960,7 +3019,7 @@
         "h": 3,
         "w": 6,
         "x": 6,
-        "y": 35
+        "y": 38
       },
       "id": 10,
       "interval": null,
@@ -3032,7 +3091,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -3049,7 +3108,7 @@
         "h": 4,
         "w": 5,
         "x": 12,
-        "y": 37
+        "y": 40
       },
       "id": 40,
       "interval": null,
@@ -3120,7 +3179,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -3137,7 +3196,7 @@
         "h": 3,
         "w": 6,
         "x": 0,
-        "y": 38
+        "y": 41
       },
       "id": 28,
       "interval": null,
@@ -3208,7 +3267,7 @@
         "rgba(237, 129, 40, 0.89)",
         "#d44a3a"
       ],
-      "datasource": "${DS_PROMETHEUS}",
+      "datasource": null,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -3225,7 +3284,7 @@
         "h": 3,
         "w": 6,
         "x": 6,
-        "y": 38
+        "y": 41
       },
       "id": 6,
       "interval": null,
@@ -3319,5 +3378,5 @@
   "timezone": "",
   "title": "Validator Monitoring Metrics",
   "uid": "_lBG68yGz",
-  "version": 12
+  "version": 15
 }

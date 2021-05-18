@@ -53,8 +53,9 @@ type solanaCollector struct {
 	// confirmed block time of validator
 	validatorBlockTime *prometheus.Desc
 	// block time difference of network and validator
-	blockTimeDiff  *prometheus.Desc
-	voteAccBalance *prometheus.Desc
+	blockTimeDiff      *prometheus.Desc
+	voteAccBalance     *prometheus.Desc
+	identityAccBalance *prometheus.Desc
 }
 
 // NewSolanaCollector exports solana collector metrics to prometheus
@@ -178,6 +179,11 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"Vote account balance",
 			[]string{"solana_vote_acc_bal"}, nil,
 		),
+		identityAccBalance: prometheus.NewDesc(
+			"solana_identity_account_balance",
+			"Identity account balance",
+			[]string{"solana_identity_acc_bal"}, nil,
+		),
 	}
 
 }
@@ -203,7 +209,7 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.validatorBlockTime
 	ch <- c.blockTimeDiff
 	ch <- c.voteAccBalance
-
+	ch <- c.identityAccBalance
 }
 
 // mustEmitMetrics gets the data from Current and Deliquent validator vote accounts and export metrics of validator Vote account to prometheus.
@@ -427,6 +433,8 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 		b := float64(bal.Result.Value) / math.Pow(10, 9)
 		s := fmt.Sprintf("%.4f", b) // TODO : cross check the value
 		ch <- prometheus.MustNewConstMetric(c.accountBalance, prometheus.GaugeValue, b, s)
+
+		ch <- prometheus.MustNewConstMetric(c.identityAccBalance, prometheus.GaugeValue, b, s)
 	}
 
 	// get vote account balance
