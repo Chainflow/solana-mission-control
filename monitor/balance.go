@@ -17,7 +17,7 @@ import (
 
 // GetIdentityBalance returns the balance of the identity account
 func GetIdentityBalance(cfg *config.Config) (types.Balance, error) {
-	log.Println("Getting Account Balance...")
+	log.Println("Getting identity account Balance...")
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method:   http.MethodPost,
@@ -42,6 +42,33 @@ func GetIdentityBalance(cfg *config.Config) (types.Balance, error) {
 	err = SendBalanceChangeAlert(result.Result.Value, cfg)
 	if err != nil {
 		log.Printf("Error while sending balance change alert : %v", err)
+	}
+
+	return result, nil
+}
+
+// GetVoteAccBalance returns the balance of the vote account
+func GetVoteAccBalance(cfg *config.Config) (types.Balance, error) {
+	log.Println("Getting vote Aaccount Balance...")
+	ops := types.HTTPOptions{
+		Endpoint: cfg.Endpoints.RPCEndpoint,
+		Method:   http.MethodPost,
+		Body: types.Payload{Jsonrpc: "2.0", Method: "getBalance", ID: 1, Params: []interface{}{
+			cfg.ValDetails.VoteKey, // should be base58 encoded to query data
+		}},
+	}
+
+	var result types.Balance
+	resp, err := HitHTTPTarget(ops)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return result, err
+	}
+
+	err = json.Unmarshal(resp.Body, &result)
+	if err != nil {
+		log.Printf("Error: %v", err)
+		return result, err
 	}
 
 	return result, nil
