@@ -53,7 +53,8 @@ type solanaCollector struct {
 	// confirmed block time of validator
 	validatorBlockTime *prometheus.Desc
 	// block time difference of network and validator
-	blockTimeDiff *prometheus.Desc
+	blockTimeDiff  *prometheus.Desc
+	voteAccBalance *prometheus.Desc
 }
 
 // NewSolanaCollector exports solana collector metrics to prometheus
@@ -86,7 +87,7 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			[]string{"version"}, nil),
 		accountBalance: prometheus.NewDesc( // check using or not
 			"solana_account_balance",
-			"Account balance",
+			"Solana identity account balance",
 			[]string{"solana_acc_balance"}, nil),
 		slotLeader: prometheus.NewDesc(
 			"solana_slot_leader",
@@ -172,6 +173,11 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"Block time difference of network and validator",
 			[]string{"solana_confirmed_blocktime_diff"}, nil,
 		),
+		voteAccBalance: prometheus.NewDesc(
+			"solana_vote_account_balance",
+			"Vote account balance",
+			[]string{"solana_vote_acc_bal"}, nil,
+		),
 	}
 
 }
@@ -196,6 +202,7 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.networkBlockTime
 	ch <- c.validatorBlockTime
 	ch <- c.blockTimeDiff
+	ch <- c.voteAccBalance
 
 }
 
@@ -416,9 +423,21 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.accountBalance, err)
 	} else {
+		log.Printf("Identity account bal : %d", bal.Result.Value)
 		b := float64(bal.Result.Value) / math.Pow(10, 9)
-		s := fmt.Sprintf("%.2f", b) // TODO : cross check the value
+		s := fmt.Sprintf("%.4f", b) // TODO : cross check the value
 		ch <- prometheus.MustNewConstMetric(c.accountBalance, prometheus.GaugeValue, b, s)
+	}
+
+	// get vote account balance
+	vAccBal, err := monitor.GetVoteAccBalance(c.config)
+	if err != nil {
+		ch <- prometheus.NewInvalidMetric(c.voteAccBalance, err)
+	} else {
+		log.Printf("Vote account bal : %d", vAccBal.Result.Value)
+		b := float64(vAccBal.Result.Value) / math.Pow(10, 9)
+		s := fmt.Sprintf("%.4f", b) // TODO : cross check the value
+		ch <- prometheus.MustNewConstMetric(c.voteAccBalance, prometheus.GaugeValue, b, s)
 	}
 
 	// get slot leader

@@ -58,7 +58,7 @@ var (
 
 	balance = prometheus.NewGauge(prometheus.GaugeOpts{
 		Name: "account_balance",
-		Help: "Current balance if your account.",
+		Help: "Current balance of your account.",
 	})
 
 	leaderSlotsTotal = prometheus.NewCounterVec(

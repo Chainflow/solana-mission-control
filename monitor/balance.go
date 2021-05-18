@@ -84,7 +84,7 @@ func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 	}
 
 	// c := float64(currentBal) / math.Pow(10, 9)
-	c := fmt.Sprintf("%.2f", float64(currentBal)/math.Pow(10, 9))
+	c := fmt.Sprintf("%.4f", float64(currentBal)/math.Pow(10, 9))
 	cBal, _ := strconv.ParseFloat(c, 64)
 	current := c + "SOL"
 	previous := prevBal + "SOL"
