@@ -147,7 +147,7 @@ func NodeStatus(cfg *config.Config) string {
 func GetAccountBal(cfg *config.Config) string {
 	var msg string
 
-	res, err := GetBalance(cfg)
+	res, err := GetIdentityBalance(cfg)
 	if err != nil {
 		log.Printf("Error while getting account balance : %v", err)
 	}

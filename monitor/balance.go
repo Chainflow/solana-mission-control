@@ -15,8 +15,8 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
-// GetBalance returns the balance of the account
-func GetBalance(cfg *config.Config) (types.Balance, error) {
+// GetIdentityBalance returns the balance of the identity account
+func GetIdentityBalance(cfg *config.Config) (types.Balance, error) {
 	log.Println("Getting Account Balance...")
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,

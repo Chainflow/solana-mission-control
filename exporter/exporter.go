@@ -411,8 +411,8 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 		ch <- prometheus.MustNewConstMetric(c.solanaVersion, prometheus.GaugeValue, 1, version.Result.SolanaCore)
 	}
 
-	// get balance
-	bal, err := monitor.GetBalance(c.config)
+	// get identity account balance
+	bal, err := monitor.GetIdentityBalance(c.config)
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.accountBalance, err)
 	} else {

@@ -12,7 +12,7 @@ func TestGetBalance(t *testing.T) {
 	if err != nil {
 		t.Error("Error while reading config :", err)
 	}
-	res, err := monitor.GetBalance(cfg)
+	res, err := monitor.GetIdentityBalance(cfg)
 	if err != nil {
 		t.Error("Error while fetching Account balance")
 	}

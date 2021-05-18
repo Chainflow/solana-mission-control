@@ -124,8 +124,8 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 	for {
 		<-ticker.C
 
-		// Get account balance
-		bal, err := monitor.GetBalance(cfg)
+		// Get identity account balance
+		bal, err := monitor.GetIdentityBalance(cfg)
 		if err != nil {
 			log.Printf("Error while getting account balance : %v", err)
 			continue
