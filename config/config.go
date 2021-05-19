@@ -106,6 +106,10 @@ type (
 		EpochDiffThreshold int64 `mapstructure:"epoch_diff_threshold"`
 	}
 
+	ValidatorsAppToken struct {
+		Token string `mapstructure:"token"`
+	}
+
 	// Config defines all the configurations required for the app
 	Config struct {
 		Endpoints           Endpoints           `mapstructure:"rpc_and_lcd_endpoints"`
@@ -118,6 +122,7 @@ type (
 		Telegram            Telegram            `mapstructure:"telegram"`
 		SendGrid            SendGrid            `mapstructure:"sendgrid"`
 		Prometheus          Prometheus          `mapstructure:"prometheus"`
+		ValidatorsAppToken  ValidatorsAppToken  `mapstructure:"validators_app_token"`
 	}
 )
 

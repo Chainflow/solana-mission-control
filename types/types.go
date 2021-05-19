@@ -271,4 +271,35 @@ type (
 			BlockTime int64 `json:"blockTime"`
 		} `json:"result"`
 	}
+
+	ValidatorsAPIResp struct {
+		Network                      string      `json:"network"`
+		Account                      string      `json:"account"`
+		Name                         string      `json:"name"`
+		KeybaseID                    string      `json:"keybase_id"`
+		WwwURL                       string      `json:"www_url"`
+		Details                      string      `json:"details"`
+		CreatedAt                    string      `json:"created_at"`
+		UpdatedAt                    string      `json:"updated_at"`
+		TotalScore                   int         `json:"total_score"`
+		RootDistanceScore            int         `json:"root_distance_score"`
+		VoteDistanceScore            int         `json:"vote_distance_score"`
+		SkippedSlotScore             int         `json:"skipped_slot_score"`
+		SoftwareVersion              string      `json:"software_version"`
+		SoftwareVersionScore         int         `json:"software_version_score"`
+		StakeConcentrationScore      int         `json:"stake_concentration_score"`
+		DataCenterConcentrationScore int         `json:"data_center_concentration_score"`
+		PublishedInformationScore    int         `json:"published_information_score"`
+		SecurityReportScore          int         `json:"security_report_score"`
+		ActiveStake                  int64       `json:"active_stake"`
+		Commission                   int         `json:"commission"`
+		Delinquent                   bool        `json:"delinquent"`
+		DataCenterKey                string      `json:"data_center_key"`
+		DataCenterHost               interface{} `json:"data_center_host"`
+		VoteAccount                  string      `json:"vote_account"`
+		SkippedSlots                 int         `json:"skipped_slots"`
+		SkippedSlotPercent           string      `json:"skipped_slot_percent"`
+		PingTime                     interface{} `json:"ping_time"`
+		URL                          string      `json:"url"`
+	}
 )

@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	slotPacerSchedule = 500 * time.Millisecond
+	slotPacerSchedule = 5 * time.Second
 )
 
 var (
@@ -82,6 +82,11 @@ var (
 		Name: "solana_block_height_diff",
 		Help: "Current Block Height difference of network and validator",
 	})
+
+	skippedSlots = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_val_skipped_slots",
+		Help: "Skipped slots of the validator",
+	})
 )
 
 func init() {
@@ -97,7 +102,7 @@ func init() {
 	prometheus.MustRegister(networkEpoch)
 	prometheus.MustRegister(epochDifference)
 	prometheus.MustRegister(blockDiff)
-
+	prometheus.MustRegister(skippedSlots)
 }
 
 // WatchSlots get data from different methods and store that data in prometheus. Those are
@@ -123,6 +128,13 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 
 	for {
 		<-ticker.C
+
+		sp, err := monitor.SkipRate(cfg)
+		if err != nil {
+			log.Printf("Error while getting skipped slots : %v", err)
+			continue
+		}
+		skippedSlots.Set(sp)
 
 		// Get identity account balance
 		bal, err := monitor.GetIdentityBalance(cfg)
