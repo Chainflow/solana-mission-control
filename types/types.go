@@ -302,4 +302,23 @@ type (
 		PingTime                     interface{} `json:"ping_time"`
 		URL                          string      `json:"url"`
 	}
+	SkipRate struct {
+		TotalActiveStake     int64 `json:"totalActiveStake"`
+		TotalCurrentStake    int64 `json:"totalCurrentStake"`
+		TotalDelinquentStake int64 `json:"totalDelinquentStake"`
+		Validators           []struct {
+			IdentityPubkey    string  `json:"identityPubkey"`
+			VoteAccountPubkey string  `json:"voteAccountPubkey"`
+			Commission        int     `json:"commission"`
+			LastVote          int     `json:"lastVote"`
+			RootSlot          int     `json:"rootSlot"`
+			Credits           int     `json:"credits"`
+			EpochCredits      int     `json:"epochCredits"`
+			ActivatedStake    int64   `json:"activatedStake"`
+			Version           string  `json:"version"`
+			Delinquent        bool    `json:"delinquent"`
+			SkipRate          float64 `json:"skipRate"`
+		} `json:"validators"`
+		StakeByVersion interface{} `json:"stakeByVersion"`
+	}
 )

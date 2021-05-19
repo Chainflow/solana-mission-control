@@ -2,46 +2,37 @@ package monitor
 
 import (
 	"encoding/json"
-	"fmt"
 	"log"
-	"net/http"
+	"os/exec"
 
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
 func SkipRate(cfg *config.Config) (float64, error) {
-	// cmd := exec.Command("solana", "validators", "--output", "json")
-	// // log.Fatalf("solana cmd..", cmd)
-	// out, err := cmd.CombinedOutput()
-	// if err != nil {
-	// 	log.Printf("Error while running ping command %v", err)
-	// 	// return
-	// }
-
-	endPoint := fmt.Sprintf("https://www.validators.app/api/v1/validators/mainnet/%s.json", cfg.ValDetails.PubKey)
-	ops := types.HTTPOptions{
-		Endpoint: endPoint,
-		// Endpoint: "https://www.validators.app/api/v1/validators/mainnet/7Gjec4iDbTxLvVYNsRbZrrHdtyLByzdDJ1C5BmcMMBks.json",
-		Method: http.MethodGet,
-	}
 	var skipedSlots float64
 
-	var result types.ValidatorsAPIResp
-	resp, err := HitValditorsAPI(ops, cfg)
+	cmd := exec.Command("solana", "validators", "--output", "json")
+	out, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Printf("Error: %v", err)
+		log.Printf("Error while running ping command %v", err)
 		return skipedSlots, err
 	}
 
+	var result types.SkipRate
 	err = json.Unmarshal(out, &result)
 	if err != nil {
 		log.Printf("Error: %v", err)
 		return skipedSlots, err
 	}
-	skipedSlots = float64(result.SkippedSlots)
 
-	log.Printf("skipped slots : %d", result.SkippedSlots)
+	for _, val := range result.Validators {
+		if val.IdentityPubkey == cfg.ValDetails.PubKey {
+			skipedSlots = val.SkipRate
+		}
+	}
+
+	log.Printf("VAL SKIPPED RATE : %f", skipedSlots)
 
 	return skipedSlots, nil
 }
