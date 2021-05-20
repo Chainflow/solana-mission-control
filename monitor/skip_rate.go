@@ -9,30 +9,32 @@ import (
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
 )
 
-func SkipRate(cfg *config.Config) (float64, error) {
-	var skipedSlots float64
+func SkipRate(cfg *config.Config) (float64, float64, error) {
+	var valSkipped, netSkipped, totalSkipped float64
 
 	cmd := exec.Command("solana", "validators", "--output", "json")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
-		log.Printf("Error while running ping command %v", err)
-		return skipedSlots, err
+		log.Printf("Error while running solana validators cli command %v", err)
+		return valSkipped, netSkipped, err
 	}
 
 	var result types.SkipRate
 	err = json.Unmarshal(out, &result)
 	if err != nil {
 		log.Printf("Error: %v", err)
-		return skipedSlots, err
+		return valSkipped, netSkipped, err
 	}
 
 	for _, val := range result.Validators {
 		if val.IdentityPubkey == cfg.ValDetails.PubKey {
-			skipedSlots = val.SkipRate
+			valSkipped = val.SkipRate
 		}
+		totalSkipped = totalSkipped + val.SkipRate
 	}
+	netSkipped = totalSkipped / float64(len(result.Validators))
 
-	log.Printf("VAL SKIPPED RATE : %f", skipedSlots)
+	log.Printf("VAL skip rate : %f, Network skip rate : %f", valSkipped, netSkipped)
 
-	return skipedSlots, nil
+	return valSkipped, netSkipped, nil
 }

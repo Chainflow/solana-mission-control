@@ -83,9 +83,19 @@ var (
 		Help: "Current Block Height difference of network and validator",
 	})
 
-	skippedSlots = prometheus.NewGauge(prometheus.GaugeOpts{
-		Name: "solana_val_skipped_slots",
-		Help: "Skipped slots of the validator",
+	valSkipRate = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_val_skip_rate",
+		Help: "Validator skip rate",
+	})
+
+	netSkipRate = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_net_skip_rate",
+		Help: "Network skip rate",
+	})
+
+	skipRateDifference = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_skip_rate_diff",
+		Help: "Skip rate difference of network and validator",
 	})
 )
 
@@ -102,7 +112,9 @@ func init() {
 	prometheus.MustRegister(networkEpoch)
 	prometheus.MustRegister(epochDifference)
 	prometheus.MustRegister(blockDiff)
-	prometheus.MustRegister(skippedSlots)
+	prometheus.MustRegister(valSkipRate)
+	prometheus.MustRegister(netSkipRate)
+	prometheus.MustRegister(skipRateDifference)
 }
 
 // WatchSlots get data from different methods and store that data in prometheus. Those are
@@ -129,13 +141,6 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 	for {
 		<-ticker.C
 
-		sp, err := monitor.SkipRate(cfg)
-		if err != nil {
-			log.Printf("Error while getting skipped slots : %v", err)
-			continue
-		}
-		skippedSlots.Set(sp)
-
 		// Get identity account balance
 		bal, err := monitor.GetIdentityBalance(cfg)
 		if err != nil {
@@ -144,6 +149,21 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		}
 
 		balance.Set(float64(bal.Result.Value) / math.Pow(10, 9))
+
+		// Get skip rate of validator and network using solana cli command
+		valSkip, netSkip, err := monitor.SkipRate(cfg)
+		if err != nil {
+			log.Printf("Error while getting skipped slots : %v", err)
+			continue
+		}
+		valSkipRate.Set(valSkip)
+		netSkipRate.Set(netSkip)
+		skipdiff := netSkip - valSkip
+		if skipdiff > 0 {
+			skipRateDifference.Set(skipdiff)
+		} else {
+			skipRateDifference.Set(-(skipdiff))
+		}
 
 		// Get Node Health
 		h, err := monitor.GetNodeHealth(cfg)
