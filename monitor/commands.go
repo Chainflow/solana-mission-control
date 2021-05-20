@@ -53,6 +53,8 @@ func TelegramAlerting(cfg *config.Config) {
 			msgToSend = GetEpochDetails(cfg)
 		} else if update.Message.Text == "/vote_credits" {
 			msgToSend = GetVoteCredits(cfg)
+		} else if update.Message.Text == "/skip_rate" {
+			msgToSend = GetSkipRate(cfg)
 		} else if update.Message.Text == "/rpc_status" {
 			msgToSend = GetEndPointStatus(cfg)
 		} else if update.Message.Text == "/stop" {
@@ -94,7 +96,7 @@ func GetHelp() string {
 		"and network block height\n /node - return status of caught-up\n" +
 		" /balance - returns the current balance of your account \n /epoch - returns current epoch of " +
 		"network and validator\n /vote_credits - returns vote credits of current and" +
-		"previous epochs \n /rpc_status - returns the status of validator rpc and network rpc i.e., running or not\n /stop - which panics the running code and also alerts will be stopped\n /list - list out the available commands"
+		"previous epochs \n /skip_rate - returns the skip rate of validator and network \n /rpc_status - returns the status of validator rpc and network rpc i.e., running or not\n /stop - which panics the running code and also alerts will be stopped\n /list - list out the available commands"
 
 	return msg
 }
@@ -225,6 +227,19 @@ func GetEndPointStatus(cfg *config.Config) string {
 	} else {
 		msg = msg + fmt.Sprintf("NETWORK RPC  ✅\n\n")
 	}
+
+	return msg
+}
+
+func GetSkipRate(cfg *config.Config) string {
+	var msg string
+	valSkip, netSkip, err := SkipRate(cfg)
+	if err != nil {
+		log.Printf("Error while getting skip rate : %v", err)
+	}
+	vs := fmt.Sprintf("%.2f", valSkip) + "%"
+	ns := fmt.Sprintf("%.2f", netSkip) + "%"
+	msg = msg + fmt.Sprintf("SKIP RATE ::\nValidator skip rate : %s\nNetwork skip rate : %s", vs, ns)
 
 	return msg
 }
