@@ -65,7 +65,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1621314542590,
+  "iteration": 1621505284087,
   "links": [],
   "panels": [
     {
@@ -831,6 +831,7 @@
         "#d44a3a"
       ],
       "datasource": "${DS_PROMETHEUS}",
+      "decimals": 3,
       "fieldConfig": {
         "defaults": {},
         "overrides": []
@@ -2661,5 +2662,5 @@
   "timezone": "",
   "title": "Summary",
   "uid": "GMwUah9Gk",
-  "version": 3
+  "version": 4
 }
