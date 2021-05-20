@@ -127,14 +127,14 @@ func init() {
 // 7. fetch a new leader schedule if previous epoch has done
 // 8. Get list of confirmed blocks
 func (c *solanaCollector) WatchSlots(cfg *config.Config) {
-	var (
-		// Current mapping of relative slot numbers to leader public keys.
-		epochSlots map[int64]string
-		// Current epoch number corresponding to epochSlots.
-		epochNumber int64
-		// Last slot number we generated ticks for.
-		watermark int64
-	)
+	// var (
+	// 	// Current mapping of relative slot numbers to leader public keys.
+	// 	epochSlots map[int64]string
+	// 	// Current epoch number corresponding to epochSlots.
+	// 	epochNumber int64
+	// 	// Last slot number we generated ticks for.
+	// 	watermark int64
+	// )
 
 	ticker := time.NewTicker(slotPacerSchedule)
 
@@ -229,93 +229,16 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 
 		if int64(heightDiff) >= cfg.AlertingThresholds.BlockDiffThreshold {
 			// send alert
-			err = alerter.SendTelegramAlert(fmt.Sprintf("Block Difference Alert : Block difference b/w network and validator has exceeded &d", cfg.AlertingThresholds.BlockDiffThreshold), cfg)
+			err = alerter.SendTelegramAlert(fmt.Sprintf("Block Difference Alert : Block difference b/w network and validator has exceeded %d", cfg.AlertingThresholds.BlockDiffThreshold), cfg)
 			if err != nil {
 				log.Printf("Error while sending block height diff alert to telegram: %v", err)
 			}
 
 			// send email alert
-			err = alerter.SendEmailAlert(fmt.Sprintf("Block Difference Alert : Block difference b/w network and validator has exceeded &d", cfg.AlertingThresholds.BlockDiffThreshold), cfg)
+			err = alerter.SendEmailAlert(fmt.Sprintf("Block Difference Alert : Block difference b/w network and validator has exceeded %d", cfg.AlertingThresholds.BlockDiffThreshold), cfg)
 			if err != nil {
 				log.Printf("Error while sending block height diff alert to email: %v", err)
 			}
 		}
-
-		// // Calling command based alerting
-		// monitor.TelegramAlerting(c.config)
-
-		// Check whether we need to fetch a new leader schedule
-		if epochNumber != info.Epoch {
-			log.Printf("new epoch at slot %d: %d (previous: %d)", firstSlot, info.Epoch, epochNumber)
-
-			epochSlots, err := monitor.GetLeaderSlots(firstSlot, cfg)
-			if err != nil {
-				log.Printf("failed to request leader schedule, retrying: %v", err)
-				continue
-			}
-
-			log.Printf("%d leader slots in epoch %d", len(epochSlots), info.Epoch)
-
-			epochNumber = info.Epoch
-			log.Printf("we're still in epoch %d, not fetching leader schedule", info.Epoch)
-
-			// Reset watermark to current offset on new epoch (we do not backfill slots we missed at startup)
-			watermark = info.SlotIndex
-		} else if watermark == info.SlotIndex {
-			log.Printf("slot has not advanced at %d, skipping", info.AbsoluteSlot)
-			continue
-		}
-
-		log.Printf("confirmed slot %d (offset %d, +%d), epoch %d (from slot %d to %d, %d remaining)",
-			info.AbsoluteSlot, info.SlotIndex, info.SlotIndex-watermark, info.Epoch, firstSlot, lastSlot, lastSlot-info.AbsoluteSlot)
-
-		// Get list of confirmed blocks since the last request. This is totally undocumented, but the result won't
-		// contain missed blocks, allowing us to figure out block production success rate.
-		rangeStart := firstSlot + watermark
-		rangeEnd := firstSlot + info.SlotIndex - 1
-
-		// get confirmed blocks
-		cfm, err := monitor.GetConfirmedBlocks(rangeStart, rangeEnd, cfg)
-		if err != nil {
-			log.Printf("failed to request confirmed blocks at %d, retrying: %v", watermark, err)
-			// cancel()
-			continue
-		}
-
-		log.Printf("confirmed blocks: %d -> %d: %v", rangeStart, rangeEnd, cfm)
-
-		// Figure out leaders for each block in range
-		for i := watermark; i < info.SlotIndex; i++ {
-			leader, ok := epochSlots[i]
-			abs := firstSlot + i
-			if !ok {
-				// This cannot happen with a well-behaved node and is a programming error in either Solana or the exporter.
-				log.Printf("slot %d (offset %d) missing from epoch %d leader schedule",
-					abs, i, info.Epoch)
-			}
-
-			// Check if block was included in getConfirmedBlocks output, otherwise, it was skipped.
-			var present bool
-			for _, s := range cfm {
-				if abs == s {
-					present = true
-				}
-			}
-
-			var skipped string
-			var label string
-			if present {
-				skipped = "(valid)"
-				label = "valid"
-			} else {
-				skipped = "(SKIPPED)"
-				label = "skipped"
-			}
-
-			leaderSlotsTotal.With(prometheus.Labels{"status": label, "nodekey": leader}).Add(1)
-			log.Printf("slot %d (offset %d) with leader %s %s", abs, i, leader, skipped)
-		}
-
-		watermark = info.SlotIndex
 	}
 }
