@@ -2,11 +2,15 @@ package monitor
 
 import (
 	"encoding/json"
+	"fmt"
 	"log"
 	"os/exec"
+	"strings"
 
+	"github.com/PrathyushaLakkireddy/solana-prometheus/alerter"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
 	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
+	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
 )
 
 func SkipRate(cfg *config.Config) (float64, float64, error) {
@@ -32,9 +36,32 @@ func SkipRate(cfg *config.Config) (float64, float64, error) {
 		}
 		totalSkipped = totalSkipped + val.SkipRate
 	}
-	netSkipped = totalSkipped / float64(len(result.Validators))
+
+	voteAccounts, err := GetVoteAccounts(cfg, utils.Network)
+	if err != nil {
+		log.Printf("Error while getting vote accounts : %v", err)
+	}
+
+	if &voteAccounts.Result != nil {
+		currentVal := len(voteAccounts.Result.Current)
+
+		netSkipped = totalSkipped / float64(currentVal)
+	}
 
 	log.Printf("VAL skip rate : %f, Network skip rate : %f", valSkipped, netSkipped)
+
+	if valSkipped > netSkipped {
+		if strings.EqualFold(cfg.AlerterPreferences.SkipRateAlerts, "yes") {
+			err = alerter.SendTelegramAlert(fmt.Sprintf("SKIP RATE ALERT ::  Your validator SKIP RATE : %f has exceeded network SKIP RATE : %f", valSkipped, netSkipped), cfg)
+			if err != nil {
+				log.Printf("Error while sending skip rate alert to telegram: %v", err)
+			}
+			err = alerter.SendEmailAlert(fmt.Sprintf("Your validator SKIP RATE : %f has exceeded network SKIP RATE : %f", valSkipped, netSkipped), cfg)
+			if err != nil {
+				log.Printf("Error while sending skip rate alert to email: %v", err)
+			}
+		}
+	}
 
 	return valSkipped, netSkipped, nil
 }

@@ -91,6 +91,7 @@ type (
 		// EpochDiffAlerts which takes an option to enable/disable epoch difference alerts, on enable sends alerts if
 		// difference reaches or exceedes epoch difference threshold
 		EpochDiffAlerts string `mapstructure:"epoch_diff_alrets"`
+		SkipRateAlerts  string `mapstructure:"skip_rate_alerts"`
 	}
 
 	//  AlertingThreshold defines threshold condition for different alert-cases.
