@@ -97,6 +97,26 @@ var (
 		Name: "solana_skip_rate_diff",
 		Help: "Skip rate difference of network and validator",
 	})
+
+	leaderSlots = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_val_leader_slots",
+		Help: "Leader slots of a validator in current epoch",
+	})
+
+	totalSlots = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_total_slots",
+		Help: "Total slots in current epoch",
+	})
+
+	valBlocksProduced = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_val_blocks_produced",
+		Help: "Blocks produced of a validator in current epoch",
+	})
+
+	totalBlocksProduced = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_total_blocks_produced",
+		Help: "Total blocks produced in current epoch",
+	})
 )
 
 func init() {
@@ -115,6 +135,10 @@ func init() {
 	prometheus.MustRegister(valSkipRate)
 	prometheus.MustRegister(netSkipRate)
 	prometheus.MustRegister(skipRateDifference)
+	prometheus.MustRegister(leaderSlots)
+	prometheus.MustRegister(totalSlots)
+	prometheus.MustRegister(valBlocksProduced)
+	prometheus.MustRegister(totalBlocksProduced)
 }
 
 // WatchSlots get data from different methods and store that data in prometheus. Those are
@@ -185,6 +209,17 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 
 		networkEpoch.Set(float64(resp.Result.Epoch))             // Set n/w epoch
 		networkBlockHeight.Set(float64(resp.Result.BlockHeight)) // set n/w block height
+
+		// Get recent block production details
+		bp, err := monitor.BlockProduction(cfg)
+		if err != nil {
+			log.Printf("Error while getting block production details : %v", err)
+		}
+
+		leaderSlots.Set(float64(bp.LeaderSlots))
+		totalSlots.Set(float64(bp.TotalSlots))
+		valBlocksProduced.Set(float64(bp.BlocksProduced))
+		totalBlocksProduced.Set(float64(bp.TotalBlocksProduced))
 
 		// Get validator epoch info
 		resp, err = monitor.GetEpochInfo(cfg, utils.Validator)
