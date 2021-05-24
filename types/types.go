@@ -302,6 +302,7 @@ type (
 		PingTime                     interface{} `json:"ping_time"`
 		URL                          string      `json:"url"`
 	}
+
 	SkipRate struct {
 		TotalActiveStake     int64 `json:"totalActiveStake"`
 		TotalCurrentStake    int64 `json:"totalCurrentStake"`
@@ -320,5 +321,25 @@ type (
 			SkipRate          float64 `json:"skipRate"`
 		} `json:"validators"`
 		StakeByVersion interface{} `json:"stakeByVersion"`
+	}
+
+	BlockProduction struct {
+		Epoch               int `json:"epoch"`
+		StartSlot           int `json:"start_slot"`
+		EndSlot             int `json:"end_slot"`
+		TotalSlots          int `json:"total_slots"`
+		TotalBlocksProduced int `json:"total_blocks_produced"`
+		TotalSlotsSkipped   int `json:"total_slots_skipped"`
+		Leaders             []struct {
+			IdentityPubkey string `json:"identityPubkey"`
+			LeaderSlots    int    `json:"leaderSlots"`
+			BlocksProduced int    `json:"blocksProduced"`
+			SkippedSlots   int    `json:"skippedSlots"`
+		} `json:"leaders"`
+		// IndividualSlotStatus []struct {
+		// 	Slot    int    `json:"slot"`
+		// 	Leader  string `json:"leader"`
+		// 	Skipped bool   `json:"skipped"`
+		// } `json:"individual_slot_status"`
 	}
 )
