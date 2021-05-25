@@ -117,6 +117,16 @@ var (
 		Name: "solana_total_blocks_produced",
 		Help: "Total blocks produced in current epoch",
 	})
+
+	skippdSlots = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_val_skipped_slots",
+		Help: "Skipped slots of a validator in current epoch",
+	})
+
+	skippedTotal = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_skipped_total",
+		Help: "Total skipped slots in current epoch",
+	})
 )
 
 func init() {
@@ -139,6 +149,8 @@ func init() {
 	prometheus.MustRegister(totalSlots)
 	prometheus.MustRegister(valBlocksProduced)
 	prometheus.MustRegister(totalBlocksProduced)
+	prometheus.MustRegister(skippdSlots)
+	prometheus.MustRegister(skippedTotal)
 }
 
 // WatchSlots get data from different methods and store that data in prometheus. Those are
@@ -220,6 +232,8 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		totalSlots.Set(float64(bp.TotalSlots))
 		valBlocksProduced.Set(float64(bp.BlocksProduced))
 		totalBlocksProduced.Set(float64(bp.TotalBlocksProduced))
+		skippdSlots.Set(float64(bp.SkippedSlots))
+		skippedTotal.Set(float64(bp.TotalSlotsSkipped))
 
 		// Get validator epoch info
 		resp, err = monitor.GetEpochInfo(cfg, utils.Validator)
