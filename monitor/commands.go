@@ -55,6 +55,8 @@ func TelegramAlerting(cfg *config.Config) {
 			msgToSend = GetVoteCredits(cfg)
 		} else if update.Message.Text == "/skip_rate" {
 			msgToSend = GetSkipRate(cfg)
+		} else if update.Message.Text == "/block_production" {
+			msgToSend = GetBlockProduction(cfg)
 		} else if update.Message.Text == "/rpc_status" {
 			msgToSend = GetEndPointStatus(cfg)
 		} else if update.Message.Text == "/stop" {
@@ -96,7 +98,7 @@ func GetHelp() string {
 		"and network block height\n /node - return status of caught-up\n" +
 		" /balance - returns the current balance of your account \n /epoch - returns current epoch of " +
 		"network and validator\n /vote_credits - returns vote credits of current and" +
-		"previous epochs \n /skip_rate - returns the skip rate of validator and network \n /rpc_status - returns the status of validator rpc and network rpc i.e., running or not\n /stop - which panics the running code and also alerts will be stopped\n /list - list out the available commands"
+		"previous epochs \n /skip_rate - returns the skip rate of validator and network \n /block_production - returns the recent block production details \n /rpc_status - returns the status of validator rpc and network rpc i.e., running or not\n /stop - which panics the running code and also alerts will be stopped\n /list - list out the available commands"
 
 	return msg
 }
@@ -231,6 +233,7 @@ func GetEndPointStatus(cfg *config.Config) string {
 	return msg
 }
 
+// GetSkipRate returns the msg string of skip rate of a validator and network
 func GetSkipRate(cfg *config.Config) string {
 	var msg string
 	valSkip, netSkip, err := SkipRate(cfg)
@@ -240,6 +243,21 @@ func GetSkipRate(cfg *config.Config) string {
 	vs := fmt.Sprintf("%.2f", valSkip) + "%"
 	ns := fmt.Sprintf("%.2f", netSkip) + "%"
 	msg = msg + fmt.Sprintf("SKIP RATE ::\nValidator skip rate : %s\nNetwork skip rate : %s", vs, ns)
+
+	return msg
+}
+
+// GetBlockProduction returns the msg of recent block production details
+func GetBlockProduction(cfg *config.Config) string {
+	var msg string
+	bp, err := BlockProduction(cfg)
+	if err != nil {
+		log.Printf("Error while getting skip rate : %v", err)
+	}
+
+	msg = msg + fmt.Sprintf("Recent Block Production ::\nValidator Leader Slots : %d\t & Total Slots In Epoch : %d\n", bp.LeaderSlots, bp.TotalSlots)
+	msg = msg + fmt.Sprintf("Validator Blocks Produced: %d\t  & Total Blocks Produced In Epoch : %d\n", bp.BlocksProduced, bp.TotalBlocksProduced)
+	msg = msg + fmt.Sprintf("Validator Skipped Slots: %d\t & Skipped Total : %d\n", bp.SkippedSlots, bp.TotalSlotsSkipped)
 
 	return msg
 }
