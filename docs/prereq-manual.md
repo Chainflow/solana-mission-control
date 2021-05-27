@@ -123,3 +123,9 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl enable node_exporter.service
 $ sudo systemctl start node_exporter.service
 ```
+
+### Install solana client
+- If you fon't have prebuilt binaries of solana then you can follow this documentation.Follow this doc (https://docs.solana.com/cli/install-solana-cli-tools#download-prebuilt-binaries)
+- You can install this binary on your non velidator node also.
+
+Note : This is important to get metrics related to skip rate and block production details(leader slots, blocks produced etc). So please make sure to have installed solana client binary.

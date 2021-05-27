@@ -8,6 +8,7 @@ Solana prometheus monitoring tool provides a comprehensive set of metrics and al
 - **Grafana 7.x+**
 - **Prometheus**
 - **Node Exporter**
+- **Solana Client Binary**
 
 ### Prerequisite Installation
 
