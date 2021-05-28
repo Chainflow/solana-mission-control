@@ -194,12 +194,12 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		}
 		valSkipRate.Set(valSkip)
 		netSkipRate.Set(netSkip)
-		skipdiff := netSkip - valSkip
-		if skipdiff > 0 {
-			skipRateDifference.Set(skipdiff)
-		} else {
-			skipRateDifference.Set(-(skipdiff))
-		}
+		skipdiff := valSkip - netSkip
+		// if skipdiff > 0 {
+		// 	skipRateDifference.Set(skipdiff)
+		// } else {
+		skipRateDifference.Set(skipdiff)
+		// }
 
 		// Get Node Health
 		h, err := monitor.GetNodeHealth(cfg)
