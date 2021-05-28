@@ -65,7 +65,7 @@
   "gnetId": null,
   "graphTooltip": 0,
   "id": null,
-  "iteration": 1621505284087,
+  "iteration": 1622188604416,
   "links": [],
   "panels": [
     {
@@ -213,25 +213,24 @@
       "type": "row"
     },
     {
+      "cacheTimeout": null,
       "datasource": "${DS_PROMETHEUS}",
       "fieldConfig": {
         "defaults": {
           "mappings": [
             {
-              "from": "",
-              "id": 1,
-              "text": "UP",
-              "to": "",
-              "type": 1,
-              "value": "1"
-            },
-            {
-              "from": "",
-              "id": 2,
+              "id": 0,
+              "op": "=",
               "text": "DOWN",
-              "to": "",
               "type": 1,
               "value": "0"
+            },
+            {
+              "id": 1,
+              "op": "=",
+              "text": "UP",
+              "type": 1,
+              "value": "1"
             }
           ],
           "thresholds": {
@@ -246,7 +245,8 @@
                 "value": 80
               }
             ]
-          }
+          },
+          "unit": "none"
         },
         "overrides": []
       },
@@ -256,11 +256,15 @@
         "x": 0,
         "y": 4
       },
-      "id": 16,
+      "id": 70,
+      "interval": null,
+      "links": [],
+      "maxDataPoints": 100,
       "options": {
+        "orientation": "horizontal",
         "reduceOptions": {
           "calcs": [
-            "mean"
+            "lastNotNull"
           ],
           "fields": "",
           "values": false
@@ -280,7 +284,7 @@
       ],
       "timeFrom": null,
       "timeShift": null,
-      "title": "Node Status",
+      "title": "Node Health",
       "type": "gauge"
     },
     {
@@ -2662,5 +2666,5 @@
   "timezone": "",
   "title": "Summary",
   "uid": "GMwUah9Gk",
-  "version": 4
+  "version": 6
 }
