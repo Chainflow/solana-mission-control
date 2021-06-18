@@ -6,7 +6,7 @@ cd $HOME
 
 echo "--------- Cloning solana-monitoring-tool -----------"
 
-git clone https://github.com/PrathyushaLakkireddy/solana-prometheus.git
+git clone https://github.com/Chainflow/solana-mission-control.git
 
 cd solana-prometheus
 

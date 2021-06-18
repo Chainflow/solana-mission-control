@@ -5,8 +5,8 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
+	"github.com/Chainflow/solana-mission-control/config"
+	"github.com/Chainflow/solana-mission-control/types"
 )
 
 // GetSlotLeader returns the current slot leader

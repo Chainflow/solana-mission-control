@@ -9,12 +9,12 @@ import (
 
 	"github.com/prometheus/client_golang/prometheus"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/alerter"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/monitor"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/querier"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
+	"github.com/Chainflow/solana-mission-control/alerter"
+	"github.com/Chainflow/solana-mission-control/config"
+	"github.com/Chainflow/solana-mission-control/monitor"
+	"github.com/Chainflow/solana-mission-control/querier"
+	"github.com/Chainflow/solana-mission-control/types"
+	"github.com/Chainflow/solana-mission-control/utils"
 )
 
 const (

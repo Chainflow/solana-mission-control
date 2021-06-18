@@ -29,7 +29,7 @@ Either of the two methods can be used to install the required prerequisites. It 
    - Execute the script using the following command:
 
    ```sh
-   curl -s -L https://github.com/PrathyushaLakkireddy/solana-prometheus/tree/main/scripts/install_script.sh | bash
+   curl -s -L https://github.com/Chainflow/solana-mission-control/tree/main/scripts/install_script.sh | bash
    ```
    Source your `.bashrc` after executing the script
 
@@ -79,7 +79,7 @@ Either of the two methods can be used to install the tool. It is not necessary t
 - Run the script using the following command
 
 ```sh
-   curl -s -L https://github.com/PrathyushaLakkireddy/solana-prometheus/tree/main/scripts/scripts/tool_installation.sh | bash
+   curl -s -L https://github.com/Chainflow/solana-mission-control/tree/main/scripts/scripts/tool_installation.sh | bash
 ```
 You can check the logs of tool using:
 ```sh
@@ -88,8 +88,8 @@ You can check the logs of tool using:
 ### 2) Manual installation
 
 ```bash
-$ git clone https://github.com/PrathyushaLakkireddy/solana-prometheus
-$ cd solana-prometheus
+$ git clone https://github.com/Chainflow/solana-mission-control
+$ cd solana-mission-control
 $ cp example.config.toml config.toml
 ```
 Edit the `config.toml` with your changes. Information on all the fields in `config.toml` can be found [here](./docs/config-desc.md)

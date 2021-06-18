@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
+	"github.com/Chainflow/solana-mission-control/config"
 )
 
 // SendTelegramAlert sends the alert to telegram account

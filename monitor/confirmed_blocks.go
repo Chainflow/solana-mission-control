@@ -5,9 +5,9 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
+	"github.com/Chainflow/solana-mission-control/config"
+	"github.com/Chainflow/solana-mission-control/types"
+	"github.com/Chainflow/solana-mission-control/utils"
 )
 
 // GetConfirmedBlocks returns a list of confirmed blocks between two slots of given range.

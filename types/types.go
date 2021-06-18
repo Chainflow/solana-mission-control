@@ -3,7 +3,7 @@ package types
 import (
 	client "github.com/influxdata/influxdb1-client/v2"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
+	"github.com/Chainflow/solana-mission-control/config"
 )
 
 type (

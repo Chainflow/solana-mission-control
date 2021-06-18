@@ -9,9 +9,9 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/exporter"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/monitor"
+	"github.com/Chainflow/solana-mission-control/config"
+	"github.com/Chainflow/solana-mission-control/exporter"
+	"github.com/Chainflow/solana-mission-control/monitor"
 )
 
 func main() {

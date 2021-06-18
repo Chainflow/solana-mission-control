@@ -10,10 +10,10 @@ import (
 
 	tgbotapi "github.com/go-telegram-bot-api/telegram-bot-api"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/querier"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
+	"github.com/Chainflow/solana-mission-control/config"
+	"github.com/Chainflow/solana-mission-control/querier"
+	"github.com/Chainflow/solana-mission-control/types"
+	"github.com/Chainflow/solana-mission-control/utils"
 )
 
 // TelegramAlerting will check for the commands from the configured telegram account

@@ -3,8 +3,8 @@ package monitor_test
 import (
 	"testing"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/monitor"
+	"github.com/Chainflow/solana-mission-control/config"
+	"github.com/Chainflow/solana-mission-control/monitor"
 )
 
 func TestSkipRate(t *testing.T) {

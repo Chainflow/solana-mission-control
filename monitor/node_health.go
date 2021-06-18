@@ -7,9 +7,9 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/alerter"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
+	"github.com/Chainflow/solana-mission-control/alerter"
+	"github.com/Chainflow/solana-mission-control/config"
+	"github.com/Chainflow/solana-mission-control/types"
 )
 
 // GetNodeHealth returns the current health of the node.

@@ -3,7 +3,7 @@ package monitor
 import (
 	"testing"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
+	"github.com/Chainflow/solana-mission-control/config"
 )
 
 func TestTxCount(t *testing.T) {
