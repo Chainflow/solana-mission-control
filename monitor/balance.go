@@ -3,19 +3,21 @@ package monitor
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"log"
+	"math"
 	"net/http"
 	"strconv"
+	"strings"
 
-	// "k8s.io/klog/v2"
-
-	"github.com/PrathyushaLakkireddy/solana-prometheus/alerter"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
+	"github.com/Chainflow/solana-mission-control/alerter"
+	"github.com/Chainflow/solana-mission-control/config"
+	"github.com/Chainflow/solana-mission-control/querier"
+	"github.com/Chainflow/solana-mission-control/types"
 )
 
-func GetBalance(cfg *config.Config) (types.Balance, error) {
+// GetIdentityBalance returns the balance of the identity account
+func GetIdentityBalance(cfg *config.Config) (types.Balance, error) {
+	log.Println("Getting identity account Balance...")
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method:   http.MethodPost,
@@ -45,14 +47,18 @@ func GetBalance(cfg *config.Config) (types.Balance, error) {
 	return result, nil
 }
 
-func GetIdentity(cfg *config.Config) (types.Identity, error) {
+// GetVoteAccBalance returns the balance of the vote account
+func GetVoteAccBalance(cfg *config.Config) (types.Balance, error) {
+	log.Println("Getting vote Aaccount Balance...")
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method:   http.MethodPost,
-		Body:     types.Payload{Jsonrpc: "2.0", Method: "getIdentity", ID: 1},
+		Body: types.Payload{Jsonrpc: "2.0", Method: "getBalance", ID: 1, Params: []interface{}{
+			cfg.ValDetails.VoteKey, // should be base58 encoded to query data
+		}},
 	}
 
-	var result types.Identity
+	var result types.Balance
 	resp, err := HitHTTPTarget(ops)
 	if err != nil {
 		log.Printf("Error: %v", err)
@@ -68,59 +74,73 @@ func GetIdentity(cfg *config.Config) (types.Identity, error) {
 	return result, nil
 }
 
-func GetAccountBalFromDB(cfg *config.Config) (string, error) {
-	var result types.AccountBal
-	var bal string
-	response, err := http.Get(fmt.Sprintf("%s/api/v1/query?query=solana_account_balance", cfg.Prometheus.PrometheusAddress))
-	if err != nil {
-		log.Printf("Error: %v", err)
-		return bal, err
-	}
-	responseData, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		log.Println(err)
-	}
-	json.Unmarshal(responseData, &result)
-	if err != nil {
-		log.Printf("Error: %v", err)
-		return bal, err
-	}
-	if len(result.Data.Result) > 0 {
-		bal = result.Data.Result[0].Metric.SolanaAccBalance
-	}
-
-	return bal, nil
-}
-
+// SendBalanceChangeAlert checks balance and DBbalance, If balance dropped to threshold,
+// sends Alerts to the validator
 func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
-
-	prevBal, err := GetAccountBalFromDB(cfg)
+	prevBal, err := querier.GetAccountBalFromDB(cfg)
 	if err != nil {
 		log.Printf("Error while getting bal from db : %v", err)
 		return err
 	}
 
-	if prevBal != "" {
+	// c := float64(currentBal) / math.Pow(10, 9)
+	c := fmt.Sprintf("%.4f", float64(currentBal)/math.Pow(10, 9))
+	cBal, _ := strconv.ParseFloat(c, 64)
+	current := c + "SOL"
+	previous := prevBal + "SOL"
 
+	if strings.EqualFold(cfg.AlerterPreferences.AccountBalanceChangeAlerts, "yes") {
+		if cBal < cfg.AlertingThresholds.AccountBalThreshold {
+			err = alerter.SendTelegramAlert(fmt.Sprintf("Account Balance Alert: Your account balance has dropped below configured threshold, current balance is : %s", current), cfg)
+			if err != nil {
+				log.Printf("Error while sending account balance change alert to telegram : %v", err)
+				return err
+			}
+
+			err = alerter.SendEmailAlert(fmt.Sprintf("Account Balance Alert: Your account balance has dropped below configured threshold, current balance is : %s", current), cfg)
+			if err != nil {
+				log.Printf("Error while sending account balance change alert to email: %v", err)
+				return err
+			}
+		}
+	}
+
+	// Send delegation alerts
+	if prevBal != "" {
 		pBal, err := strconv.ParseFloat(prevBal, 64)
 		if err != nil {
 			log.Printf("Error while converting pBal to float64 : %v ", err)
 			return err
 		}
-		cBal := float64(currentBal)
 
-		if cfg.AlerterPreferences.BalanceChangeAlerts == "yes" {
+		if strings.EqualFold(cfg.AlerterPreferences.DelegationAlerts, "yes") {
 			diff := cBal - pBal
-			if diff > 0 {
-				err = alerter.SendTelegramAlert(fmt.Sprintf("Delegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
+			if diff > 50 && diff < 100 { // check and change the condition
+				// Alert to telegram
+				err = alerter.SendTelegramAlert(fmt.Sprintf("Delegation Alert: Your account balance has changed form %s to %s", previous, current), cfg)
 				if err != nil {
-					log.Printf("Error while sending delegation alert : %v", err)
+					log.Printf("Error while sending delegation alert to telegram : %v", err)
 					return err
 				}
-			} else {
-				err = alerter.SendTelegramAlert(fmt.Sprintf("Undelegation Alert: Your account balance has changed form %f to %f", pBal, cBal), cfg)
+
+				// Alert to email
+				err = alerter.SendEmailAlert(fmt.Sprintf("Delegation Alert: Your account balance has changed form %s to %s", previous, current), cfg)
 				if err != nil {
-					log.Printf("Error while sending undelegation alert : %v", err)
+					log.Printf("Error while sending delegation alert to email : %v", err)
+					return err
+				}
+			} else if diff < -50 { // check and change the condition
+				// Alert to telegram
+				err = alerter.SendTelegramAlert(fmt.Sprintf("Undelegation Alert: Your account balance has changed form %s to %s", previous, current), cfg)
+				if err != nil {
+					log.Printf("Error while sending undelegation alert to telegram : %v", err)
+					return err
+				}
+
+				// Alert to email
+				err = alerter.SendEmailAlert(fmt.Sprintf("Undelegation Alert: Your account balance has changed form %s to %s", previous, current), cfg)
+				if err != nil {
+					log.Printf("Error while sending undelegation alert to email : %v", err)
 					return err
 				}
 			}

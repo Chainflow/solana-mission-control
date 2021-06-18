@@ -6,11 +6,14 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
+	"github.com/Chainflow/solana-mission-control/config"
+	"github.com/Chainflow/solana-mission-control/types"
+	"github.com/Chainflow/solana-mission-control/utils"
 )
 
-func GetVoteAccounts(cfg *config.Config) (types.GetVoteAccountsResponse, error) {
+// GetVoteAccounts returns voting accounts information
+func GetVoteAccounts(cfg *config.Config, node string) (types.GetVoteAccountsResponse, error) {
+	log.Println("Getting Vote Account Information...")
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method:   http.MethodPost,
@@ -19,6 +22,13 @@ func GetVoteAccounts(cfg *config.Config) (types.GetVoteAccountsResponse, error) 
 				Commitemnt: "recent",
 			},
 		}},
+	}
+	if node == utils.Network {
+		ops.Endpoint = cfg.Endpoints.NetworkRPC
+	} else if node == utils.Validator {
+		ops.Endpoint = cfg.Endpoints.RPCEndpoint
+	} else {
+		ops.Endpoint = cfg.Endpoints.RPCEndpoint
 	}
 
 	var result types.GetVoteAccountsResponse

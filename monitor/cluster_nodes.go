@@ -9,26 +9,27 @@ import (
 	"github.com/Chainflow/solana-mission-control/types"
 )
 
-// GetBlockTime returns the estimated production time of a confirmed block
-func GetBlockTime(slot int64, cfg *config.Config) (types.BlockTime, error) {
-	log.Println("Getting block time...")
-	var result types.BlockTime
+// GetClusterNodes returns information about all the nodes participating in the cluster
+func GetClusterNodes(cfg *config.Config) (types.ClustrNode, error) {
+	log.Println("Getting Cluster Nodes...")
 	ops := types.HTTPOptions{
 		Endpoint: cfg.Endpoints.RPCEndpoint,
 		Method:   http.MethodPost,
-		Body:     types.Payload{Jsonrpc: "2.0", Method: "getBlockTime", ID: 1, Params: []interface{}{slot}},
+		Body:     types.Payload{Jsonrpc: "2.0", Method: "getClusterNodes", ID: 1},
 	}
 
+	var result types.ClustrNode
 	resp, err := HitHTTPTarget(ops)
 	if err != nil {
-		log.Printf("Error while getting block time: %v", err)
+		log.Printf("Error: %v", err)
 		return result, err
 	}
 
 	err = json.Unmarshal(resp.Body, &result)
 	if err != nil {
-		log.Printf("Error while unmarshelling block time res: %v", err)
+		log.Printf("Error: %v", err)
 		return result, err
 	}
+
 	return result, nil
 }

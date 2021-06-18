@@ -31,82 +31,84 @@ type (
 	Scraper struct {
 		// Rate is to call and get the data for specified targets on that particular time interval
 		Rate string `mapstructure:"rate"`
-		// ValidatorRate is to call and fetch the data from validatorStatus target on that time interval
-		ValidatorRate string `mapstructure:"validator_rate"`
-		// ContractRate is to call and fetch the data from smart contract realted targets on that time interval
-		ContractRate string `mapstructure:"contract_rate"`
-		// CommandsRate is to check the for telegram commands from telegram chat and returns the data
-		CommandsRate string `mapstructure:"tg_commnads_rate"`
 	}
 
 	// Prometheus stores Prometheus details
 	Prometheus struct {
-		// Port on which influxdb is running
-		Port string `mapstructure:"port"`
-		// IP to connect to influxdb where it is running
-		IP string `mapstructure:"ip"`
-		// Database is the name of the influxdb database to store the data
-		Database string `mapstructure:"database"`
-		// Username is the name of the user of influxdb
-		Username string `mapstructure:"username"`
-		// Password of influxdb
-		Password string `mapstructure:"password"`
-
-		ListenAddress     string `mapstructure:"listen_address"`
+		// ListenAddress to export metrics on the given port
+		ListenAddress string `mapstructure:"listen_address"`
+		// PrometheusAddress to connect to prormetheus where it has running
 		PrometheusAddress string `mapstructure:"prometheus_address"`
 	}
 
 	// Endpoints defines multiple API base-urls to fetch the data
 	Endpoints struct {
+		// RPCEndPoint is used to gather information about validator status,active stake, account balance, commission rate and etc.
 		RPCEndpoint string `mapstructure:"rpc_endpoint"`
+		// NetworkRPC is used to gather information about validator
+		NetworkRPC string `mapstructure:"network_rpc"`
 	}
 
 	// ValDetails stores the validator meta details
 	ValDetails struct {
 		// ValidatorName is the moniker of your validator which will be used to display in alerts messages
 		ValidatorName string `mapstructure:"validator_name"`
-		PubKey        string `mapstructure:"pub_key"`
-		VoteKey       string `mapstructure:"vote_key"`
+		// PubKey of validator as base-58 encoded string
+		PubKey string `mapstructure:"pub_key"`
+		// VoteKey of validator as base-58 encoded string
+		VoteKey string `mapstructure:"vote_key"`
 	}
 
 	// EnableAlerts struct which holds options to enalbe/disable alerts
 	EnableAlerts struct {
+		// EnableTelegramAlerts which takes an option to enable/disable telegram alerts
 		EnableTelegramAlerts bool `mapstructure:"enable_telegram_alerts"`
-		EnableEmailAlerts    bool `mapstructure:"enable_email_alerts"`
+		// EnableTelegramAlerts which takes an option to enable/disable emial alerts
+		EnableEmailAlerts bool `mapstructure:"enable_email_alerts"`
 	}
 
 	// RegularStatusAlerts defines time-slots to receive validator status alerts
 	RegularStatusAlerts struct {
-		// AlertTimings is the array of time slots to send validator status alerts
+		// AlertTimings is the array of time slots to send validator status alerts at that particular timings
 		AlertTimings []string `mapstructure:"alert_timings"`
 	}
 
-	// AlerterPreferences stores individual alert settings to enable/disable particular alert
+	// AlerterPreferences which holds individual alert settings which takes an option to  enable/disable particular alert
 	AlerterPreferences struct {
-		BalanceChangeAlerts string `mapstructure:"balance_change_alerts"`
-		VotingPowerAlerts   string `mapstructure:"voting_power_alerts"`
-		ProposalAlerts      string `mapstructure:"proposal_alerts"`
-		BlockDiffAlerts     string `mapstructure:"block_diff_alerts"`
-		MissedBlockAlerts   string `mapstructure:"missed_block_alerts"`
-		NumPeersAlerts      string `mapstructure:"num_peers_alerts"`
-		NodeSyncAlert       string `mapstructure:"node_sync_alert"`
-		NodeStatusAlert     string `mapstructure:"node_status_alert"`
-		EthLowBalanceAlert  string `mapstructure:"eth_low_balance_alert"`
+		// DelegationAlerts which takes an option to disable/enable balance delegation alerts, on enable sends alert when current
+		// account balance has dropped below from previous account balance.
+		DelegationAlerts string `mapstructure:"delegation_alerts"`
+		// AccountBalanceChangeAlerts which takes an option to disable/enable Account balance change alerts, on enable sends alert
+		// when balance has dropped to balance threshold
+		AccountBalanceChangeAlerts string `mapstructure:"account_balance_change_alerts"`
+		// VotingPowerAlerts          string `mapstructure:"voting_power_alerts"`
+		// BlockDiffAlerts which takes an option to enable/disable block height difference alerts, on enable sends alert
+		// when difference meets or exceedes block difference threshold
+		BlockDiffAlerts string `mapstructure:"block_diff_alerts"`
+		// NodeHealthAlert which takes an option to  enable/disable node Health status alert, on enable sends alerts
+		NodeHealthAlert string `mapstructure:"node_health_alert"`
+		// NodeStatusAlert            string `mapstructure:"node_status_alert"`
+		// EpochDiffAlerts which takes an option to enable/disable epoch difference alerts, on enable sends alerts if
+		// difference reaches or exceedes epoch difference threshold
+		EpochDiffAlerts string `mapstructure:"epoch_diff_alrets"`
+		SkipRateAlerts  string `mapstructure:"skip_rate_alerts"`
 	}
 
 	//  AlertingThreshold defines threshold condition for different alert-cases.
-	// `Alerter` will send alerts if the condition reaches the threshold
+	//`Alerter` will send alerts if the condition reaches the threshold
 	AlertingThreshold struct {
-		// NumPeersThreshold is to alert when the connected peers falls below this threshold
-		NumPeersThreshold int64 `mapstructure:"num_peers_threshold"`
-		// MissedBlocksThreshold is to alert when validator misses continuous missed bocks
-		// Alerter will send alerts when the missed blocks count reaches the configured threshold
-		MissedBlocksThreshold int64 `mapstructure:"missed_blocks_threshold"`
-		// BlockDiffThreshold is to send alerts when the difference b/w network and validator
-		// block height reaches the given threshold
+		// BlockDiffThreshold is to send alerts when the difference b/w network and validator's
+		// block height reaches or exceedes to block difference threshold
 		BlockDiffThreshold int64 `mapstructure:"block_diff_threshold"`
-		// EthBalanceThreshold is to send alerts when the etherium balance falls below the configured threshold
-		EthBalanceThreshold float64 `mapstructure:"eth_balance_threshold"`
+		// AccountBalThreshold is to send Alert when the validator balance has dropped below to this threshold
+		AccountBalThreshold float64 `mapstructure:"account_bal_threshold"`
+		// EpochDiffThreahold option is to send alerts when the difference b/w network and validator's
+		// epoch reaches or exceedes to epoch difference threshold
+		EpochDiffThreshold int64 `mapstructure:"epoch_diff_threshold"`
+	}
+
+	ValidatorsAppToken struct {
+		Token string `mapstructure:"token"`
 	}
 
 	// Config defines all the configurations required for the app
@@ -121,6 +123,7 @@ type (
 		Telegram            Telegram            `mapstructure:"telegram"`
 		SendGrid            SendGrid            `mapstructure:"sendgrid"`
 		Prometheus          Prometheus          `mapstructure:"prometheus"`
+		ValidatorsAppToken  ValidatorsAppToken  `mapstructure:"validators_app_token"`
 	}
 )
 
@@ -131,11 +134,12 @@ func ReadFromFile() (*Config, error) {
 	// 	log.Fatal(err)
 	// }
 
-	// configPath := path.Join(usr.HomeDir, `.matic-jagar/config/`)
+	// configPath := path.Join(usr.HomeDir, `.solana-tool/config/`)
 	// log.Printf("Config Path : %s", configPath)
 
 	v := viper.New()
 	v.AddConfigPath(".")
+	v.AddConfigPath("../")
 	// v.AddConfigPath(configPath)
 	v.SetConfigName("config")
 	if err := v.ReadInConfig(); err != nil {

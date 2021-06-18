@@ -1,6 +1,6 @@
 [rpc_and_lcd_endpoints]
-#rpc_endpoint = "https://testnet.solana.com"
-rpc_endpoint = "https://api.mainnet-beta.solana.com"
+rpc_endpoint = "https://testnet.solana.com"
+network_rpc = "https://testnet.solana.com"
 
 [validator_details]
 validator_name = "witval"
@@ -15,30 +15,23 @@ enable_email_alerts = false
 alert_timings = ["02:30PM","12:18PM","12:19PM","02:33PM"]
 
 [alerter_preferences]
-balance_change_alerts = "yes"
-voting_power_alerts = "yes"
-proposal_alerts = "yes"
+delegation_alerts = "yes"
+account_balance_change_alerts = "yes"
 block_diff_alerts = "yes"
-missed_block_alerts = "yes"
-num_peers_alerts = "yes"
-node_sync_alert = "yes"
-node_status_alert = "yes"
-eth_low_balance_alert = "yes"
+node_health_alert = "yes"
+epoch_diff_alrets = "yes"
 
 [alerting_threholds]
-num_peers_threshold = 0
-missed_blocks_threshold = 10
 block_diff_threshold = 10
-eth_balance_threshold = 0.1
+account_bal_threshold = 0.1
+epoch_diff_threshold = 10
 
 [scraper]
 rate = "540000s"
-validator_rate = "60s"
-contract_rate = "300s"
 tg_commnads_rate = "2s"
 
 [telegram]
-tg_chat_id = 228288205
+tg_chat_id = 228281095
 tg_bot_token = "1117273891:AAEtr3ZU5x4JRj5YSF4LBeu1fPF0T4xj-UI"
 
 [sendgrid]
@@ -48,5 +41,5 @@ account_email = "xyz@domain.com"
 sendgrid_account_name = "xyz"
 
 [prometheus]
-port = "8088"
-ip = "http://localhost"
+listen_address = ":1234"
+prometheus_address = "http://localhost:9090"

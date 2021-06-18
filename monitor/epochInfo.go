@@ -5,17 +5,25 @@ import (
 	"log"
 	"net/http"
 
-	// "k8s.io/klog/v2"
-
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
+	"github.com/Chainflow/solana-mission-control/config"
+	"github.com/Chainflow/solana-mission-control/types"
+	"github.com/Chainflow/solana-mission-control/utils"
 )
 
-func GetEpochInfo(cfg *config.Config) (types.EpochInfo, error) {
+// GetEpochInfo returns information about the current epoch
+func GetEpochInfo(cfg *config.Config, node string) (types.EpochInfo, error) {
+	log.Println("Getiing EpochInfo...")
 	ops := types.HTTPOptions{
-		Endpoint: cfg.Endpoints.RPCEndpoint,
-		Method:   http.MethodPost,
-		Body:     types.Payload{Jsonrpc: "2.0", Method: "getEpochInfo", ID: 1},
+		Method: http.MethodPost,
+		Body:   types.Payload{Jsonrpc: "2.0", Method: "getEpochInfo", ID: 1},
+	}
+
+	if node == utils.Network {
+		ops.Endpoint = cfg.Endpoints.NetworkRPC
+	} else if node == utils.Validator {
+		ops.Endpoint = cfg.Endpoints.RPCEndpoint
+	} else {
+		ops.Endpoint = cfg.Endpoints.RPCEndpoint
 	}
 
 	var result types.EpochInfo
