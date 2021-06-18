@@ -5,12 +5,14 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
+	"github.com/Chainflow/solana-mission-control/config"
+	"github.com/Chainflow/solana-mission-control/types"
+	"github.com/Chainflow/solana-mission-control/utils"
 )
 
+// GetEpochInfo returns information about the current epoch
 func GetEpochInfo(cfg *config.Config, node string) (types.EpochInfo, error) {
+	log.Println("Getiing EpochInfo...")
 	ops := types.HTTPOptions{
 		Method: http.MethodPost,
 		Body:   types.Payload{Jsonrpc: "2.0", Method: "getEpochInfo", ID: 1},

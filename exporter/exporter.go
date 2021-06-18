@@ -1,59 +1,64 @@
 package exporter
 
 import (
-	// "context"
 	"fmt"
 	"log"
 	"math"
 	"strconv"
 	"time"
 
-	// "github.com/certusone/solana_exporter/pkg/rpc"
 	"github.com/prometheus/client_golang/prometheus"
-	// "k8s.io/klog/v2"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/alerter"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/monitor"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/types"
-	"github.com/PrathyushaLakkireddy/solana-prometheus/utils"
+	"github.com/Chainflow/solana-mission-control/alerter"
+	"github.com/Chainflow/solana-mission-control/config"
+	"github.com/Chainflow/solana-mission-control/monitor"
+	"github.com/Chainflow/solana-mission-control/querier"
+	"github.com/Chainflow/solana-mission-control/types"
+	"github.com/Chainflow/solana-mission-control/utils"
 )
 
 const (
 	httpTimeout = 5 * time.Second
 )
 
+// solanaCollector respresents a set of solana metrics
 type solanaCollector struct {
-	config                  *config.Config
-	totalValidatorsDesc     *prometheus.Desc
-	validatorActivatedStake *prometheus.Desc
-	validatorLastVote       *prometheus.Desc
-	validatorRootSlot       *prometheus.Desc
-	validatorDelinquent     *prometheus.Desc
-	solanaVersion           *prometheus.Desc
-	accountBalance          *prometheus.Desc
-	slotLeader              *prometheus.Desc
-	blockTime               *prometheus.Desc
-	currentSlot             *prometheus.Desc
-	commission              *prometheus.Desc
-	delinqentCommission     *prometheus.Desc
-	validatorVote           *prometheus.Desc
-	statusAlertCount        *prometheus.Desc
-	ipAddress               *prometheus.Desc
-	txCount                 *prometheus.Desc
-	netVoteHeight           *prometheus.Desc
-	valVoteHeight           *prometheus.Desc
-	voteHeightDiff          *prometheus.Desc
-	valVotingStatus         *prometheus.Desc
-	voteCredits             *prometheus.Desc
+	config                    *config.Config
+	totalValidatorsDesc       *prometheus.Desc
+	validatorActivatedStake   *prometheus.Desc
+	validatorLastVote         *prometheus.Desc
+	validatorRootSlot         *prometheus.Desc
+	validatorDelinquent       *prometheus.Desc
+	solanaVersion             *prometheus.Desc
+	accountBalance            *prometheus.Desc
+	slotLeader                *prometheus.Desc
+	blockTime                 *prometheus.Desc
+	currentSlot               *prometheus.Desc
+	commission                *prometheus.Desc
+	delinqentCommission       *prometheus.Desc
+	validatorVote             *prometheus.Desc
+	statusAlertCount          *prometheus.Desc
+	ipAddress                 *prometheus.Desc
+	txCount                   *prometheus.Desc
+	netVoteHeight             *prometheus.Desc
+	valVoteHeight             *prometheus.Desc
+	voteHeightDiff            *prometheus.Desc
+	valVotingStatus           *prometheus.Desc
+	voteCredits               *prometheus.Desc
+	networkConfirmationTime   *prometheus.Desc
+	validatorConfirmationTime *prometheus.Desc
+	confirmationTimeDiff      *prometheus.Desc
 	// confirmed block time of network
 	networkBlockTime *prometheus.Desc
 	// confirmed block time of validator
 	validatorBlockTime *prometheus.Desc
 	// block time difference of network and validator
-	blockTimeDiff *prometheus.Desc
+	blockTimeDiff      *prometheus.Desc
+	voteAccBalance     *prometheus.Desc
+	identityAccBalance *prometheus.Desc
 }
 
+// NewSolanaCollector exports solana collector metrics to prometheus
 func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 	return &solanaCollector{
 		config: cfg,
@@ -81,9 +86,9 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 			"solana_node_version",
 			"Node version of solana",
 			[]string{"version"}, nil),
-		accountBalance: prometheus.NewDesc(
+		accountBalance: prometheus.NewDesc( // check using or not
 			"solana_account_balance",
-			"Account balance",
+			"Solana identity account balance",
 			[]string{"solana_acc_balance"}, nil),
 		slotLeader: prometheus.NewDesc(
 			"solana_slot_leader",
@@ -167,11 +172,23 @@ func NewSolanaCollector(cfg *config.Config) *solanaCollector {
 		blockTimeDiff: prometheus.NewDesc(
 			"solana_confirmed_blocktime_diff",
 			"Block time difference of network and validator",
-			[]string{"solana_confirmed_time_diff"}, nil,
+			[]string{"solana_confirmed_blocktime_diff"}, nil,
+		),
+		voteAccBalance: prometheus.NewDesc(
+			"solana_vote_account_balance",
+			"Vote account balance",
+			[]string{"solana_vote_acc_bal"}, nil,
+		),
+		identityAccBalance: prometheus.NewDesc(
+			"solana_identity_account_balance",
+			"Identity account balance",
+			[]string{"solana_identity_acc_bal"}, nil,
 		),
 	}
+
 }
 
+// Desribe exports metrics to the channel
 func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.solanaVersion
 	ch <- c.accountBalance
@@ -191,9 +208,24 @@ func (c *solanaCollector) Describe(ch chan<- *prometheus.Desc) {
 	ch <- c.networkBlockTime
 	ch <- c.validatorBlockTime
 	ch <- c.blockTimeDiff
-
+	ch <- c.voteAccBalance
+	ch <- c.identityAccBalance
 }
 
+// mustEmitMetrics gets the data from Current and Deliquent validator vote accounts and export metrics of validator Vote account to prometheus.
+//  Those metrics are
+// 1. Current validator's info
+// 2. Deliquent validator's info
+// 3. curent validator node key and vote key
+// 4. Validator vote account wether it is voting or not and send alert
+// 5. Current validator Vote commision
+// 6. Validator Activated Stake
+// 7. Validator Vote Height
+// 8. Network Vote Height
+// 9. VOte Height difference of Validator and Network
+// 10. Validator Vote Credits
+// 11. Deliquent validator commision
+// 12. Deliquent validatot vote account whether it voting or not and send alerts
 func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response types.GetVoteAccountsResponse) {
 	ch <- prometheus.MustNewConstMetric(c.totalValidatorsDesc, prometheus.GaugeValue,
 		float64(len(response.Result.Delinquent)), "delinquent")
@@ -265,28 +297,35 @@ func (c *solanaCollector) mustEmitMetrics(ch chan<- prometheus.Metric, response 
 	for _, vote := range response.Result.Delinquent {
 		if vote.NodePubkey == c.config.ValDetails.PubKey {
 			v := strconv.FormatInt(vote.Commission, 10)
-			if vote.EpochVoteAccount {
-				epochvote = 1
-			} else {
-				epochvote = 0
-			}
-			ch <- prometheus.MustNewConstMetric(c.validatorVote, prometheus.GaugeValue,
-				epochvote, "delinquent")
+			// if vote.EpochVoteAccount {
+			// 	epochvote = 1
+			// } else {
+			// 	epochvote = 0
+			// }
+			// ch <- prometheus.MustNewConstMetric(c.validatorVote, prometheus.GaugeValue,
+			// 	epochvote, "delinquent")
 			ch <- prometheus.MustNewConstMetric(c.delinqentCommission, prometheus.GaugeValue, float64(vote.Commission), v) // store delinquent commission
 
 			// send alert if the validator is delinquent
 			ch <- prometheus.MustNewConstMetric(c.validatorDelinquent, prometheus.GaugeValue,
 				1, vote.VotePubkey, vote.NodePubkey)
 
-			err := alerter.SendTelegramAlert(fmt.Sprintf("Your solana validator is in DELINQUENT state"), c.config)
-			if err != nil {
-				log.Printf("Error while sending vallidator status alert: %v", err)
+			// Send Telegram Alert
+			telegramErr := alerter.SendTelegramAlert(fmt.Sprintf("Your solana validator is in DELINQUENT state"), c.config)
+			if telegramErr != nil {
+				log.Printf("Error while sending vallidator status alert to telegram: %v", telegramErr)
 			}
 
+			// Send Email Alert
+			emailErr := alerter.SendEmailAlert(fmt.Sprintf("Your solana validator is in DELINQUNET state"), c.config)
+			if emailErr != nil {
+				log.Printf("Error while sending validator status alert to email: %v", emailErr)
+			}
 		}
 	}
 }
 
+// calculateEpochVoteCredits returns epoch credits of vote account
 func (c *solanaCollector) calcualteEpochVoteCredits(credits [][]int64) (string, string) {
 	epochInfo, err := monitor.GetEpochInfo(c.config, utils.Validator)
 	if err != nil {
@@ -313,6 +352,7 @@ func (c *solanaCollector) calcualteEpochVoteCredits(credits [][]int64) (string, 
 	return cCredits, pCredits
 }
 
+// AlertValidatorStatus sends validator status alerts at respective alert timings.
 func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.Metric) {
 	now := time.Now().UTC()
 	currentTime := now.Format(time.Kitchen)
@@ -332,11 +372,15 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 
 	for _, statusAlertTime := range alertsArray {
 		if currentTime == statusAlertTime {
-			dbcount, _ := monitor.AlertStatusCountFromPrometheus(c.config)
-			if dbcount == "false" {
-				err := alerter.SendTelegramAlert(msg, c.config)
-				if err != nil {
-					log.Printf("Error while sending vallidator status alert: %v", err)
+			alreadySentAlert, _ := querier.AlertStatusCountFromPrometheus(c.config)
+			if alreadySentAlert == "false" {
+				telegramErr := alerter.SendTelegramAlert(msg, c.config)
+				emailErr := alerter.SendEmailAlert(msg, c.config)
+				if telegramErr != nil {
+					log.Printf("Error while sending vallidator status alert to telegram: %v", telegramErr)
+				}
+				if emailErr != nil {
+					log.Printf("Error while sending validator status alert to email: %v", emailErr)
 				}
 				ch <- prometheus.MustNewConstMetric(c.statusAlertCount, prometheus.GaugeValue,
 					count, "true")
@@ -347,13 +391,19 @@ func (c *solanaCollector) AlertValidatorStatus(msg string, ch chan<- prometheus.
 				return
 			}
 		}
-		// else {
-		// 	ch <- prometheus.MustNewConstMetric(c.StatusAlertCount, prometheus.GaugeValue,
-		// 		count, "0")
-		// }
 	}
 }
 
+// Collect get data from methods and exports metrics to prometheus. Those metrics are
+// 1. Solana Version
+// 2. Account Balance
+// 3. slot Leader
+// 4. Confirmed block time of Validator
+// 5. Confirmed block time of Network
+// 6. Confirmed BlockTime difference of validator and network
+// 7. IP address
+// 8. Total Transaction Count
+// 9. Get current Blocktime and previous Blocktime and Difference of them.
 func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	accs, err := monitor.GetVoteAccounts(c.config, utils.Validator) // get vote accounts
 	if err != nil {
@@ -374,13 +424,28 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 		ch <- prometheus.MustNewConstMetric(c.solanaVersion, prometheus.GaugeValue, 1, version.Result.SolanaCore)
 	}
 
-	// get balance
-	bal, err := monitor.GetBalance(c.config)
+	// get identity account balance
+	bal, err := monitor.GetIdentityBalance(c.config)
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.accountBalance, err)
 	} else {
-		s := strconv.FormatInt(bal.Result.Value, 10)
-		ch <- prometheus.MustNewConstMetric(c.accountBalance, prometheus.GaugeValue, 1, s)
+		log.Printf("Identity account bal : %d", bal.Result.Value)
+		b := float64(bal.Result.Value) / math.Pow(10, 9)
+		s := fmt.Sprintf("%.4f", b) // TODO : cross check the value
+		ch <- prometheus.MustNewConstMetric(c.accountBalance, prometheus.GaugeValue, b, s)
+
+		ch <- prometheus.MustNewConstMetric(c.identityAccBalance, prometheus.GaugeValue, b, s)
+	}
+
+	// get vote account balance
+	vAccBal, err := monitor.GetVoteAccBalance(c.config)
+	if err != nil {
+		ch <- prometheus.NewInvalidMetric(c.voteAccBalance, err)
+	} else {
+		log.Printf("Vote account bal : %d", vAccBal.Result.Value)
+		b := float64(vAccBal.Result.Value) / math.Pow(10, 9)
+		s := fmt.Sprintf("%.4f", b) // TODO : cross check the value
+		ch <- prometheus.MustNewConstMetric(c.voteAccBalance, prometheus.GaugeValue, b, s)
 	}
 
 	// get slot leader
@@ -391,14 +456,33 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 		ch <- prometheus.MustNewConstMetric(c.slotLeader, prometheus.GaugeValue, 1, leader.Result)
 	}
 
-	// get current slot
-	slot, err := monitor.GetCurrentSlot(c.config)
+	// get current validator slot
+	slot, err := monitor.GetCurrentSlot(c.config, utils.Validator)
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.currentSlot, err)
 	} else {
 		cs := strconv.FormatInt(slot.Result, 10)
 		ch <- prometheus.MustNewConstMetric(c.currentSlot, prometheus.GaugeValue, 1, cs)
 	}
+
+	// Export Confirmed block time of Validator
+	validatorBlocktime := c.getValidatorBlockTime(slot.Result)
+	nowV := time.Unix(validatorBlocktime, 0).UTC()
+	timesV := nowV.Format(time.RFC1123)
+	ch <- prometheus.MustNewConstMetric(c.validatorBlockTime, prometheus.GaugeValue, 1, timesV)
+
+	// Get current Network slot
+	networkSlot, err := monitor.GetCurrentSlot(c.config, utils.Network)
+
+	// Export confirmed block time of Network
+	networkBlocktime := c.getNetworkBlockTime(networkSlot.Result)
+	nowN := time.Unix(networkBlocktime, 0).UTC()
+	timesN := nowN.Format(time.RFC1123)
+	ch <- prometheus.MustNewConstMetric(c.networkBlockTime, prometheus.GaugeValue, 1, timesN)
+
+	// Get confirmed Block Time Difference of Network and Validator
+	secs, ss := blockTimeDiff(networkBlocktime, validatorBlocktime)
+	ch <- prometheus.MustNewConstMetric(c.blockTimeDiff, prometheus.GaugeValue, secs, ss+"s")
 
 	// get block time and calculate block time diff
 	bt, err := monitor.GetBlockTime(slot.Result, c.config)
@@ -425,24 +509,9 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	txcount := utils.NearestThousandFormat(float64(count.Result))
 
 	ch <- prometheus.MustNewConstMetric(c.txCount, prometheus.GaugeValue, float64(count.Result), txcount)
-
-	// Export confirmed block time of Network
-	networkBlocktime := c.getNetworkBlockTime()
-	nowN := time.Unix(networkBlocktime, 0).UTC()
-	timesN := nowN.Format(time.RFC1123)
-	ch <- prometheus.MustNewConstMetric(c.networkBlockTime, prometheus.GaugeValue, 1, timesN)
-
-	// Export Confirmed block time of Validator
-	validatorBlocktime := c.getValidatorBlockTime()
-	nowV := time.Unix(validatorBlocktime, 0).UTC()
-	timesV := nowV.Format(time.RFC1123)
-	ch <- prometheus.MustNewConstMetric(c.validatorBlockTime, prometheus.GaugeValue, 1, timesV)
-
-	// Get confirmed Block Time Difference of Network and Validator
-	secs, ss := blockTimeDiff(networkBlocktime, validatorBlocktime)
-	ch <- prometheus.MustNewConstMetric(c.blockTimeDiff, prometheus.GaugeValue, secs, ss+"s")
 }
 
+// getClusterNodeInfo returns gossip address of node
 func (c *solanaCollector) getClusterNodeInfo() string {
 	result, err := monitor.GetClusterNodes(c.config)
 	if err != nil {
@@ -458,6 +527,7 @@ func (c *solanaCollector) getClusterNodeInfo() string {
 	return address
 }
 
+// getNetworkVoteAccountinfo returns last vote  information of  network vote account
 func (c *solanaCollector) getNetworkVoteAccountinfo() float64 {
 	resn, _ := monitor.GetVoteAccounts(c.config, utils.Network)
 	var outN float64
@@ -470,28 +540,9 @@ func (c *solanaCollector) getNetworkVoteAccountinfo() float64 {
 	return outN
 }
 
-func (c *solanaCollector) getNetworkBlockHeight() int64 {
-	resp, err := monitor.GetEpochInfo(c.config, utils.Network)
-	if err != nil {
-		log.Printf("failed to fetch epoch info of network, retrying: %v", err)
-		// cancel()
-	}
-	return int64(resp.Result.BlockHeight)
-}
-
-func (c *solanaCollector) getValBlockHeight() int64 {
-	resp, err := monitor.GetEpochInfo(c.config, utils.Validator)
-	if err != nil {
-		log.Printf("failed to fetch epoch info of network, retrying: %v", err)
-		// cancel()
-	}
-	return int64(resp.Result.BlockHeight)
-}
-
 // get confirmed block time of network
-func (c *solanaCollector) getNetworkBlockTime() int64 {
-	netBlockHeight := c.getNetworkBlockHeight()
-	result, err := monitor.GetConfirmedBlock(c.config, netBlockHeight, utils.Network)
+func (c *solanaCollector) getNetworkBlockTime(slot int64) int64 {
+	result, err := monitor.GetConfirmedBlock(c.config, slot, utils.Network)
 	if err != nil {
 		log.Printf("failed to fetch confirmed time of network, retrying: %v", err)
 		// cancel()
@@ -500,9 +551,8 @@ func (c *solanaCollector) getNetworkBlockTime() int64 {
 }
 
 // get confirmed blocktime of validator
-func (c *solanaCollector) getValidatorBlockTime() int64 {
-	valBlockHeight := c.getValBlockHeight()
-	result, err := monitor.GetConfirmedBlock(c.config, valBlockHeight, utils.Validator)
+func (c *solanaCollector) getValidatorBlockTime(slot int64) int64 {
+	result, err := monitor.GetConfirmedBlock(c.config, slot, utils.Validator)
 	if err != nil {
 		log.Printf("failed to fetch confirmed time of network, retrying: %v", err)
 		// cancel()
@@ -510,6 +560,7 @@ func (c *solanaCollector) getValidatorBlockTime() int64 {
 	return result.Result.BlockTime
 }
 
+// blockTimeDiff calculate block time difference
 func blockTimeDiff(bt int64, pvt int64) (float64, string) {
 	t1 := time.Unix(bt, 0)
 	t2 := time.Unix(pvt, 0)

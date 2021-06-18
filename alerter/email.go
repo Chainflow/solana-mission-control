@@ -4,7 +4,7 @@ import (
 	"github.com/sendgrid/sendgrid-go"
 	"github.com/sendgrid/sendgrid-go/helpers/mail"
 
-	"github.com/PrathyushaLakkireddy/solana-prometheus/config"
+	"github.com/Chainflow/solana-mission-control/config"
 )
 
 // SendEmail to send mail alert

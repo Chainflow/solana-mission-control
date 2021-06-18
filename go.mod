@@ -1,4 +1,4 @@
-module github.com/PrathyushaLakkireddy/solana-prometheus
+module github.com/Chainflow/solana-mission-control
 
 go 1.15
 
