@@ -119,11 +119,15 @@ $ sudo systemctl start prometheus.service
 - Now you can build and run the monitoring binary
 
 ```sh
-   $ go build -o solana-prometheus && ./solana-prometheus
+   $ go build -o solana-mc && ./solana-mc
 
-   - If you wish to give env variable to execute solana executable, just follow below steps
-   $ export EXECUTABLE_PATH = "sonala-mc"
-   $ go build -o $EXECUTABLE_PATH && ./$EXECUTABLE_PATH
+   - If you wish to give env variable to execute solana, just follow below steps
+
+   $ export BINARYNAME="solana-mc"
+   $ export SOLANABIN="/usr/local/bin"
+   $ go build -o $BINARYNAME
+   $ sudo mv $BINARYNAME $SOLANABIN
+   $ $SOLANABIN/$BINARYNAME
 ```
 
 Installation of the tool is completed lets configure the Grafana dashboards.
