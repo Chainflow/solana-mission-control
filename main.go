@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
@@ -15,7 +16,8 @@ import (
 )
 
 func main() {
-	cfg, err := config.ReadFromFile()
+	envConfigPath := os.Getenv("CONFIG_PATH") // read exported config path if any
+	cfg, err := config.ReadFromFile(envConfigPath)
 	if err != nil {
 		log.Fatal(err)
 	}
