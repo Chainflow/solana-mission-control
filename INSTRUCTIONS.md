@@ -120,6 +120,10 @@ $ sudo systemctl start prometheus.service
 
 ```sh
    $ go build -o solana-prometheus && ./solana-prometheus
+
+   - If you wish to give env variable to execute solana executable, just follow below steps
+   $ export EXECUTABLE_PATH = "sonala-mc"
+   $ go build -o $EXECUTABLE_PATH && ./$EXECUTABLE_PATH
 ```
 
 Installation of the tool is completed lets configure the Grafana dashboards.
