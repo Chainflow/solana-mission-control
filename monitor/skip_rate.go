@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"os"
 	"os/exec"
 	"strings"
 
@@ -13,10 +14,20 @@ import (
 	"github.com/Chainflow/solana-mission-control/utils"
 )
 
+var (
+	solanaBinaryPath = os.Getenv("SOLANA_BINARY_PATH")
+)
+
 func SkipRate(cfg *config.Config) (float64, float64, error) {
 	var valSkipped, netSkipped, totalSkipped float64
 
-	cmd := exec.Command("solana", "validators", "--output", "json")
+	if solanaBinaryPath == "" {
+		solanaBinaryPath = "solana"
+	}
+
+	log.Printf("Solana binary path : %s", solanaBinaryPath)
+
+	cmd := exec.Command(solanaBinaryPath, "validators", "--output", "json")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Printf("Error while running solana validators cli command %v", err)
