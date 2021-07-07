@@ -92,6 +92,9 @@ $ git clone https://github.com/Chainflow/solana-mission-control
 $ cd solana-mission-control
 $ cp example.config.toml config.toml
 ```
+
+Note : (OPTIONAL) If you wish to pass your config path from env variabale then you can use this command. `export CONFIG_PATH="/path/to/config"` (ex: export CONFIG_PATH="/home/Desktop").
+
 Edit the `config.toml` with your changes. Information on all the fields in `config.toml` can be found [here](./docs/config-desc.md)
 
 Note : Before running this monitoring binary, you need to add below configuration to prometheus.yml, which you have configured while installing prometheus.
