@@ -419,7 +419,7 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	// get version
 	version, err := monitor.GetVersion(c.config)
 	if err != nil {
-		ch <- prometheus.NewInvalidMetric(c.solanaVersion, err)
+		// ch <- prometheus.NewInvalidMetric(c.solanaVersion, err)
 	} else {
 		ch <- prometheus.MustNewConstMetric(c.solanaVersion, prometheus.GaugeValue, 1, version.Result.SolanaCore)
 	}
@@ -427,7 +427,7 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	// get identity account balance
 	bal, err := monitor.GetIdentityBalance(c.config)
 	if err != nil {
-		ch <- prometheus.NewInvalidMetric(c.accountBalance, err)
+		// ch <- prometheus.NewInvalidMetric(c.accountBalance, err)
 	} else {
 		log.Printf("Identity account bal : %d", bal.Result.Value)
 		b := float64(bal.Result.Value) / math.Pow(10, 9)
@@ -440,7 +440,7 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	// get vote account balance
 	vAccBal, err := monitor.GetVoteAccBalance(c.config)
 	if err != nil {
-		ch <- prometheus.NewInvalidMetric(c.voteAccBalance, err)
+		// ch <- prometheus.NewInvalidMetric(c.voteAccBalance, err)
 	} else {
 		log.Printf("Vote account bal : %d", vAccBal.Result.Value)
 		b := float64(vAccBal.Result.Value) / math.Pow(10, 9)
@@ -451,7 +451,7 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	// get slot leader
 	leader, err := monitor.GetSlotLeader(c.config)
 	if err != nil {
-		ch <- prometheus.NewInvalidMetric(c.slotLeader, err)
+		// ch <- prometheus.NewInvalidMetric(c.slotLeader, err)
 	} else {
 		ch <- prometheus.MustNewConstMetric(c.slotLeader, prometheus.GaugeValue, 1, leader.Result)
 	}
@@ -459,7 +459,7 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	// get current validator slot
 	slot, err := monitor.GetCurrentSlot(c.config, utils.Validator)
 	if err != nil {
-		ch <- prometheus.NewInvalidMetric(c.currentSlot, err)
+		// ch <- prometheus.NewInvalidMetric(c.currentSlot, err)
 	} else {
 		cs := strconv.FormatInt(slot.Result, 10)
 		ch <- prometheus.MustNewConstMetric(c.currentSlot, prometheus.GaugeValue, 1, cs)
