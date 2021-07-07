@@ -43,12 +43,17 @@ var (
 
 	epochFirstSlot = prometheus.NewGauge(prometheus.GaugeOpts{
 		Name: "solana_confirmed_epoch_first_slot",
-		Help: "Current epoch's first slot (max confirmation)",
+		Help: "Current epoch's first slot (max confirmation) - validator",
 	})
 
 	epochLastSlot = prometheus.NewGauge(prometheus.GaugeOpts{
 		Name: "solana_confirmed_epoch_last_slot",
-		Help: "Current epoch's last slot (max confirmation)",
+		Help: "Current epoch's last slot (max confirmation) - validator",
+	})
+
+	networkEpochLastSlot = prometheus.NewGauge(prometheus.GaugeOpts{
+		Name: "solana_network_confirmed_epoch_last_slot",
+		Help: "Confirmed epoch's last slot (max confirmation) - network",
 	})
 
 	nodeHealth = prometheus.NewGauge(prometheus.GaugeOpts{
@@ -151,6 +156,7 @@ func init() {
 	prometheus.MustRegister(totalBlocksProduced)
 	prometheus.MustRegister(skippdSlots)
 	prometheus.MustRegister(skippedTotal)
+	prometheus.MustRegister(networkEpochLastSlot)
 }
 
 // WatchSlots get data from different methods and store that data in prometheus. Those are
@@ -163,15 +169,6 @@ func init() {
 // 7. fetch a new leader schedule if previous epoch has done
 // 8. Get list of confirmed blocks
 func (c *solanaCollector) WatchSlots(cfg *config.Config) {
-	// var (
-	// 	// Current mapping of relative slot numbers to leader public keys.
-	// 	epochSlots map[int64]string
-	// 	// Current epoch number corresponding to epochSlots.
-	// 	epochNumber int64
-	// 	// Last slot number we generated ticks for.
-	// 	watermark int64
-	// )
-
 	ticker := time.NewTicker(slotPacerSchedule)
 
 	for {
@@ -208,10 +205,9 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 			continue
 		}
 
-		nodeHealth.Set(h)
+		nodeHealth.Set(h) // set node health
 
 		// Get network epoch info
-
 		resp, err := monitor.GetEpochInfo(cfg, utils.Network)
 		if err != nil {
 			log.Printf("failed to fetch epoch info of network, retrying: %v", err)
@@ -221,6 +217,11 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 
 		networkEpoch.Set(float64(resp.Result.Epoch))             // Set n/w epoch
 		networkBlockHeight.Set(float64(resp.Result.BlockHeight)) // set n/w block height
+
+		// Calculate first and last slot in network epoch.
+		netFirstSlot := resp.Result.AbsoluteSlot - resp.Result.SlotIndex
+		netLastSlot := netFirstSlot + resp.Result.SlotsInEpoch
+		networkEpochLastSlot.Set(float64(netLastSlot)) // set confirmed epoch last slock - network
 
 		// Get recent block production details
 		bp, err := monitor.BlockProduction(cfg)
