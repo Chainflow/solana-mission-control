@@ -2,7 +2,7 @@
 
 ### Getting Started
 
-[Setup Instructions](./INSTRUCTIONS.md)
+[Setup Instructions](./INSTRUCTIONS.md)   (under development)
 
 [Telegram and Email Alerts](./docs/alerts-commands.md)
 

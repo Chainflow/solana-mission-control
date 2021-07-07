@@ -21,7 +21,14 @@ type RecentBlock struct {
 func BlockProduction(cfg *config.Config) (RecentBlock, error) {
 	var leaderSlots, blocksProduced, skippedSlots int
 	var bp RecentBlock
-	cmd := exec.Command("solana", "block-production", "--output", "json")
+
+	if solanaBinaryPath == "" {
+		solanaBinaryPath = "solana"
+	}
+
+	log.Printf("Solana binary path : %s", solanaBinaryPath)
+
+	cmd := exec.Command(solanaBinaryPath, "block-production", "--output", "json")
 	out, err := cmd.CombinedOutput()
 	if err != nil {
 		log.Printf("Error while running solana validators cli command %v", err)
