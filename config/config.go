@@ -1,6 +1,10 @@
 package config
 
 import (
+	"os"
+	"os/user"
+	"path"
+
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 	"gopkg.in/go-playground/validator.v9"
@@ -129,18 +133,22 @@ type (
 
 // ReadFromFile to read config details using viper
 func ReadFromFile() (*Config, error) {
-	// usr, err := user.Current()
-	// if err != nil {
-	// 	log.Fatal(err)
-	// }
+	usr, err := user.Current()
+	if err != nil {
+		log.Printf("Error while reading current user : %v", err)
+	}
 
-	// configPath := path.Join(usr.HomeDir, `.solana-tool/config/`)
-	// log.Printf("Config Path : %s", configPath)
+	configPath := path.Join(usr.HomeDir, `.solana-tool/config/`)
+	log.Printf("Config Path of root: %s", configPath)
+
+	envConfigPath := os.Getenv("CONFIG_PATH") // read exported config path if any
+	log.Printf("Exported env config path : %s", envConfigPath)
 
 	v := viper.New()
 	v.AddConfigPath(".")
 	v.AddConfigPath("../")
-	// v.AddConfigPath(configPath)
+	v.AddConfigPath(configPath)
+	v.AddConfigPath(envConfigPath)
 	v.SetConfigName("config")
 	if err := v.ReadInConfig(); err != nil {
 		log.Fatalf("error while reading config.toml: %v", err)

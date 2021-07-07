@@ -125,7 +125,13 @@ $ sudo systemctl start node_exporter.service
 ```
 
 ### Install solana client
-- If you fon't have prebuilt binaries of solana then you can follow this documentation.Follow this doc (https://docs.solana.com/cli/install-solana-cli-tools#download-prebuilt-binaries)
+- Solana client binary can be used to get metrics of skip rate and block production details.
+- So make sure to configure it before running monitoring tool.
+
+- If you don't have prebuilt binaries of solana then you can follow this documentation.Follow this doc (https://docs.solana.com/cli/install-solana-cli-tools#download-prebuilt-binaries)
 - You can install this binary on your non validator node also.
+
+- If you want to specify the solana binary path, then execute this command by providing solana executable path `export SOLANA_BINARY_PATH="path_to_solana_binary"` (ex : export SOLANA_BINARY_PATH="/usr/local/bin/solana")
+- This provided path will be used in monitoring tool code and fetch the metrics accordingly.
 
 Note : This is important to get metrics related to skip rate and block production details(leader slots, blocks produced etc). So please make sure to have, installed solana client binary.

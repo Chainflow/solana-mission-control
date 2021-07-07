@@ -62,12 +62,12 @@ Either of the two methods can be used to install the tool. It is not necessary t
 
 **1) Installation script**
 
-  - It clones and sets up the monitoring tool as a system service.
+  - It clones and set up the monitoring tool as a system service.
   - Please export the following env variables first as they will be used to initialize the `config.toml` file for the tool.
   ```sh
   cd $HOME
-  export RPC_ENDPOINT="<validator-endpoint>" # Ex - export RPC_ENDPOINT="https://api.xxxxxxxxxxxxxxxxxxxx.com"
-  export NETWORK_RPC="<network-endpoint>" # Ex - export NETWORK_RPC="https://api.xxxxxxxxxxxxxxxxxxxx.com"
+  export RPC_ENDPOINT="<validator-endpoint>" # Ex - export RPC_ENDPOINT="https://api.rpc.solana.com"
+  export NETWORK_RPC="<network-endpoint>" # Ex - export NETWORK_RPC="https://api.rpc.com"
   export VALIDATOR_NAME="<moniker>" # Your validator name
   export PUB_KEY="<node-Public-key>"  # Ex - export PUB_KEY="valmmK7i1AxXeiTtQgQZhQNiXYU84ULeaYF1EH1pa"
   export VOTE_KEY="<vote-key>" # Ex - export VOTE_KEY="2oxQJ1qpgUZU9JU84BHaoM1GzHkYfRDgDQY9dpH5mghh"
@@ -92,6 +92,9 @@ $ git clone https://github.com/Chainflow/solana-mission-control
 $ cd solana-mission-control
 $ cp example.config.toml config.toml
 ```
+
+Note : (OPTIONAL) If you wish to pass your config path from env variabale then you can use this command. `export CONFIG_PATH="/path/to/config"` (ex: export CONFIG_PATH="/home/Desktop").
+
 Edit the `config.toml` with your changes. Information on all the fields in `config.toml` can be found [here](./docs/config-desc.md)
 
 Note : Before running this monitoring binary, you need to add below configuration to prometheus.yml, which you have configured while installing prometheus.
@@ -119,7 +122,7 @@ $ sudo systemctl start prometheus.service
 - Now you can build and run the monitoring binary
 
 ```sh
-   $ go build -o solana-prometheus && ./solana-prometheus
+   $ go build -o solana-mc && ./solana-mc
 ```
 
 Installation of the tool is completed lets configure the Grafana dashboards.

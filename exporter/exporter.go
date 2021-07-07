@@ -418,11 +418,11 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 
 	// get version
 	version, err := monitor.GetVersion(c.config)
-	if err != nil {
-		ch <- prometheus.NewInvalidMetric(c.solanaVersion, err)
-	} else {
-		ch <- prometheus.MustNewConstMetric(c.solanaVersion, prometheus.GaugeValue, 1, version.Result.SolanaCore)
-	}
+	// if err != nil {
+	// 	ch <- prometheus.NewInvalidMetric(c.solanaVersion, err)
+	// } else {
+	ch <- prometheus.MustNewConstMetric(c.solanaVersion, prometheus.GaugeValue, 1, version.Result.SolanaCore)
+	// }
 
 	// get identity account balance
 	bal, err := monitor.GetIdentityBalance(c.config)
@@ -439,14 +439,14 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 
 	// get vote account balance
 	vAccBal, err := monitor.GetVoteAccBalance(c.config)
-	if err != nil {
-		ch <- prometheus.NewInvalidMetric(c.voteAccBalance, err)
-	} else {
-		log.Printf("Vote account bal : %d", vAccBal.Result.Value)
-		b := float64(vAccBal.Result.Value) / math.Pow(10, 9)
-		s := fmt.Sprintf("%.4f", b) // TODO : cross check the value
-		ch <- prometheus.MustNewConstMetric(c.voteAccBalance, prometheus.GaugeValue, b, s)
-	}
+	// if err != nil {
+	// 	ch <- prometheus.NewInvalidMetric(c.voteAccBalance, err)
+	// } else {
+	log.Printf("Vote account bal : %d", vAccBal.Result.Value)
+	b := float64(vAccBal.Result.Value) / math.Pow(10, 9)
+	s := fmt.Sprintf("%.4f", b) // TODO : cross check the value
+	ch <- prometheus.MustNewConstMetric(c.voteAccBalance, prometheus.GaugeValue, b, s)
+	// }
 
 	// get slot leader
 	leader, err := monitor.GetSlotLeader(c.config)
@@ -502,7 +502,9 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 
 	// IP address of gossip
 	address := c.getClusterNodeInfo()
-	ch <- prometheus.MustNewConstMetric(c.ipAddress, prometheus.GaugeValue, 1, address)
+	if address != "" {
+		ch <- prometheus.MustNewConstMetric(c.ipAddress, prometheus.GaugeValue, 1, address)
+	}
 
 	// get tx count
 	count, _ := monitor.GetTxCount(c.config)
