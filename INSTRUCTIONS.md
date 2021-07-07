@@ -62,12 +62,12 @@ Either of the two methods can be used to install the tool. It is not necessary t
 
 **1) Installation script**
 
-  - It clones and sets up the monitoring tool as a system service.
+  - It clones and set up the monitoring tool as a system service.
   - Please export the following env variables first as they will be used to initialize the `config.toml` file for the tool.
   ```sh
   cd $HOME
-  export RPC_ENDPOINT="<validator-endpoint>" # Ex - export RPC_ENDPOINT="https://api.xxxxxxxxxxxxxxxxxxxx.com"
-  export NETWORK_RPC="<network-endpoint>" # Ex - export NETWORK_RPC="https://api.xxxxxxxxxxxxxxxxxxxx.com"
+  export RPC_ENDPOINT="<validator-endpoint>" # Ex - export RPC_ENDPOINT="https://api.rpc.solana.com"
+  export NETWORK_RPC="<network-endpoint>" # Ex - export NETWORK_RPC="https://api.rpc.com"
   export VALIDATOR_NAME="<moniker>" # Your validator name
   export PUB_KEY="<node-Public-key>"  # Ex - export PUB_KEY="valmmK7i1AxXeiTtQgQZhQNiXYU84ULeaYF1EH1pa"
   export VOTE_KEY="<vote-key>" # Ex - export VOTE_KEY="2oxQJ1qpgUZU9JU84BHaoM1GzHkYfRDgDQY9dpH5mghh"
@@ -120,14 +120,6 @@ $ sudo systemctl start prometheus.service
 
 ```sh
    $ go build -o solana-mc && ./solana-mc
-
-   - If you wish to give env variable to execute solana, just follow below steps
-
-   $ export BINARYNAME="solana-mc"
-   $ export SOLANABIN="/usr/local/bin"
-   $ go build -o $BINARYNAME
-   $ sudo mv $BINARYNAME $SOLANABIN
-   $ $SOLANABIN/$BINARYNAME
 ```
 
 Installation of the tool is completed lets configure the Grafana dashboards.
