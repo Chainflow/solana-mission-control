@@ -1,6 +1,7 @@
 package config
 
 import (
+	"os"
 	"os/user"
 	"path"
 
@@ -131,14 +132,16 @@ type (
 )
 
 // ReadFromFile to read config details using viper
-func ReadFromFile(envConfigPath string) (*Config, error) {
+func ReadFromFile() (*Config, error) {
 	usr, err := user.Current()
 	if err != nil {
-		log.Fatal(err)
+		log.Printf("Error while reading current user : %v", err)
 	}
 
 	configPath := path.Join(usr.HomeDir, `.solana-tool/config/`)
 	log.Printf("Config Path of root: %s", configPath)
+
+	envConfigPath := os.Getenv("CONFIG_PATH") // read exported config path if any
 	log.Printf("Exported env config path : %s", envConfigPath)
 
 	v := viper.New()
