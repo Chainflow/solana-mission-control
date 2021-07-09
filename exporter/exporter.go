@@ -420,9 +420,10 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	version, err := monitor.GetVersion(c.config)
 	// if err != nil {
 	// 	ch <- prometheus.NewInvalidMetric(c.solanaVersion, err)
-	// } else {
-	ch <- prometheus.MustNewConstMetric(c.solanaVersion, prometheus.GaugeValue, 1, version.Result.SolanaCore)
-	// }
+	// } else {}
+	if version.Result.SolanaCore != "" {
+		ch <- prometheus.MustNewConstMetric(c.solanaVersion, prometheus.GaugeValue, 1, version.Result.SolanaCore)
+	}
 
 	// get identity account balance
 	bal, err := monitor.GetIdentityBalance(c.config)
@@ -442,10 +443,13 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	// if err != nil {
 	// 	ch <- prometheus.NewInvalidMetric(c.voteAccBalance, err)
 	// } else {
-	log.Printf("Vote account bal : %d", vAccBal.Result.Value)
-	b := float64(vAccBal.Result.Value) / math.Pow(10, 9)
-	s := fmt.Sprintf("%.4f", b) // TODO : cross check the value
-	ch <- prometheus.MustNewConstMetric(c.voteAccBalance, prometheus.GaugeValue, b, s)
+	if vAccBal.Result.Value != 0 {
+		log.Printf("Vote account bal : %d", vAccBal.Result.Value)
+		b := float64(vAccBal.Result.Value) / math.Pow(10, 9)
+		s := fmt.Sprintf("%.4f", b) // TODO : cross check the value
+		ch <- prometheus.MustNewConstMetric(c.voteAccBalance, prometheus.GaugeValue, b, s)
+	}
+
 	// }
 
 	// get slot leader
@@ -453,7 +457,9 @@ func (c *solanaCollector) Collect(ch chan<- prometheus.Metric) {
 	if err != nil {
 		ch <- prometheus.NewInvalidMetric(c.slotLeader, err)
 	} else {
-		ch <- prometheus.MustNewConstMetric(c.slotLeader, prometheus.GaugeValue, 1, leader.Result)
+		if leader.Result != "" {
+			ch <- prometheus.MustNewConstMetric(c.slotLeader, prometheus.GaugeValue, 1, leader.Result)
+		}
 	}
 
 	// get current validator slot
