@@ -63,6 +63,10 @@
 
       Configure **yes** if you wish to get alerts about alters when current account balance has dropped below to previous account balance otherwise make it **no**
 
+   - *node_health_alert*
+
+     If you want to recieve alerts when your validator node is down then make it **yes** otherwise **no**
+
 - **[alerting_threholds]**
 
    - *block_diff_threshold*
