@@ -85,20 +85,20 @@ type (
 		// AccountBalanceChangeAlerts which takes an option to disable/enable Account balance change alerts, on enable sends alert
 		// when balance has dropped to balance threshold
 		AccountBalanceChangeAlerts string `mapstructure:"account_balance_change_alerts"`
-		// VotingPowerAlerts          string `mapstructure:"voting_power_alerts"`
 		// BlockDiffAlerts which takes an option to enable/disable block height difference alerts, on enable sends alert
-		// when difference meets or exceedes block difference threshold
+		// when difference meets or exceeds block difference threshold
 		BlockDiffAlerts string `mapstructure:"block_diff_alerts"`
 		// NodeHealthAlert which takes an option to  enable/disable node Health status alert, on enable sends alerts
 		NodeHealthAlert string `mapstructure:"node_health_alert"`
-		// NodeStatusAlert            string `mapstructure:"node_status_alert"`
 		// EpochDiffAlerts which takes an option to enable/disable epoch difference alerts, on enable sends alerts if
-		// difference reaches or exceedes epoch difference threshold
+		// difference reaches or exceeds epoch difference threshold
 		EpochDiffAlerts string `mapstructure:"epoch_diff_alrets"`
-		SkipRateAlerts  string `mapstructure:"skip_rate_alerts"`
+		// SkipRateAlerts which takes an option to enable/disable skip rate alerts, on enable sends alerts if validator skip rate
+		// exceeds network skip rate
+		SkipRateAlerts string `mapstructure:"skip_rate_alerts"`
 	}
 
-	//  AlertingThreshold defines threshold condition for different alert-cases.
+	// AlertingThreshold defines threshold condition for different alert-cases.
 	//`Alerter` will send alerts if the condition reaches the threshold
 	AlertingThreshold struct {
 		// BlockDiffThreshold is to send alerts when the difference b/w network and validator's
@@ -109,10 +109,6 @@ type (
 		// EpochDiffThreahold option is to send alerts when the difference b/w network and validator's
 		// epoch reaches or exceedes to epoch difference threshold
 		EpochDiffThreshold int64 `mapstructure:"epoch_diff_threshold"`
-	}
-
-	ValidatorsAppToken struct {
-		Token string `mapstructure:"token"`
 	}
 
 	// Config defines all the configurations required for the app
@@ -127,7 +123,6 @@ type (
 		Telegram            Telegram            `mapstructure:"telegram"`
 		SendGrid            SendGrid            `mapstructure:"sendgrid"`
 		Prometheus          Prometheus          `mapstructure:"prometheus"`
-		ValidatorsAppToken  ValidatorsAppToken  `mapstructure:"validators_app_token"`
 	}
 )
 
@@ -138,7 +133,7 @@ func ReadFromFile() (*Config, error) {
 		log.Printf("Error while reading current user : %v", err)
 	}
 
-	configPath := path.Join(usr.HomeDir, `.solana-tool/config/`)
+	configPath := path.Join(usr.HomeDir, `.solana-tool/config/`) // will be used to run as system service using script file
 	log.Printf("Config Path of root: %s", configPath)
 
 	envConfigPath := os.Getenv("CONFIG_PATH") // read exported config path if any

@@ -1,6 +1,6 @@
-# solana-prometheus
+# solana-mission-control
 
-Solana prometheus monitoring tool provides a comprehensive set of metrics and alerts for solana validator node operators. We utilized the power of Grafana + Node exporter and extended the monitoring & alerting with a custom built go server.
+Solana mission control provides a comprehensive set of metrics and alerts for solana validator node operators. We utilized the power of Grafana + Node exporter and extended the monitoring & alerting with a custom built go server.
 
 ## Install Prerequisites
 

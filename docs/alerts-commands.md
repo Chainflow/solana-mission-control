@@ -19,5 +19,7 @@ Here is the list of available Telegram Commands.
   - **/epoch** - returns current epoch of network and validator
   - **/vote_credits** - returns vote credits of current andprevious epochs 
   - **/rpc_status** - returns the status of validator rpc and network rpc i.e., running or not
+  - **/skip_rate** - returns the skip rate of validator and network
+  - **/block_production** - returns the recent block production details
   - **/stop** - which panics the running code and also alerts will be stopped
   - **/list** - list out the available commands
