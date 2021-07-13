@@ -4,13 +4,13 @@
 
 - **Validator Identity**
 
-  Validator public Key: Node public key of the validator as base-58 encoded public key 
+  Vote Key: Node public key of the validator.
 
-  Validator vote key: Vote Key of the validator as base-58 encoded pubKey
+  Pub key: Vote Key of the validator.
 
 - **Validator Information**
 
-    Solana node version: Returns the current solana versions running on the node, result feild is `solana-core` from `getVersion` method
+    Solana node version: Returns the current solana version running on the node,considered result field is `solana-core` from `getVersion` method
 
     Solana node health: Checking wether solana is running active on this port or not, if it is active node status will be  marked as **UP** or else **DOWN** , result got from method `getHealth`.
 
@@ -22,7 +22,7 @@
         
     Commision: Validator's vote account commision, percentage (0-100) of rewards payout owed to the vote account, result feild is `commission` from the method `getVoteAccounts`.
 
-- **validator Health**
+- **Validator Health**
 
     Network Epoch: Current network's  epoch height, calculated by calling the method `getEpochInfo`, the result presented in the feild of `epoch`.
 

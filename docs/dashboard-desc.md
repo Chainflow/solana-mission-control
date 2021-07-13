@@ -120,7 +120,7 @@ The following list of metrics are displayed in this dashboard.
 
 This view provides a comprehensive look at system performance metrics, expanding on the summary dashboard. Here's you'll find all the system metrics you'd expect to see in a comprehensive system monitoring tool.
 
-These metrics are are collected by the node_exporter and displays all the metrics related to
+These metrics are collected by the node_exporter and displays all the metrics related to
 
 - CPU
 - Memory
@@ -137,7 +137,7 @@ This dashboard displays a quick information summary of validator details and sys
 
 - Validator identity (validator public key, validator vote key)
 - Validator summary which includes  
-         Voting Account, Validator status,Node status,
+         Voting Account, Validator Status,Node Health,
          Block Height - Network, Block Height - Validator, Block Height Difference 
          Validator Commision, Active stake, Current Epoch Vote Credits
 - Server Uptime, CPU Busy, RAM Used, CPU, Memory Stake, Network Traffic, Disk Space Used, Disk IOps, I/O usage Read/Write, I/O Usage Times are the metrics being displayed from System details.
