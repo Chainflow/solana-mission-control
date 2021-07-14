@@ -56,30 +56,6 @@
    - *skip_rate_alerts*
      
       Configure **yes** if you wish to get alerts when validator skip rate exceeds network skip rate otherwise **no**.
-     
-- **[telegram]**
-  - *tg_chat_id*
-
-    Telegram chat ID to receive Telegram alerts, required for Telegram alerting.
-    
-  - *tg_bot_token*
-
-    Telegram bot token, required for Telegram alerting. The bot should be added to the chat and should have send message permission.
-    
-- **[Email]**
-
-  - *email_address*
-
-    E-mail address to receive mail notifications, required for e-mail alerting.
-   
-  - *sendgrid_token*
-
-     Sendgrid mail service api token, required for e-mail alerting.
-
-- **[regular_status_alerts]**
-   - *alert_timings*
-   
-      Array of timestamps for alerting about the validator health, i.e. whether it's voting or jailed. You can get alerts based on the time which can be configured.
 
 - **[alerting_threholds]**
 
@@ -89,18 +65,43 @@
 
    - *epoch_diff_threshold*
        
-       An integer value to recieve epoch difference alerts, e.g. a value of 5 would alert you if difference between your validator's epoch number and network's epoch is 5 or more.
+      An integer value to recieve epoch difference alerts, e.g. a value of 5 would alert you if difference between your validator's epoch number and network's epoch is 5 or more.
 
-   - *account_bal_threshold*
+   - *balance_change_threshold*
 
-       An integer value to recieve account balance change alerts, e.g. if your account balance has dropped to given threshold value you will receive alerts.
+      An integer value to recieve account balance change alerts, e.g. if your account balance has dropped to given threshold value you will receive alerts.
+
+- **[regular_status_alerts]**
+
+   - *alert_timings*
+   
+      Array of timestamps for alerting about the validator health, i.e. whether it's voting or jailed. You can get alerts based on the time which can be configured.
+     
+- **[telegram]**
+  - *tg_chat_id*
+
+      Telegram chat ID to receive alerts to your telegram char, required for Telegram alerting.
+    
+  - *tg_bot_token*
+
+      Telegram bot token, required for Telegram alerting. The bot should be added to the chat and should have send message permission.
+    
+- **[Email]**
+
+  - *email_address*
+
+      E-mail address to receive mail notifications, required for e-mail alerting.
+   
+  - *sendgrid_token*
+
+      Sendgrid mail service api token, required for e-mail alerting.
 
 - **[prometheus]**
 
     - *prometheus_address*
 
-       PrometheusAddress to connect to prormetheus where it has running, by default prometheus listening address (ex: http://localhost:9090)
+      Prometheus address to export solana metrics and serve, by default listening address configured as (ex: http://localhost:1234) on config.toml
 
     - *listen_address*
        
-       Port in which prometheus server will run,and export metrics on this port, (ex: http://localhost:1234/metrics) shows all the metrics which are stored in prometheus database, by default it will run on 9090 port.
+      Port in which prometheus server will run,and export metrics on this port, (ex: http://localhost:1234/metrics) shows all the metrics which are stored in prometheus database, by default it will run on 9090 port.
