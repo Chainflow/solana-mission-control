@@ -104,8 +104,8 @@ type (
 		// BlockDiffThreshold is to send alerts when the difference b/w network and validator's
 		// block height reaches or exceedes to block difference threshold
 		BlockDiffThreshold int64 `mapstructure:"block_diff_threshold"`
-		// AccountBalThreshold is to send Alert when the validator balance has dropped below to this threshold
-		AccountBalThreshold float64 `mapstructure:"account_bal_threshold"`
+		// BalanaceChangeThreshold is to send alert when the validator balance has dropped below to this threshold
+		BalanaceChangeThreshold float64 `mapstructure:"balance_change_threshold"`
 		// EpochDiffThreahold option is to send alerts when the difference b/w network and validator's
 		// epoch reaches or exceedes to epoch difference threshold
 		EpochDiffThreshold int64 `mapstructure:"epoch_diff_threshold"`
