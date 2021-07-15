@@ -168,6 +168,10 @@ func init() {
 // 6. block height difference of network and validator
 // 7. fetch a new leader schedule if previous epoch has done
 // 8. Get list of confirmed blocks
+// 9. Skip Rate of the validator and network and difference between them
+// 10. Leader slots and total slots of the validator
+// 11. Valid and total blocks produced
+// 12. Skipped slots and total slots skipped
 func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 	ticker := time.NewTicker(slotPacerSchedule)
 
