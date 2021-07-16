@@ -40,6 +40,7 @@ fi
 
 echo "------ Building and running the code --------"
 
+cd $HOME
 cd solana-mission-control
 
 go build -o solana-mc
