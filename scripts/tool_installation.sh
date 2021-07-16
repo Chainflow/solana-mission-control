@@ -8,7 +8,7 @@ echo "--------- Cloning solana-monitoring-tool -----------"
 
 git clone https://github.com/Chainflow/solana-mission-control.git
 
-cd solana-prometheus
+cd solana-mission-control
 
 cp example.config.toml config.toml
 
@@ -61,7 +61,7 @@ LimitNOFILE=4096
 [Install]
 WantedBy=multi-user.target" | sudo tee "/lib/systemd/system/solana_mc.service"
 
-echo "--------------- Start Solana-Prometheus service ----------------"
+echo "--------------- Start Solana-Mession-Control service ----------------"
 
 
 sudo systemctl daemon-reload
