@@ -73,7 +73,7 @@ echo "
     static_configs:
     - targets: ['localhost:9090']
 
-  - job_name: 'Solana'
+  - job_name: 'solana'
     static_configs:
       - targets: ['localhost:1234']
 

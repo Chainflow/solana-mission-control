@@ -40,34 +40,34 @@ fi
 
 echo "------ Building and running the code --------"
 
-cd solana-prometheus
+cd solana-mission-control
 
-go build -o solana-prometheus
-mv solana-prometheus $HOME/go/bin
+go build -o solana-mc
+mv solana-mc $HOME/go/bin
 
-echo "----------- Setup Solana-Prometheus service------------"
+echo "----------- Setupsolana-mc service------------"
 
 echo "[Unit]
-Description=Solana-Prometheus
+Description=Solana-mc
 After=network-online.target
 
 [Service]
 User=$USER
-ExecStart=$HOME/go/bin/solana-prometheus
+ExecStart=$HOME/go/bin/solana-mc
 Restart=always
 RestartSec=3
 LimitNOFILE=4096
 
 [Install]
-WantedBy=multi-user.target" | sudo tee "/lib/systemd/system/solana_prometheus.service"
+WantedBy=multi-user.target" | sudo tee "/lib/systemd/system/solana_mc.service"
 
 echo "--------------- Start Solana-Prometheus service ----------------"
 
 
 sudo systemctl daemon-reload
 
-sudo systemctl enable solana_prometheus.service
+sudo systemctl enable solana_mc.service
 
-sudo systemctl start solana_prometheus.service
+sudo systemctl start solana_mc.service
 
 echo "** Done **"
