@@ -10,7 +10,9 @@ git clone https://github.com/Chainflow/solana-mission-control.git
 
 cd solana-mission-control
 
-cp example.config.toml config.toml
+mkdir -p  ~/.solana-mc/config/
+
+cp example.config.toml ~/.solana-mc/config/config.toml
 
 cd $HOME
 
