@@ -23,7 +23,7 @@ epoch_diff_alrets = "yes"
 
 [alerting_threholds]
 block_diff_threshold = 10
-account_bal_threshold = 0.1
+balance_change_threshold = 0.1
 epoch_diff_threshold = 10
 
 [scraper]

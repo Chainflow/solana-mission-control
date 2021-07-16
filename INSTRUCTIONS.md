@@ -1,6 +1,6 @@
-# solana-prometheus
+# solana-mission-control
 
-Solana prometheus monitoring tool provides a comprehensive set of metrics and alerts for solana validator node operators. We utilized the power of Grafana + Node exporter and extended the monitoring & alerting with a custom built go server.
+Solana mission control provides a comprehensive set of metrics and alerts for solana validator node operators. We utilized the power of Grafana + Node exporter and extended the monitoring & alerting with a custom built go server.
 
 ## Install Prerequisites
 
@@ -169,10 +169,3 @@ Information of all the dashboards can be found [here](./docs/dashboard-desc.md).
 - To import **summary**, click the *plus* button present on left hand side of the dashboard. Click on import and load the summary.json present in the grafana_template folder.
 
 - *For more info about grafana dashboard imports you can refer https://grafana.com/docs/grafana/latest/reference/export_import/*
-
-
-
-
-
-
-      

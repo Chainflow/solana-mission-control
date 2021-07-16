@@ -12,93 +12,115 @@ The following list of metrics are displayed in this dashboard.
 
 - **Validator Identity**
 
-  *Validator public Key*: Node public key of the validator
+  *Pub Key*: Node public key of the validator.
 
-  *Validator vote key*: Vote Key of the validator
+  *Vote key*: Vote Key of the validator.
 
 - **Validator Information**
 
-    *Solana node version*: Current version of the solana
+    *Node Version*: Current version of the solana node.
 
-    *Solana node health*: Current health of the solana node, if it is running fine it marked as **UP** or else marked as **DOWN**
+    *Node health*: Current health of the solana node, if it is running fine, then it marked as **UP** or else marked as **DOWN**.
 
-    *IP Address*: Gossip network address for the node
+    *Validator Active stake*: Displays the stake, delegated to the vote account and active in the current epoch.
+
+    *IP Address*: Gossip network address for the node.
     
-    *Vote Account*: Shows information about whether the validator is voting or jailed, If the validator is voting account it marked as **YES** or else **NO**
-    
-    *Validator Active stake*: Displays the stake, delegated to this vote account and active in this epoch
+    *Vote Account*: Shows information about whether the validator is voting or jailed, If the validator is voting, it marked as **YES** or else **NO**.
         
     *Commision*: Validator's vote account commision, percentage (0-100) of rewards payout owed to the vote account.
 
-- **validator Health**
+- **Validator Health**
 
-    *Network Epoch*: Displays network's epoch height 
+    *Network Epoch*: Displays network's epoch height .
 
-    *Validator Epoch*: Displays validator's epoch height
+    *Validator Epoch*: Displays validator's epoch height.
 
-    *Epoch Difference*: Difference between validator's and network's epoch height
+    *Epoch Difference*: Difference between validator's and network's epoch height.
 
-    *Validator status*: Shows validator's status whether the validator is voting or jailed, If the validator is voting then it displayed as **VOTING** or else displayed as **JAILED**
+    *Vote Height - Network*: Displays the latest vote height of network.
+    
+    *Vote Height - Validator*: Displays the latest vote height committed by validator.
+
+    *Vote Height Difference*: Displays height difference of network and validator's vote height.
+
+    *Block Height - Network*: Displays the latest block height of a network.
+    
+    *Block Height - Validator*: Displays the latest block height committed by the validator.
+    
+    *Block Height Difference*: Displays Block Height Difference of network and validator.
+
+    *Voting*: Shows validator's status whether the validator is voting or jailed, If the validator is voting then it displays as **VOTING** or else **JAILED**.
+
+    *Skip Rate - Validator*: Displays skip rate of validator.
+
+    *Skip Rate - Network*: Displays skip Rate of network.
+    
+    *Skip Rate - Difference*: Displays difference between validator and network skip rate.
+
+    *Vote Height - Network*: Displays the latest vote height of network.
+    
+    *Vote Height - Validator*: Displays the latest vote height committed by validator.
+
+    *Vote Height Difference*: Displays height difference of network and validator's vote height.
 
 - **Validator Performance**
 
-    *Block Height - Network*: Displays the latest block height of a network
-    
-    *Block Height - Validator*: Displays the latest block height committed by the validator
-    
-    *Height Difference*: Displays Block Height Difference of network and validator's block height
+    *Current Epoch - Vote credits*: Displays vote credits of vote account for current epoch.
 
-    *Solana Blocktime*: Displays estimated production time of a confirmed block
+    *Previous Epoch - Vote credits*: Displays vote credits of validator for previous epoch.
     
-    *Vote Height - Network*: Displays the latest vote height of network
-    
-    *Vote Height - Validator*: Displays the latest vote height committed by validator
+    *Identity Account Balance*: Displays identity account balance.
 
-    *Vote Height Difference*: Displays height difference of network and validator's vote height
-
-    *Account Balance*: Displays Account Balance of validator in SOL's
+    *Confirmed Blocktime - Network*: Displays estimated production time of confirmed block of a network.
     
-    *Solana current slot height*: Displays Current slot height 
-    
-    *Confirmed Blocktime - Network*: Displays estimated production time of confirmed block of Network
-    
-    *Confirmed Blocktime - Validator*: Displays estimated production time of confirmed block committed by validator
+    *Confirmed Blocktime - Validator*: Displays estimated production time of confirmed block committed by validator.
         
-    *Block Time Difference*: Difference between confirmation time of network and validator
+    *Confirmed Time Difference*: Difference between confirmation time of validator and network.
 
-    *Current Epoch - Vote credits*: Displays total current epoch vote credits of validator vote account
-
-    *Previous Epoch - Vote credits*: Displays total previous epoch vote credits of validator vote account
+    *Total Transaction Count*: Displays total transaction count from the current ledger.
     
-    *Total valid slots*: Displays number of leader valid slots per leader
-    
-    *Total skipped slots*: Displays number of leader skipped slots per leader
+    *Confirmed Epoch Last Slot - Validator*: Displays confirmed epoch of validator in last slot.
 
-- **Validator Details**
+    *Confirmed Epoch Last Slot - Network*: Displays confirmed epoch of network in last slot.
 
-   *Solana slot leader*: Displays current slot leader address as base-58 encoded string 
-   
-   *Transaction Count*: Displays current total transaction count from the ledger
-   
-   *Validator last voted*: Displays most recent slot voted on by this vote account
-   
-   *Solana confirmed slot height*: Displays current slot height
-    
-   *Current Active Validators*: Displays the number of current active validators, i.e validators who are voting 
-    
-   *Delinquent validators*: Displays the number of delinquent validators, i.e validators who are jailed.
+    *Vote Account Balance*: Displays current vote account balance.
 
-   *Confirmed epoch last slot*: Displays current epoch's last slot
+- **Recent Block Production - Current Epoch**
 
-   *Validator Root slot*: Displays Root slot per validator
+    *Leader Slots - Validator*:Displays the no.of leader slots of a validator in current epoch.
 
-**Note**: The above mentioned metrics will be calculated and displayed according to the validator address which will be configured in config.toml.      
+    *Total Slots - Current Epoch*:Displays total slots in current epoch.
+
+    *Blocks Produced - Validator*: Displays produced blocks of a validator in current epoch.
+
+    *Total Blocks Produced - Current Epoch*: Displays total blocks produced in current epoch.
+
+    *Skipped Slots - Validator*: Displays Skipped slots of a validator in current epoch.
+
+    *Total Skipped Slots - Current Epoch* - Displays Total skipped slots in current epoch.
+
+- **Extra Information**
+
+    *Solana Slot Leader*: Display slot leader for current slot.
+
+    *Delinquent validators*: Displays the number of delinquent validators, i.e validators who are not active. 
+
+    *Validator Root Slot*: Displays root slot of validator.
+
+    *Last voted*: Displays recent slot voted by vote account.
+
+    *Current Active Validators*: Displays the number of current active validators, i.e validators who are voting.
+
+    *Confirmed Slot Height*: Displays confirmed slot height.
+
+**Note**: The above mentioned metrics will be calculated and displayed according to the addresses which will be configured in config.toml.      
 
 ### 2. System Monitoring Metrics
 
 This view provides a comprehensive look at system performance metrics, expanding on the summary dashboard. Here's you'll find all the system metrics you'd expect to see in a comprehensive system monitoring tool.
 
-These metrics are are collected by the node_exporter and displays all the metrics related to
+These metrics are collected by the node_exporter and displays all the metrics related to
 
 - CPU
 - Memory
@@ -115,7 +137,7 @@ This dashboard displays a quick information summary of validator details and sys
 
 - Validator identity (validator public key, validator vote key)
 - Validator summary which includes  
-         Voting Account, Validator status,Node status,
+         Voting Account, Validator Status,Node Health,
          Block Height - Network, Block Height - Validator, Block Height Difference 
          Validator Commision, Active stake, Current Epoch Vote Credits
 - Server Uptime, CPU Busy, RAM Used, CPU, Memory Stake, Network Traffic, Disk Space Used, Disk IOps, I/O usage Read/Write, I/O Usage Times are the metrics being displayed from System details.

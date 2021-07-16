@@ -90,7 +90,7 @@ func SendBalanceChangeAlert(currentBal int64, cfg *config.Config) error {
 	previous := prevBal + "SOL"
 
 	if strings.EqualFold(cfg.AlerterPreferences.AccountBalanceChangeAlerts, "yes") {
-		if cBal < cfg.AlertingThresholds.AccountBalThreshold {
+		if cBal < cfg.AlertingThresholds.BalanaceChangeThreshold {
 			err = alerter.SendTelegramAlert(fmt.Sprintf("Account Balance Alert: Your account balance has dropped below configured threshold, current balance is : %s", current), cfg)
 			if err != nil {
 				log.Printf("Error while sending account balance change alert to telegram : %v", err)

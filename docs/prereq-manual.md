@@ -39,6 +39,11 @@ $ sudo cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
 
     static_configs:
     - targets: ['localhost:9090']
+
+  - job_name: 'solana'
+
+    static_configs:
+      - targets: ['localhost:1234']
     
 ```
 

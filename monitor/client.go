@@ -50,8 +50,6 @@ func newRequest(ops types.HTTPOptions, cfg *config.Config) (*http.Request, error
 		return nil, err
 	}
 
-	req.Header.Set("Token", cfg.ValidatorsAppToken.Token)
-	// req.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 	req.Header.Set("Content-Type", "application/json")
 
 	// Add any query parameters to the URL.
@@ -83,27 +81,7 @@ func HitHTTPTarget(ops types.HTTPOptions) (*types.PingResp, error) {
 		return nil, err
 	}
 
-	httpcli := http.Client{Timeout: time.Duration(5 * time.Second)}
-	resp, err := httpcli.Do(req)
-	if err != nil {
-		return nil, err
-	}
-
-	res, err := makeResponse(resp)
-	if err != nil {
-		return nil, err
-	}
-
-	return res, nil
-}
-
-func HitValditorsAPI(ops types.HTTPOptions, cfg *config.Config) (*types.PingResp, error) {
-	req, err := newRequest(ops, cfg)
-	if err != nil {
-		return nil, err
-	}
-
-	httpcli := http.Client{Timeout: time.Duration(5 * time.Second)}
+	httpcli := http.Client{Timeout: time.Duration(10 * time.Second)}
 	resp, err := httpcli.Do(req)
 	if err != nil {
 		return nil, err
