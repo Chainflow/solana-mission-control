@@ -133,7 +133,7 @@ func ReadFromFile() (*Config, error) {
 		log.Printf("Error while reading current user : %v", err)
 	}
 
-	configPath := path.Join(usr.HomeDir, `.solana-tool/config/`) // will be used to run as system service using script file
+	configPath := path.Join(usr.HomeDir, `.solana-mission-control/config/`) // will be used to run as system service using script file
 	log.Printf("Config Path of root: %s", configPath)
 
 	envConfigPath := os.Getenv("CONFIG_PATH") // read exported config path if any
