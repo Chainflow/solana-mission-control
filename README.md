@@ -1,11 +1,15 @@
-# solana-prometheus
+# Solana-mission-control
+
+Solana mission control provides a comprehensive set of metrics and alerts for solana validator  operators. We utilized the power of Grafana + Node exporter and extended the monitoring & alerting with a custom built go-server.
 
 ### Getting Started
 
-[Setup Instructions](./INSTRUCTIONS.md)
+ - [Click here](./INSTRUCTIONS.md) to find the instructions to install the tool. 
 
-[Telegram and Email Alerts](./docs/alerts-commands.md)
+ - [Click here](./docs/metric-cal.md) to find out how the metrics were calculated.
 
-Click [here](./docs/custom-port.md) to setup customized ports for Grafana, Prometheus, Node Exporter.
+ - [Click here](./docs/alerts-commands.md) to find the list of telegram commands supported by the alerting bot.
 
-Click [here](./docs/metric-cal.md) to know about the metric calculations.
+
+
+

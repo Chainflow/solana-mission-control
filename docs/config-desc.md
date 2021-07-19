@@ -2,7 +2,7 @@
 - **[rpc_and_lcd_endpoints]**
   - *rpc_endpoint*
 
-      RPC end point is used to gather information like validator status,active stake, account balance, commission rate and etc.
+      RPC end point is used to gather information like validator status,active stake, account balance, commission rate etc.
    - *network_rpc*
 
       NetworkRPC is used to gather information about network metrics like confirmed blocks, epoch information etc.
@@ -11,7 +11,7 @@
 
    - *validator_name*
    
-      Valiadtor name is the moniker of your validator which will be used to display in alert messages.
+      Validator name is the moniker of your validator which will be used to display in alert messages.
 
    - *pub_key*
   
@@ -47,7 +47,7 @@
 
    - *delegation_alerts*
 
-      Configure **yes** if you wish to get alerts when there is a new delegation and your account balance has changed, otherwise make it **no**.
+      Configure **yes** if you wish to get alerts when there is a new delegation and your account balance changes, otherwise make it **no**.
 
    - *node_health_alert*
    
@@ -80,7 +80,7 @@
 - **[telegram]**
   - *tg_chat_id*
 
-      Telegram chat ID to receive alerts to your telegram char, required for Telegram alerting.
+      Telegram chat ID to receive alerts to your telegram chat, required for Telegram alerting.
     
   - *tg_bot_token*
 
@@ -100,7 +100,7 @@
 
     - *prometheus_address*
 
-      Prometheus address to export solana metrics and serve, by default listening address configured as (ex: http://localhost:1234) on config.toml
+      Prometheus address to export solana metrics and serve, by default listening address configured as (http://localhost:1234) in `config.toml`
 
     - *listen_address*
        
