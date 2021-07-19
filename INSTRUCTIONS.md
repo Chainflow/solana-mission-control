@@ -17,6 +17,8 @@ Solana mission control provides a comprehensive set of metrics and alerts for so
    Before installing monitoring tool prerequisites make sure to have installed solana client binary.
    - If you haven't installed it before, follow [this guide](https://docs.solana.com/cli/install-solana-cli-tools#download-prebuilt-binaries) to install the prebuilt binaries of latest version.
 
+   To know more information about solana client binary usage [click here](https://github.com/Chainflow/solana-mission-control/blob/main/docs/prereq-manual.md#install-solana-client).
+
  - Install other prerequisites
 
    There are two ways of installing the prerequisites:-

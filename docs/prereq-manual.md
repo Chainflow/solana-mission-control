@@ -129,7 +129,7 @@ $ sudo systemctl enable node_exporter.service
 $ sudo systemctl start node_exporter.service
 ```
 
-### Install solana client
+### Install solana client (If not already installed)
 - Solana client binary can be used to get metrics of skip rate and block production details.
 - So make sure to configure it before running monitoring tool.
 
