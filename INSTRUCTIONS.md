@@ -12,12 +12,21 @@ Solana mission control provides a comprehensive set of metrics and alerts for so
 
 ### Prerequisite Installation
 
-There are two ways of installing the prerequisites:-
+ - Solana Client Binary Installation 
+
+   Before installing monitoring tool prerequisites make sure to have installed solana client binary.
+   - If you haven't installed it before, follow [this guide](https://docs.solana.com/cli/install-solana-cli-tools#download-prebuilt-binaries) to install the prebuilt binaries of latest version.
+
+   To know more information about solana client binary usage [click here](https://github.com/Chainflow/solana-mission-control/blob/main/docs/prereq-manual.md#install-solana-client).
+
+ - Install other prerequisites
+
+   There are two ways of installing the prerequisites:-
 
    1. Installation script
    2. Manual installation
 
-Either of the two methods can be used to install the required prerequisites. It is not necessary to do both.
+   Either of the two methods can be used to install the required prerequisites. It is not necessary to do both.
 
 **1) Installation script**
 
@@ -74,7 +83,7 @@ Either of the two methods can be used to install the tool. It is not necessary t
   export TELEGRAM_CHAT_ID=<id> # Ex - export TELEGRAM_CHAT_ID=22828812
   export TELEGRAM_BOT_TOKEN="<token>" # Ex - TELEGRAM_BOT_TOKEN="1117273891:AAEtr3ZU5x4JRj5YSF5LBeu1fPF0T4xj-UI"
 ```
-- **Note**: if you don't want telegram notifications you can skip exporting `TELEGRAM_CHAT_ID` and `TELEGRAM_BOT_TOKEN` but the rest are mandatory.
+- **Note**: If you don't want telegram notifications you can skip exporting `TELEGRAM_CHAT_ID` and `TELEGRAM_BOT_TOKEN` but the rest are mandatory.
 - You can find the tool installation script [here](./scripts/tool_installation.sh)
 - Run the script using the following command
 
@@ -83,7 +92,7 @@ Either of the two methods can be used to install the tool. It is not necessary t
 ```
 You can check the logs of tool using:
 ```sh
-   journalctl -u solana_prometheus.service
+   journalctl -u solana_mc.service
 ```
 ### 2) Manual installation
 
@@ -95,7 +104,7 @@ $ cp example.config.toml config.toml
 
 Note : (OPTIONAL) If you wish to pass your config path from env variabale then you can use this command. `export CONFIG_PATH="/path/to/config"` (ex: export CONFIG_PATH="/home/Desktop").
 
-Edit the `config.toml` with your changes. Information on all the fields in `config.toml` can be found [here](./docs/config-desc.md)
+Edit the `config.toml` with your changes. Information about all the fields in `config.toml` can be found [here](./docs/config-desc.md)
 
 Note : Before running this monitoring binary, you need to add below configuration to prometheus.yml, which you have configured while installing prometheus.
 
@@ -105,7 +114,7 @@ Note : Before running this monitoring binary, you need to add below configuratio
 ```sh
  scrape_configs:
 
-  - job_name: 'Solana'
+  - job_name: 'solana'
 
     static_configs:
     - targets: ['localhost:1234']
@@ -132,7 +141,7 @@ Installation of the tool is completed lets configure the Grafana dashboards.
 The repo provides three dashboards
 
 1. Validator Monitoring Metrics - Displays the validator metrics which are calculated and stored in prometheus.
-2. System Metrics - Displays the metrics related to your validator server on which this tool is hosted on.
+2. System Monitoring Metrics - Displays the metrics related to your validator server on which this tool is hosted on.
 3. Summary - Displays a quick overview of validator monitoring metrics and system metrics.
 
 Information of all the dashboards can be found [here](./docs/dashboard-desc.md).
@@ -140,7 +149,7 @@ Information of all the dashboards can be found [here](./docs/dashboard-desc.md).
 ## How to import these dashboards in your Grafana installation
 
 ### 1. Login to your Grafana dashboard
-- Open your web browser and go to http://<your_ip>:3000/. `3000` is the default HTTP port that Grafana listens to if you haven’t configured a different port.
+- Open your web browser and go to http://<your_ip>:3000/. `3000` is the default HTTP port that Grafana listens to, if you haven’t configured a different port.
 - If you are a first time user type `admin` for the username and password in the login page.
 - You can change the password after login.
 

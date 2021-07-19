@@ -69,17 +69,13 @@ echo "------- Edit prometheus.yml --------------"
 
 echo "
 
-  - job_name: 'prometheus'
-    static_configs:
-    - targets: ['localhost:9090']
-
   - job_name: 'solana'
     static_configs:
       - targets: ['localhost:1234']
 
   - job_name: 'node_exporter'
     static_configs:
-    - targets: [localhost:9100]" >> sudo "$HOME/prometheus.yml"
+    - targets: ['localhost:9100']" >> sudo "$HOME/prometheus.yml"
 
 
 echo "------- Setup prometheus system service -------"

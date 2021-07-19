@@ -182,7 +182,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		bal, err := monitor.GetIdentityBalance(cfg)
 		if err != nil {
 			log.Printf("Error while getting account balance : %v", err)
-			continue
+			// continue
 		}
 
 		balance.Set(float64(bal.Result.Value) / math.Pow(10, 9))
@@ -191,7 +191,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		valSkip, netSkip, err := monitor.SkipRate(cfg)
 		if err != nil {
 			log.Printf("Error while getting skipped slots : %v", err)
-			continue
+			// continue
 		}
 		valSkipRate.Set(valSkip)
 		netSkipRate.Set(netSkip)
@@ -206,7 +206,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		h, err := monitor.GetNodeHealth(cfg)
 		if err != nil {
 			log.Printf("Error while getting node health info : %v", err)
-			continue
+			// continue
 		}
 
 		nodeHealth.Set(h) // set node health
@@ -216,7 +216,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		if err != nil {
 			log.Printf("failed to fetch epoch info of network, retrying: %v", err)
 			// cancel()
-			continue
+			// continue
 		}
 
 		networkEpoch.Set(float64(resp.Result.Epoch))             // Set n/w epoch
@@ -243,9 +243,9 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		// Get validator epoch info
 		resp, err = monitor.GetEpochInfo(cfg, utils.Validator)
 		if err != nil {
-			log.Printf("failed to fetch poch info of validator, retrying: %v", err)
+			log.Printf("failed to fetch epoch info of validator, retrying: %v", err)
 			// cancel()
-			continue
+			// continue
 		}
 		// cancel()
 		info := resp.Result

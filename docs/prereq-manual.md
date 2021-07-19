@@ -33,12 +33,6 @@ $ sudo cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
 - Add the following in prometheus.yml using your editor of choices
 
 ```sh
- scrape_configs:
-
-  - job_name: 'prometheus'
-
-    static_configs:
-    - targets: ['localhost:9090']
 
   - job_name: 'solana'
 
@@ -119,7 +113,7 @@ Copy paste the following in prometheus.yml.
   - job_name: 'node_exporter'
 
       static_configs:
-      - targets: [localhost:9100]
+      - targets: ['localhost:9100']
 ```
 Start Node exporter
 
@@ -129,7 +123,7 @@ $ sudo systemctl enable node_exporter.service
 $ sudo systemctl start node_exporter.service
 ```
 
-### Install solana client
+### Install solana client (If not already installed)
 - Solana client binary can be used to get metrics of skip rate and block production details.
 - So make sure to configure it before running monitoring tool.
 
