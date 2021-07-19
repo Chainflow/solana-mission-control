@@ -79,7 +79,7 @@ echo "
 
   - job_name: 'node_exporter'
     static_configs:
-    - targets: [localhost:9100]" >> sudo "$HOME/prometheus.yml"
+    - targets: ['localhost:9100']" >> sudo "$HOME/prometheus.yml"
 
 
 echo "------- Setup prometheus system service -------"
