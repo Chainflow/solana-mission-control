@@ -69,10 +69,6 @@ echo "------- Edit prometheus.yml --------------"
 
 echo "
 
-  - job_name: 'prometheus'
-    static_configs:
-    - targets: ['localhost:9090']
-
   - job_name: 'solana'
     static_configs:
       - targets: ['localhost:1234']
