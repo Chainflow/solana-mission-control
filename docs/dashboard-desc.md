@@ -1,4 +1,3 @@
-
 ## Monitoring 
 
 Monitoring is provided via three customized Grafana dashboards.  The dashboards provide consolidated, user-friendly, yet comprehensive views of a validator infrastucture's health.
@@ -26,7 +25,7 @@ The following list of metrics are displayed in this dashboard.
 
     *IP Address*: Gossip network address for the node.
     
-    *Vote Account*: Shows information about whether the validator is voting or jailed, If the validator is voting, it marked as **YES** or else **NO**.
+    *Vote Account*: Shows information about whether the validator is voting or delinquent, If the validator is voting, it marked as **YES** or else **NO**.
         
     *Commision*: Validator's vote account commision, percentage (0-100) of rewards payout owed to the vote account.
 
@@ -50,7 +49,7 @@ The following list of metrics are displayed in this dashboard.
     
     *Block Height Difference*: Displays Block Height Difference of network and validator.
 
-    *Voting*: Shows validator's status whether the validator is voting or jailed, If the validator is voting then it displays as **VOTING** or else **JAILED**.
+    *Voting*: Shows validator's status whether the validator is voting or delinquent, If the validator is voting then it displays as **VOTING** or else **JAILED**.
 
     *Skip Rate - Validator*: Displays skip rate of validator.
 
@@ -88,9 +87,9 @@ The following list of metrics are displayed in this dashboard.
 
 - **Recent Block Production - Current Epoch**
 
-    *Leader Slots - Validator*:Displays the no.of leader slots of a validator in current epoch.
+    *Leader Slots - Validator*: Displays the no.of leader slots of a validator in current epoch.
 
-    *Total Slots - Current Epoch*:Displays total slots in current epoch.
+    *Total Slots - Current Epoch* :Displays total slots in current epoch.
 
     *Blocks Produced - Validator*: Displays produced blocks of a validator in current epoch.
 
@@ -114,11 +113,11 @@ The following list of metrics are displayed in this dashboard.
 
     *Confirmed Slot Height*: Displays confirmed slot height.
 
-**Note**: The above mentioned metrics will be calculated and displayed according to the addresses which will be configured in config.toml.      
+**Note**: The above mentioned metrics will be calculated and displayed according to the addresses configured in `config.toml.`      
 
 ### 2. System Monitoring Metrics
 
-This view provides a comprehensive look at system performance metrics, expanding on the summary dashboard. Here's you'll find all the system metrics you'd expect to see in a comprehensive system monitoring tool.
+This view provides a comprehensive look at system performance metrics, expanding on the summary dashboard. Here you'll find all the system metrics you'd expect to see in a comprehensive system monitoring tool.
 
 These metrics are collected by the node_exporter and displays all the metrics related to
 

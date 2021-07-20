@@ -1,10 +1,6 @@
-# solana-mission-control
-
-Solana mission control provides a comprehensive set of metrics and alerts for solana validator node operators. We utilized the power of Grafana + Node exporter and extended the monitoring & alerting with a custom built go server.
-
 ## Install Prerequisites
 
-- **Go 14.x+**
+- **Go 1.14.x+**
 - **Grafana 7.x+**
 - **Prometheus**
 - **Node Exporter**
@@ -14,7 +10,7 @@ Solana mission control provides a comprehensive set of metrics and alerts for so
 
  - Solana Client Binary Installation 
 
-   Before installing monitoring tool prerequisites make sure to have installed solana client binary.
+   Before installing prerequisites make sure to have solana client binary installed.
    - If you haven't installed it before, follow [this guide](https://docs.solana.com/cli/install-solana-cli-tools#download-prebuilt-binaries) to install the prebuilt binaries of latest version.
 
    To know more information about solana client binary usage [click here](https://github.com/Chainflow/solana-mission-control/blob/main/docs/prereq-manual.md#install-solana-client).
@@ -45,7 +41,7 @@ Solana mission control provides a comprehensive set of metrics and alerts for so
    ```sh
    source ~/.bashrc
    ```
-   **Note**: This script installs the prerequisites and enables them to run on their default ports ie. `Grafana` by default runs on port 3000, `prometheus` by default runs on port 9090 and `Node Exporter` by default runs on port 9100. If you want to change the defaults ports please follow these [Instructions](./docs/custom-port.md)
+   **Note**: This script installs the prerequisites and enables them to run on their default ports ie. `Grafana` by default runs on port 3000, `prometheus` by default runs on port 9090 and `Node Exporter` by default runs on port 9100. If you want to change the defaults ports please follow these [instructions](./docs/custom-port.md).
 
    You can view the logs by executing the following commands:
    ```bash
@@ -67,11 +63,12 @@ There are two ways of installing the tool:-
 
 1. Installation script
 2. Manual installation
+
 Either of the two methods can be used to install the tool. It is not necessary to do both.
 
 **1) Installation script**
 
-  - It clones and set up the monitoring tool as a system service.
+  - It clones and sets up the monitoring tool as a system service.
   - Please export the following env variables first as they will be used to initialize the `config.toml` file for the tool.
   ```sh
   cd $HOME
@@ -102,14 +99,13 @@ $ cd solana-mission-control
 $ cp example.config.toml config.toml
 ```
 
-Note : (OPTIONAL) If you wish to pass your config path from env variabale then you can use this command. `export CONFIG_PATH="/path/to/config"` (ex: export CONFIG_PATH="/home/Desktop").
+**Note** : (OPTIONAL) If you wish to pass your config path from env variable then you can use this command. `export CONFIG_PATH="/path/to/config"` (ex: `export CONFIG_PATH="/home/Desktop"`).
 
 Edit the `config.toml` with your changes. Information about all the fields in `config.toml` can be found [here](./docs/config-desc.md)
 
-Note : Before running this monitoring binary, you need to add below configuration to prometheus.yml, which you have configured while installing prometheus.
+Note : Before running this monitoring binary, you need to add the following configuration to `prometheus.yml`.
 
-```
-- Add the following in prometheus.yml using your editor of choices
+
 
 ```sh
  scrape_configs:
@@ -121,20 +117,20 @@ Note : Before running this monitoring binary, you need to add below configuratio
 
 ```
 
-Then, restart the prometheus serivce
+Restart the prometheus serivce
 
 ```sh 
 $ sudo systemctl daemon-reload
-$ sudo systemctl start prometheus.service
+$ sudo systemctl restart prometheus.service
 ```
 
-- Now you can build and run the monitoring binary
+- Build and run the monitoring binary
 
 ```sh
    $ go build -o solana-mc && ./solana-mc
 ```
 
-Installation of the tool is completed lets configure the Grafana dashboards.
+Installation of the tool is completed let's configure the Grafana dashboards.
 
 ### Grafana Dashboards
 
@@ -157,24 +153,27 @@ Information of all the dashboards can be found [here](./docs/dashboard-desc.md).
 
 - Before importing the dashboards you have to create datasources of `Prometheus`.
 
-- To create datasoruces go to configuration and select Data Sources.
+- To create datasoruces go to **Configuration** and select **Data Sources**.
 
-- Click on Add data source and select `Prometheus` from Time series databases section.
+- Click on **Add data source** and select `Prometheus` from Time series databases section.
 
 - Replace the URL with http://localhost:9090. 
 
-- Click on Save & Test . Now you have a working Datasource of Prometheus.
+- Click on **Save & Test** .
 
 ### 3. Import the dashboards
 
-- To import the json file of the **validator monitoring metrics** click the *plus* button present on left hand side of the dashboard. Click on import and load the validator_monitoring_metrics.json present in the grafana_template folder. 
+- To import the dashboards click the **+** button present on left hand side of the dashboard. Click on import and paste the UID of the dashboards on the text field below **Import via grafana.com** and click on load. 
 
 - Select the datasources and click on import.
 
-- To import **system monitoring metrics** click the *plus* button present on left hand side of the dashboard. Click on import and load the system_monitoring_metrics.json present in the grafana_template folder.
+UID of dashboards are as follows:
 
-- While creating this dashboard if you face any issues at valueset, change it to empty and then click on import by selecting the datasources.
+ - **14738**: Validator Monitoring Metrics dashboard
+ - **14739**: Summary dashboard
+ - **13445**: System monitoring metrics dashboard
 
-- To import **summary**, click the *plus* button present on left hand side of the dashboard. Click on import and load the summary.json present in the grafana_template folder.
+ While importing these dashboards if you face any issues at valueset, change it to empty and then click on import by selecting the datasources.
+
 
 - *For more info about grafana dashboard imports you can refer https://grafana.com/docs/grafana/latest/reference/export_import/*
