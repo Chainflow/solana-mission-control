@@ -61,9 +61,9 @@ wget https://github.com/prometheus/prometheus/releases/download/v2.22.1/promethe
 
 tar -xvf prometheus-2.22.1.linux-amd64.tar.gz
 
-sudo cp prometheus-2.22.1.linux-amd64/prometheus $GOBIN
+cp prometheus-2.22.1.linux-amd64/prometheus $GOBIN
 
-sudo cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
+cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
 
 echo "------- Edit prometheus.yml --------------"
 
