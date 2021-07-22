@@ -61,9 +61,9 @@ wget https://github.com/prometheus/prometheus/releases/download/v2.22.1/promethe
 
 tar -xvf prometheus-2.22.1.linux-amd64.tar.gz
 
-sudo cp prometheus-2.22.1.linux-amd64/prometheus $GOBIN
+cp prometheus-2.22.1.linux-amd64/prometheus $GOBIN
 
-sudo cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
+cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
 
 echo "------- Edit prometheus.yml --------------"
 
@@ -77,7 +77,7 @@ echo "
   - job_name: 'node_exporter'
 
     static_configs:
-    - targets: ['localhost:9100']" >> sudo "$HOME/prometheus.yml"
+    - targets: ['localhost:9100']" >> "$HOME/prometheus.yml"
 
 
 echo "------- Setup prometheus system service -------"

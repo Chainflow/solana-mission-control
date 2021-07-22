@@ -34,7 +34,7 @@
    - Execute the script using the following command:
 
    ```sh
-   curl -s -L https://github.com/Chainflow/solana-mission-control/tree/main/scripts/install_script.sh | bash
+   curl -s -L https://raw.githubusercontent.com/Chainflow/solana-mission-control/main/scripts/install_script.sh | bash
    ```
    Source your `.bashrc` after executing the script
 
