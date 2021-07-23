@@ -12,7 +12,7 @@ enable_telegram_alerts = true
 enable_email_alerts = false
 
 [regular_status_alerts]
-alert_timings = ["02:30PM","12:18PM","12:19PM","02:33PM","08:35AM","08:32AM"]
+alert_timings = ["02:30AM","02:30PM"]
 
 [alerter_preferences]
 delegation_alerts = "yes"
@@ -24,15 +24,8 @@ skip_rate_alerts = "yes"
 
 [alerting_threholds]
 block_diff_threshold = 10
-account_bal_threshold = 1000.123
+balance_change_threshold = 1000.123
 epoch_diff_threshold = 0
-
-
-[scraper]
-rate = "1s"
-validator_rate = "60s"
-contract_rate = "300s"
-tg_commnads_rate = "2s"
 
 [telegram]
 tg_chat_id = 2121288205
