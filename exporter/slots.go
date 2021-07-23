@@ -17,7 +17,7 @@ import (
 )
 
 const (
-	slotPacerSchedule = 5 * time.Second
+	slotPacerSchedule = 2 * time.Second
 )
 
 var (

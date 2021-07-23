@@ -60,32 +60,3 @@ func TestConfirmedNetworkBlock(t *testing.T) {
 		t.Log("Got network confirmed Block information : ", res)
 	}
 }
-
-// var tests = []struct {
-// 	rangeStart int64
-// 	rangeEnd   int64
-// 	want       []int64
-// }{
-// 	{70539000, 70539097, []int64{70539000, 70539001, 70539002}},
-// 	{5, 10, []int64{5, 6, 7, 8, 9, 10}},
-// }
-
-// func TestConfirmedBlocks(t *testing.T) {
-
-// 	cfg, err := config.ReadFromFile()
-// 	if err != nil {
-// 		t.Error("Error while reading config :", err)
-// 	}
-// 	for _, tt := range tests {
-// 		testname := fmt.Sprintf("%d,%d", tt.rangeStart, tt.rangeEnd)
-// 		t.Run(testname, func(t *testing.T) {
-// 			res, err := monitor.GetConfirmedBlocks(tt.rangeStart, tt.rangeEnd, cfg)
-// 			if err != nil {
-// 				t.Error("Error while fetching confirmed Blocks")
-// 			}
-// 			if res != tt.want {
-
-// 			}
-// 		})
-// 	}
-// }
