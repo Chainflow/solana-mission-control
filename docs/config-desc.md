@@ -15,7 +15,7 @@
 
    - *pub_key*
   
-      Public key of the validator, which will be used to gather information about validator metrics like commision,validator status etc...
+      Public key of the validator, which will be used to gather information about validator metrics like commision,validator status etc.
 
    - *vote_key*
    
@@ -100,7 +100,7 @@
 
     - *prometheus_address*
 
-      Prometheus address to export solana metrics and serve, by default listening address configured as (http://localhost:1234) in `config.toml`
+      Prometheus address to export solana metrics and serve, by default listening address configured as (http://localhost:1234) in `config.toml` .
 
     - *listen_address*
        

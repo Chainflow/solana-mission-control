@@ -169,9 +169,9 @@ Information of all the dashboards can be found [here](./docs/dashboard-desc.md).
 
 UID of dashboards are as follows:
 
- - **14738**: Validator Monitoring Metrics dashboard
- - **14739**: Summary dashboard
- - **13445**: System monitoring metrics dashboard
+ - **14738**: Validator monitoring metrics dashboard.
+ - **14739**: Summary dashboard.
+ - **13445**: System monitoring metrics dashboard.
 
  While importing these dashboards if you face any issues at valueset, change it to empty and then click on import by selecting the datasources.
 
