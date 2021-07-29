@@ -1,10 +1,10 @@
-## Install Prerequisites
+## 1 - Install Prerequisites
 
+- **Solana Client Binary**
 - **Go 1.14.x+**
 - **Grafana 7.x+**
 - **Prometheus**
 - **Node Exporter**
-- **Solana Client Binary**
 
 ### Prerequisite Installation
 
@@ -13,7 +13,7 @@
    Before installing prerequisites make sure to have solana client binary installed.
    - If you haven't installed it before, follow [this guide](https://docs.solana.com/cli/install-solana-cli-tools#download-prebuilt-binaries) to install the prebuilt binaries of latest version.
 
-   To know more information about solana client binary usage [click here](https://github.com/Chainflow/solana-mission-control/blob/main/docs/prereq-manual.md#install-solana-client).
+   To learn more about solana client binary usage [click here](https://github.com/Chainflow/solana-mission-control/blob/main/docs/prereq-manual.md#install-solana-client).
 
  - Install other prerequisites
 
@@ -55,7 +55,6 @@
 **2) Manual installation**
 
 To manually install the prerequisites please follow this [guide](./docs/prereq-manual.md).
-
  
 ## Install and configure the Solana Monitoring Tool
 
@@ -68,7 +67,7 @@ Either of the two methods can be used to install the tool. It is not necessary t
 
 **1) Installation script**
 
-  - It clones and sets up the monitoring tool as a system service.
+  - The script clones and sets up the monitoring tool as a system service.
   - Please export the following env variables first as they will be used to initialize the `config.toml` file for the tool.
   ```sh
   cd $HOME
@@ -99,13 +98,11 @@ $ cd solana-mission-control
 $ cp example.config.toml config.toml
 ```
 
-**Note** : (OPTIONAL) If you wish to pass your config path from env variable then you can use this command. `export CONFIG_PATH="/path/to/config"` (ex: `export CONFIG_PATH="/home/Desktop"`).
+**Note** : (OPTIONAL) If you wish to pass your config path from an ENV variable then you can use this command. `export CONFIG_PATH="/path/to/config"` (ex: `export CONFIG_PATH="/home/Desktop"`).
 
 Edit the `config.toml` with your changes. Information about all the fields in `config.toml` can be found [here](./docs/config-desc.md)
 
 Note : Before running this monitoring binary, you need to add the following configuration to `prometheus.yml`.
-
-
 
 ```sh
  scrape_configs:
@@ -151,9 +148,9 @@ Information of all the dashboards can be found [here](./docs/dashboard-desc.md).
 
 ### 2. Create Datasource
 
-- Before importing the dashboards you have to create datasources of `Prometheus`.
+- Before importing the dashboards you have to create a `Prometheus` datasources.
 
-- To create datasoruces go to **Configuration** and select **Data Sources**.
+- To create the datasoruce go to **Configuration** and select **Data Sources**.
 
 - Click on **Add data source** and select `Prometheus` from Time series databases section.
 
