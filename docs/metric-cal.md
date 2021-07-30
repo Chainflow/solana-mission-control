@@ -30,7 +30,7 @@
 
     Epoch Difference: Epoch Difference is calulated by subtracting validator's epoch from network's epoch.
    
-    Validator status: If the valiadtor is a non-deliquent and Epochvoteaccount is true and active stake is non-zero then validator is **voting**, otherwise considered as **jailed**. Will be getting epochvoteaccount and activestake by calling the method `getVoteAccounts`.
+    Validator status: If the valiadtor is a non-deliquent and Epochvoteaccount is true and active stake is non-zero then validator is **voting**, otherwise considered as **delinquent**. Will be getting epochvoteaccount and activestake by calling the method `getVoteAccounts`.
 
     Solana Current slot height: Returns the current slot the node is processing, calculated by calling method `getSlot`.
 
@@ -85,7 +85,7 @@
 
    Skipped Slots - Validator: Skipped slots of a validator in current epoch, considered result field is `SkippedSlots` from the method `BlockProduction`.
 
-   Total Skipped Slots - Current Epoch: Total skipped slots in current epoch, considered result field is `TotalSlotsSkipped` from the method `BlockProduction`.
+   Total Skipped Slots Network - Current Epoch: Total skipped slots in current epoch, considered result field is `TotalSlotsSkipped` from the method `BlockProduction`.
 
 - **Extra Information**
 

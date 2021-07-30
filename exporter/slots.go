@@ -130,7 +130,7 @@ var (
 
 	skippedTotal = prometheus.NewGauge(prometheus.GaugeOpts{
 		Name: "solana_skipped_total",
-		Help: "Total skipped slots in current epoch",
+		Help: "Total skipped slots of network in current epoch",
 	})
 )
 

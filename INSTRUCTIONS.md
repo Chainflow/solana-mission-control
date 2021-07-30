@@ -102,7 +102,7 @@ $ cp example.config.toml config.toml
 
 Edit the `config.toml` with your changes. Information about all the fields in `config.toml` can be found [here](./docs/config-desc.md)
 
-Note : Before running this monitoring binary, you need to add the following configuration to `prometheus.yml`.
+Note : Before running this monitoring binary, you need to add the following configuration to `prometheus.yml`. You can find the prometheus file at `$HOME/prometheus.yml` .
 
 ```sh
  scrape_configs:
@@ -127,7 +127,7 @@ $ sudo systemctl restart prometheus.service
    $ go build -o solana-mc && ./solana-mc
 ```
 
-Installation of the tool is completed let's configure the Grafana dashboards.
+Installation of the tool is completed let's configure the grafana dashboards.
 
 ### Grafana Dashboards
 
@@ -170,7 +170,7 @@ UID of dashboards are as follows:
  - **14739**: Summary dashboard.
  - **13445**: System monitoring metrics dashboard.
 
- While importing these dashboards if you face any issues at valueset, change it to empty and then click on import by selecting the datasources.
+ While importing these dashboards if you face any issues at valueset i.e., unique identifier (uid) of a dashboard, then change it to empty and then click on import by selecting the datasources.
 
 
 - *For more info about grafana dashboard imports you can refer https://grafana.com/docs/grafana/latest/reference/export_import/*
