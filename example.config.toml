@@ -1,0 +1,42 @@
+[rpc_and_lcd_endpoints]
+rpc_endpoint = "https://api.solana.com"
+network_rpc = "https://api.mainnet-beta.solana.com"
+
+[validator_details]
+validator_name = "witval"
+pub_key = "ChjhgsdfmmK7i1gQZhQNiXYU84ULeaYF1EH15n"
+vote_key = "2oxQJ1qpgUZU9JU8sdwerasdf1GzHkYfRDgDQY9dpH5mgGn"
+
+[enable_alerts]
+enable_telegram_alerts = true
+enable_email_alerts = false
+
+[regular_status_alerts]
+alert_timings = ["02:30AM","02:30PM"]
+
+[alerter_preferences]
+delegation_alerts = "yes"
+block_diff_alerts = "yes"
+node_health_alert = "yes"
+epoch_diff_alrets = "yes"
+account_balance_change_alerts = "yes"
+skip_rate_alerts = "yes"
+
+[alerting_threholds]
+block_diff_threshold = 10
+balance_change_threshold = 1000.123
+epoch_diff_threshold = 0
+
+[telegram]
+tg_chat_id = 2121288205
+tg_bot_token = "1533624405:AAGasdfg1a-sT4X-5I_q29rKK8yvWR_T4"
+
+[sendgrid]
+sendgrid_token = "SG.J4d12345TREWTbvh6A.L_FPSzlqvBesPPQP72hATEt5Hs8TUzo9Dl3ohG8Rk"
+receiver_email_address = "xyz@example.com"
+account_email = "xyz@domain.com"
+sendgrid_account_name = "xyz"
+
+[prometheus]
+listen_address = ":1234"
+prometheus_address = "http://localhost:9090"
