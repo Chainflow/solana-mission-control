@@ -3,11 +3,11 @@
 
  Here are the list of Alerts
  - Alert when node health is **DOWN**.
- - Alert when validator is in **DELINQUNET** state.
+ - Alert when validator is in **DELINQUENT** state.
  - Alert when Block difference meets or exceedes **block_diff_threshold** which is user configured in *config.toml*.
  - Alert when Epoch difference reaches or exceedes **epoch_diff_threshold** which is user configured in *config.toml*.
  - Alert when account balance drops below **account_bal_threshold** which is user configured in *config.toml*.
-- Alert if validator skip rate exceeds network skip rate.
+ - Alert if validator skip rate exceeds network skip rate.
 
 ## Telegram Commands
 These commands can be used to get quick information about your solana node.
