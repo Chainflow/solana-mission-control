@@ -278,7 +278,7 @@
       },
       "id": 48,
       "panels": [],
-      "title": "Validator Informational",
+      "title": "Validator Information",
       "type": "row"
     },
     {
@@ -350,9 +350,10 @@
       "tableColumn": "",
       "targets": [
         {
+          "exemplar": true,
           "expr": "solana_node_version",
           "hide": false,
-          "instant": true,
+          "instant": false,
           "interval": "",
           "legendFormat": "{{version}}",
           "refId": "A"
@@ -2806,6 +2807,96 @@
       "valueName": "current"
     },
     {
+      "cacheTimeout": null,
+      "colorBackground": false,
+      "colorValue": true,
+      "colors": [
+        "#299c46",
+        "rgba(237, 129, 40, 0.89)",
+        "#d44a3a"
+      ],
+      "datasource": "${DS_PROMETHEUS}",
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "format": "none",
+      "gauge": {
+        "maxValue": 100,
+        "minValue": 0,
+        "show": false,
+        "thresholdLabels": false,
+        "thresholdMarkers": true
+      },
+      "gridPos": {
+        "h": 3,
+        "w": 6,
+        "x": 18,
+        "y": 35
+      },
+      "id": 85,
+      "interval": null,
+      "links": [],
+      "mappingType": 1,
+      "mappingTypes": [
+        {
+          "name": "value to text",
+          "value": 1
+        },
+        {
+          "name": "range to text",
+          "value": 2
+        }
+      ],
+      "maxDataPoints": 100,
+      "nullPointMode": "connected",
+      "nullText": null,
+      "pluginVersion": "6.7.2",
+      "postfix": "SOL",
+      "postfixFontSize": "50%",
+      "prefix": "",
+      "prefixFontSize": "50%",
+      "rangeMaps": [
+        {
+          "from": "null",
+          "text": "N/A",
+          "to": "null"
+        }
+      ],
+      "sparkline": {
+        "fillColor": "rgba(31, 118, 189, 0.18)",
+        "full": false,
+        "lineColor": "#73BF69",
+        "show": false,
+        "ymax": null,
+        "ymin": null
+      },
+      "tableColumn": "",
+      "targets": [
+        {
+          "exemplar": true,
+          "expr": "solana_vote_account_balance",
+          "interval": "",
+          "legendFormat": "{{solana_vote_acc_bal}}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": "",
+      "timeFrom": null,
+      "timeShift": null,
+      "title": "Vote Account Balance",
+      "type": "singlestat",
+      "valueFontSize": "80%",
+      "valueMaps": [
+        {
+          "op": "=",
+          "text": "N/A",
+          "value": "null"
+        }
+      ],
+      "valueName": "current"
+    },
+    {
       "aliasColors": {},
       "bars": false,
       "cacheTimeout": null,
@@ -2820,7 +2911,7 @@
         "overrides": []
       },
       "fill": 1,
-      "fillGradient": 3,
+      "fillGradient": 0,
       "gridPos": {
         "h": 6,
         "w": 9,
@@ -2834,7 +2925,7 @@
         "avg": false,
         "current": true,
         "hideEmpty": false,
-        "hideZero": false,
+        "hideZero": true,
         "max": false,
         "min": false,
         "show": true,
@@ -2864,7 +2955,7 @@
           "expr": "solana_tx_count",
           "instant": false,
           "interval": "",
-          "legendFormat": "",
+          "legendFormat": "{{solana_tx_count}}",
           "refId": "A"
         }
       ],
@@ -2889,116 +2980,6 @@
       "yaxes": [
         {
           "format": "string",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        },
-        {
-          "format": "short",
-          "label": null,
-          "logBase": 1,
-          "max": null,
-          "min": null,
-          "show": true
-        }
-      ],
-      "yaxis": {
-        "align": false,
-        "alignLevel": null
-      }
-    },
-    {
-      "aliasColors": {},
-      "bars": false,
-      "cacheTimeout": null,
-      "dashLength": 10,
-      "dashes": false,
-      "datasource": "${DS_PROMETHEUS}",
-      "description": "",
-      "fieldConfig": {
-        "defaults": {
-          "displayName": "Balance in SOL"
-        },
-        "overrides": []
-      },
-      "fill": 1,
-      "fillGradient": 0,
-      "gridPos": {
-        "h": 6,
-        "w": 7,
-        "x": 9,
-        "y": 38
-      },
-      "hiddenSeries": false,
-      "id": 73,
-      "interval": null,
-      "legend": {
-        "avg": false,
-        "current": true,
-        "hideEmpty": true,
-        "hideZero": true,
-        "max": false,
-        "min": false,
-        "show": true,
-        "total": false,
-        "values": true
-      },
-      "lines": true,
-      "linewidth": 1,
-      "links": [],
-      "maxDataPoints": 100,
-      "nullPointMode": "null",
-      "options": {
-        "alertThreshold": true
-      },
-      "percentage": false,
-      "pluginVersion": "7.5.2",
-      "pointradius": 2,
-      "points": false,
-      "renderer": "flot",
-      "seriesOverrides": [],
-      "spaceLength": 10,
-      "stack": false,
-      "steppedLine": false,
-      "targets": [
-        {
-          "exemplar": true,
-          "expr": "solana_vote_account_balance",
-          "instant": false,
-          "interval": "",
-          "legendFormat": "{{solana_vote_acc_bal}}",
-          "refId": "A"
-        }
-      ],
-      "thresholds": [],
-      "timeFrom": null,
-      "timeRegions": [],
-      "timeShift": null,
-      "title": "Vote Account Balance ::",
-      "tooltip": {
-        "shared": true,
-        "sort": 0,
-        "value_type": "individual"
-      },
-      "transformations": [
-        {
-          "id": "filterByRefId",
-          "options": {}
-        }
-      ],
-      "type": "graph",
-      "xaxis": {
-        "buckets": null,
-        "mode": "time",
-        "name": null,
-        "show": true,
-        "values": []
-      },
-      "yaxes": [
-        {
-          "format": "short",
           "label": null,
           "logBase": 1,
           "max": null,
@@ -3502,7 +3483,7 @@
       },
       "gridPos": {
         "h": 3,
-        "w": 6,
+        "w": 7,
         "x": 6,
         "y": 48
       },
@@ -3555,7 +3536,7 @@
       "thresholds": "",
       "timeFrom": null,
       "timeShift": null,
-      "title": "Total Skipped Slots - Current Epoch",
+      "title": "Total Skipped Slots Network - Current Epoch",
       "type": "singlestat",
       "valueFontSize": "80%",
       "valueMaps": [
@@ -4195,5 +4176,5 @@
   "timezone": "",
   "title": "Validator Monitoring Metrics",
   "uid": "_lBG68yGz",
-  "version": 48
+  "version": 58
 }
