@@ -40,3 +40,9 @@ sendgrid_account_name = "xyz"
 [prometheus]
 listen_address = ":1234"
 prometheus_address = "http://localhost:9090"
+
+
+[validator_details]
+validator_name = "Val"
+pub_key = "ChorusmmK7i1AxXeiTtQgQZhQNiXYU84ULeaYF1EH15n"
+vote_key = "2oxQJ1qpgUZU9JU84BHaoM1GzHkYfRDgDQY9dpH5mgGn"
