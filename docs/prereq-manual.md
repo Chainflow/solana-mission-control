@@ -75,9 +75,9 @@ $ sudo systemctl start prometheus.service
 
 ```sh
 $ cd $HOME
-$ curl -LO https://github.com/prometheus/node_exporter/releases/download/v0.18.1/node_exporter-0.18.1.linux-amd64.tar.gz
-$ tar -xvf node_exporter-0.18.1.linux-amd64.tar.gz
-$ sudo cp node_exporter-0.18.1.linux-amd64/node_exporter $GOBIN
+$ curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz
+$ tar -xvf node_exporter-1.2.2.linux-amd64.tar.gz
+$ sudo cp node_exporter-1.2.2.linux-amd64/node_exporter $GOBIN
 ```
 
 Setup Node exporter service

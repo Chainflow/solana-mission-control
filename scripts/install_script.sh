@@ -134,6 +134,6 @@ sudo systemctl start node_exporter.service
 
 echo "---- Cleaning .dep .tar.gz files of grafana, prometheus and node exporter --------"
 
-rm grafana_7.5.2_amd64.deb node_exporter-0.18.1.linux-amd64.tar.gz prometheus-2.22.1.linux-amd64.tar.gz
+rm grafana_7.5.2_amd64.deb node_exporter-1.2.2.linux-amd64.tar.gz prometheus-2.22.1.linux-amd64.tar.gz
 
 echo "** Done with prerequisite installtion **"
