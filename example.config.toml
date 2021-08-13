@@ -3,8 +3,8 @@ rpc_endpoint = "https://api.solana.com"
 network_rpc = "https://api.mainnet-beta.solana.com"
 
 [validator_details]
-validator_name = "witval"
-pub_key = "ChjhgsdfmmK7i1gQZhQNiXYU84ULeaYF1EH15n"
+validator_name = "val-name"
+pub_key = "ChjhgsdfmmKahsa1hQNiXYU84ULeaYF1EH15n"
 vote_key = "2oxQJ1qpgUZU9JU8sdwerasdf1GzHkYfRDgDQY9dpH5mgGn"
 
 [enable_alerts]
@@ -28,7 +28,7 @@ balance_change_threshold = 1000.123
 epoch_diff_threshold = 0
 
 [telegram]
-tg_chat_id = 2121288205
+tg_chat_id = 2121888205
 tg_bot_token = "1533624405:AAGasdfg1a-sT4X-5I_q29rKK8yvWR_T4"
 
 [sendgrid]
