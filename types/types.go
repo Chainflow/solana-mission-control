@@ -75,34 +75,6 @@ type (
 		ID int `json:"id"`
 	}
 
-	// AccountInfo struct which holds Account Information
-	AccountInfo struct {
-		Jsonrpc string `json:"jsonrpc"`
-		Result  struct {
-			Context struct {
-				Slot int `json:"slot"`
-			} `json:"context"`
-			Value struct {
-				Data struct {
-					Nonce struct {
-						Initialized struct {
-							Authority     string `json:"authority"`
-							Blockhash     string `json:"blockhash"`
-							FeeCalculator struct {
-								LamportsPerSignature int `json:"lamportsPerSignature"`
-							} `json:"feeCalculator"`
-						} `json:"initialized"`
-					} `json:"nonce"`
-				} `json:"data"`
-				Executable bool   `json:"executable"`
-				Lamports   int    `json:"lamports"`
-				Owner      string `json:"owner"`
-				RentEpoch  int    `json:"rentEpoch"`
-			} `json:"value"`
-		} `json:"result"`
-		ID int `json:"id"`
-	}
-
 	// EpochInfo struct which holds information of current Epoch
 	EpochInfo struct {
 		Jsonrpc string `json:"jsonrpc"`
