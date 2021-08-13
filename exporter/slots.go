@@ -194,12 +194,9 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		}
 		valSkipRate.Set(valSkip)
 		netSkipRate.Set(netSkip)
-		skipdiff := valSkip - netSkip
-		// if skipdiff > 0 {
-		// 	skipRateDifference.Set(skipdiff)
-		// } else {
+		skipdiff := valSkip - netSkip // skip rate difference of validator and network
 		skipRateDifference.Set(skipdiff)
-		// }
+		log.Printf("Skip rate difference : %v", skipdiff)
 
 		// Get Node Health
 		h, err := monitor.GetNodeHealth(cfg)
@@ -214,12 +211,11 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		resp, err := monitor.GetEpochInfo(cfg, utils.Network)
 		if err != nil {
 			log.Printf("failed to fetch epoch info of network, retrying: %v", err)
-			// cancel()
 			// continue
 		}
 
-		networkEpoch.Set(float64(resp.Result.Epoch))             // Set n/w epoch
-		networkBlockHeight.Set(float64(resp.Result.BlockHeight)) // set n/w block height
+		networkEpoch.Set(float64(resp.Result.Epoch))             // Set nw epoch
+		networkBlockHeight.Set(float64(resp.Result.BlockHeight)) // set nw block height
 
 		// Calculate first and last slot in network epoch.
 		netFirstSlot := resp.Result.AbsoluteSlot - resp.Result.SlotIndex
@@ -243,10 +239,8 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		resp, err = monitor.GetEpochInfo(cfg, utils.Validator)
 		if err != nil {
 			log.Printf("failed to fetch epoch info of validator, retrying: %v", err)
-			// cancel()
 			// continue
 		}
-		// cancel()
 		info := resp.Result
 
 		// Calculate first and last slot in epoch.
@@ -258,7 +252,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		epochLastSlot.Set(float64(lastSlot))
 		valBlockHeight.Set(float64(info.BlockHeight))
 
-		log.Printf("************** Block Height ********* : %d", info.BlockHeight)
+		log.Printf("Block Height: %d", info.BlockHeight)
 
 		// Calculate epoch difference of network and validator
 		diff := float64(resp.Result.Epoch) - float64(info.Epoch)
@@ -281,7 +275,7 @@ func (c *solanaCollector) WatchSlots(cfg *config.Config) {
 		blockDiff.Set(heightDiff) // block height difference of network and validator
 
 		if int64(heightDiff) >= cfg.AlertingThresholds.BlockDiffThreshold {
-			// send alert
+			// send telegram alert
 			err = alerter.SendTelegramAlert(fmt.Sprintf("Block Difference Alert : Block difference b/w network and validator has exceeded %d", cfg.AlertingThresholds.BlockDiffThreshold), cfg)
 			if err != nil {
 				log.Printf("Error while sending block height diff alert to telegram: %v", err)
