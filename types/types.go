@@ -265,7 +265,7 @@ type (
 		StakeByVersion interface{} `json:"stakeByVersion"`
 	}
 
-	// BlockProduction is a struct which holds the block production details in current epoch
+	// BlockProduction is a struct which holds the block production details of current epoch
 	BlockProduction struct {
 		Epoch               int `json:"epoch"`
 		StartSlot           int `json:"start_slot"`

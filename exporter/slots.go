@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/prometheus/client_golang/prometheus"
-	// "k8s.io/klog/v2"
 
 	"github.com/Chainflow/solana-mission-control/alerter"
 	"github.com/Chainflow/solana-mission-control/config"
@@ -17,7 +16,7 @@ import (
 )
 
 const (
-	slotPacerSchedule = 2 * time.Second
+	slotPacerSchedule = 2 * time.Second // metrics will be scraped for every 2 seconds
 )
 
 var (

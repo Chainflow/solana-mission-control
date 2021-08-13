@@ -63,6 +63,7 @@ func AlertStatusCountFromPrometheus(cfg *config.Config) (string, error) {
 	return count, nil
 }
 
+// GetValStatusFromDB which returns the validator status form prometheus db
 func GetValStatusFromDB(cfg *config.Config) (string, error) {
 	var result types.DBRes
 	var status string
