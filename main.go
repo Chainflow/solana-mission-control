@@ -15,7 +15,7 @@ import (
 )
 
 func main() {
-	cfg, err := config.ReadFromFile()
+	cfg, err := config.ReadFromFile() // Read config file
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -33,7 +33,7 @@ func main() {
 	}()
 
 	prometheus.MustRegister(collector)
-	http.Handle("/metrics", promhttp.Handler())
+	http.Handle("/metrics", promhttp.Handler()) // exported metrics can be seen in /metrics
 	err = http.ListenAndServe(fmt.Sprintf("%s", cfg.Prometheus.ListenAddress), nil)
 	if err != nil {
 		log.Printf("Error while listening on server : %v", err)
