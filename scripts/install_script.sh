@@ -55,15 +55,13 @@ sudo -S systemctl start grafana-server
 
 cd $HOME
 
-echo $GOBIN
-
 echo "----------- Installing prometheus -----------"
 
 wget https://github.com/prometheus/prometheus/releases/download/v2.22.1/prometheus-2.22.1.linux-amd64.tar.gz
 
 tar -xvf prometheus-2.22.1.linux-amd64.tar.gz
 
-cp prometheus-2.22.1.linux-amd64/prometheus $GOBIN
+cp prometheus-2.22.1.linux-amd64/prometheus $HOME/go/bin
 
 cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
 
@@ -110,7 +108,7 @@ curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.2.2/no
 
 tar -xvf node_exporter-1.2.2.linux-amd64.tar.gz
 
-sudo cp node_exporter-1.2.2.linux-amd64/node_exporter $GOBIN
+sudo cp node_exporter-1.2.2.linux-amd64/node_exporter $HOME/go/bin
 
 echo "---------- Setup Prometheus Node exporter service -----------"
 
