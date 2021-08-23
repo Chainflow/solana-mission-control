@@ -84,7 +84,7 @@ Either of the two methods can be used to install the tool. It is not necessary t
 - Run the script using the following command
 
 ```sh
-   curl -s -L https://github.com/Chainflow/solana-mission-control/tree/main/scripts/scripts/tool_installation.sh | bash
+   curl -s -L https://raw.githubusercontent.com/Chainflow/solana-mission-control/main/scripts/tool_installation.sh | bash
 ```
 You can check the logs of tool using:
 ```sh
