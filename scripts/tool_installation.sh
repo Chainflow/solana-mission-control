@@ -56,6 +56,7 @@ After=network-online.target
 
 [Service]
 User=$USER
+EnvironmentFile=/etc/systemd/system/solana.env
 ExecStart=$HOME/go/bin/solana-mc
 Restart=always
 RestartSec=3

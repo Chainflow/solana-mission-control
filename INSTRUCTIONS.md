@@ -15,6 +15,21 @@
 
    To learn more about solana client binary usage [click here](https://github.com/Chainflow/solana-mission-control/blob/main/docs/prereq-manual.md#install-solana-client).
 
+   - Instructions to store solana client binary path in solana.env file, This environment file will be used to add solana client binary in solana_mc.service file.
+     
+   ```sh
+     cd $Home
+     sudo touch /etc/systemd/system/solana.env
+
+     sudo chmod +rwx /etc/systemd/system/solana.env
+   ```
+     
+   Please do copy your solana client binary path (Ex: SOLANA_BINARY_PATH=/home/ubuntu/.local/share/solana/install/active_release/bin/solana) in solana.env file, 
+
+   **Note**: This is important to get metrics related to skip rate and block production details(leader slots, blocks produced etc). If its not configured it takes `solana` as default path, then you may not able to get above mentioned metrics.
+    
+
+
  - Install other prerequisites
 
    There are two ways of installing the prerequisites:-
