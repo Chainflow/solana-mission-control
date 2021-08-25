@@ -39,11 +39,11 @@
 
    - *block_diff_alerts*
 
-      If you want to recieve alerts when there is a gap between your validator block height and network height then make it **yes** otherwise **no**.
+      If you want to receive alerts when there is a gap between your validator block height and network height then make it **yes** otherwise **no**.
 
    - *epoch_diff_alrets*
 
-      If you want to recieve alerts when there is a gap between your validator epoch and network epoch then make it **yes** otherwise **no**.
+      If you want to receive alerts when there is a gap between your validator epoch and network epoch then make it **yes** otherwise **no**.
 
    - *delegation_alerts*
 
@@ -51,7 +51,7 @@
 
    - *node_health_alert*
    
-      If you want to recieve alerts when your validator node is down then make it as **yes** otherwise **no**.
+      If you want to receive alerts when your validator node is down then make it as **yes** otherwise **no**.
 
    - *skip_rate_alerts*
      
@@ -61,15 +61,19 @@
 
    - *block_diff_threshold*
 
-      An Integer value to recieve block difference alerts, e.g. a value of 2 would alert you if your validator falls 2 or more blocks behind the network's current block height.
+      An Integer value to receive block difference alerts, e.g. a value of 2 would alert you if your validator falls 2 or more blocks behind the network's current block height.
 
    - *epoch_diff_threshold*
        
-      An integer value to recieve epoch difference alerts, e.g. a value of 5 would alert you if difference between your validator's epoch number and network's epoch is 5 or more.
+      An integer value to receive epoch difference alerts, e.g. a value of 5 would alert you if difference between your validator's epoch number and network's epoch is 5 or more.
 
    - *balance_change_threshold*
 
-      An integer value to recieve account balance change alerts, e.g. if your account balance has dropped to given threshold value you will receive alerts.
+      An integer value to receive account balance change alerts, e.g. if your account balance has dropped to given threshold value you will receive alerts.
+
+   - *skip_rate_threshold*
+
+      An integer value to receive skip rate alerts. If your validator skip rate has exceeded network skip rate and difference of both has exceeded given threshold then you will receive alerts.
 
 - **[regular_status_alerts]**
 
