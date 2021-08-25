@@ -109,6 +109,22 @@ $ cp example.config.toml config.toml
 
 **Note** : (OPTIONAL) If you wish to pass your config path from an ENV variable then you can use this command. `export CONFIG_PATH="/path/to/config"` (ex: `export CONFIG_PATH="/home/Desktop"`).
 
+**Note**: (OPTIONAL) If you wish to store solana client binary path in environment file follow these commands
+```sh
+  sudo touch /etc/systemd/system/solana.env
+  sudo chmod 777 /etc/systemd/system/solana.env
+```
+  copy your binary path to environment file
+  ```sh
+  echo "/home/ubuntu/.local/share/solana/install/active_release/bin/solana" > "/etc/systemd/system/solna.env"
+  ```
+  -  For the purpose of this guide it is assumed the `user` is `ubuntu`. If your user is different or your solana client binary path is different please make the required changes above.
+
+  To know your solana binary path 
+  ```sh
+  which solana
+  ```
+
 Edit the `config.toml` with your changes. Information about all the fields in `config.toml` can be found [here](./docs/config-desc.md)
 
 Note : Before running this monitoring binary, you need to add the following configuration to `prometheus.yml`. You can find the prometheus file at `$HOME/prometheus.yml` .
