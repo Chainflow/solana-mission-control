@@ -61,7 +61,7 @@ func SkipRate(cfg *config.Config) (float64, float64, error) {
 
 	log.Printf("VAL skip rate : %f, Network skip rate : %f", valSkipped, netSkipped)
 
-	if valSkipped > netSkipped {
+	if valSkipped > netSkipped && (valSkipped > float64(cfg.AlertingThresholds.SkipRateThreshold)) {
 		if strings.EqualFold(cfg.AlerterPreferences.SkipRateAlerts, "yes") {
 			err = alerter.SendTelegramAlert(fmt.Sprintf("SKIP RATE ALERT ::  Your validator SKIP RATE : %f has exceeded network SKIP RATE : %f", valSkipped, netSkipped), cfg)
 			if err != nil {
