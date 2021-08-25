@@ -15,21 +15,6 @@
 
    To learn more about solana client binary usage [click here](https://github.com/Chainflow/solana-mission-control/blob/main/docs/prereq-manual.md#install-solana-client).
 
-   - Instructions to store solana client binary path in solana.env file, This environment file will be used to add solana client binary in solana_mc.service file.
-     
-   ```sh
-     cd $Home
-     sudo touch /etc/systemd/system/solana.env
-
-     sudo chmod +rwx /etc/systemd/system/solana.env
-   ```
-     
-   Please do copy your solana client binary path (Ex: SOLANA_BINARY_PATH=/home/ubuntu/.local/share/solana/install/active_release/bin/solana) in solana.env file, 
-
-   **Note**: This is important to get metrics related to skip rate and block production details(leader slots, blocks produced etc). If its not configured it takes `solana` as default path, then you may not able to get above mentioned metrics.
-    
-
-
  - Install other prerequisites
 
    There are two ways of installing the prerequisites:-
@@ -93,8 +78,17 @@ Either of the two methods can be used to install the tool. It is not necessary t
   export VOTE_KEY="<vote-key>" # Ex - export VOTE_KEY="2oxQJ1qpgUZU9JU84BHaoM1GzHkYfRDgDQY9dpH5mghh"
   export TELEGRAM_CHAT_ID=<id> # Ex - export TELEGRAM_CHAT_ID=22128812
   export TELEGRAM_BOT_TOKEN="<token>" # Ex - TELEGRAM_BOT_TOKEN="1117273891:AAE12xZU5x4JRj5YSF5LBeu1fPF0T4xj-UI"
+  export SOLANA_BINARY_PATH="<solana-client-binary-path>" # Ex - export SOLANA_BINARY_PATH="/home/ubuntu/.local/share/solana/install/active_release/bin/solana"
 ```
 - **Note**: If you don't want telegram notifications you can skip exporting `TELEGRAM_CHAT_ID` and `TELEGRAM_BOT_TOKEN` but the rest are mandatory.
+
+- Instructions to store solana client binary path in solana.env file, This environment file will be used to add solana client binary in solana_mc.service file.
+```sh
+  sudo touch /etc/systemd/system/solana.env
+  sudo chmod +rwx /etc/systemd/system/solana.env
+  echo "$SOLANA_BINARY_PATH" >> "/etc/systemd/system/solana.env"
+```
+- **Note**: This is important to get metrics related to skip rate and block production details(leader slots, blocks produced etc). If its not configured it takes `solana` as default path, then you may not able to get above mentioned metrics.
 - You can find the tool installation script [here](./scripts/tool_installation.sh)
 - Run the script using the following command
 
