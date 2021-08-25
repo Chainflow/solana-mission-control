@@ -85,7 +85,7 @@ Either of the two methods can be used to install the tool. It is not necessary t
 - Instructions to store solana client binary path in solana.env file, This environment file will be used to add solana client binary in solana_mc.service file.
 ```sh
   sudo touch /etc/systemd/system/solana.env
-  sudo chmod +rwx /etc/systemd/system/solana.env
+  sudo chmod 777 /etc/systemd/system/solana.env
   echo "$SOLANA_BINARY_PATH" >> "/etc/systemd/system/solana.env"
 ```
 - **Note**: This is important to get metrics related to skip rate and block production details(leader slots, blocks produced etc). If its not configured it takes `solana` as default path, then you may not able to get above mentioned metrics.
@@ -97,7 +97,7 @@ Either of the two methods can be used to install the tool. It is not necessary t
 ```
 You can check the logs of tool using:
 ```sh
-   journalctl -u solana_mc.service
+   journalctl -u solana_mc.service -f
 ```
 ### 2) Manual installation
 
