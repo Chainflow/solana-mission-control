@@ -16,8 +16,14 @@ cp example.config.toml ~/.solana-mc/config/config.toml
 
 cd $HOME
 
-echo "------ Updatig config fields with exported values -------"
+sudo touch /etc/systemd/system/solana.env
 
+sudo chmod 777 /etc/systemd/system/solana.env
+
+
+echo "$SOLANA_BINARY_PATH" >> "/etc/systemd/system/solana.env"
+
+echo "------ Updatig config fields with exported values -------"
 
 sed -i '/rpc_endpoint =/c\rpc_endpoint = "'"$RPC_ENDPOINT"'"' ~/.solana-mc/config/config.toml
 

@@ -82,13 +82,6 @@ Either of the two methods can be used to install the tool. It is not necessary t
 ```
 - **Note**: If you don't want telegram notifications you can skip exporting `TELEGRAM_CHAT_ID` and `TELEGRAM_BOT_TOKEN` but the rest are mandatory.
 
-- Instructions to store solana client binary path in solana.env file, This environment file will be used to add solana client binary in solana_mc.service file.
-```sh
-  sudo touch /etc/systemd/system/solana.env
-  sudo chmod 777 /etc/systemd/system/solana.env
-  echo "$SOLANA_BINARY_PATH" >> "/etc/systemd/system/solana.env"
-```
-- **Note**: This is important to get metrics related to skip rate and block production details(leader slots, blocks produced etc). If its not configured it takes `solana` as default path, then you may not able to get above mentioned metrics.
 - You can find the tool installation script [here](./scripts/tool_installation.sh)
 - Run the script using the following command
 
@@ -108,22 +101,6 @@ $ cp example.config.toml config.toml
 ```
 
 **Note** : (OPTIONAL) If you wish to pass your config path from an ENV variable then you can use this command. `export CONFIG_PATH="/path/to/config"` (ex: `export CONFIG_PATH="/home/Desktop"`).
-
-**Note**: (OPTIONAL) If you wish to store solana client binary path in environment file follow these commands
-```sh
-  sudo touch /etc/systemd/system/solana.env
-  sudo chmod 777 /etc/systemd/system/solana.env
-```
-  copy your binary path to environment file
-  ```sh
-  echo "/home/ubuntu/.local/share/solana/install/active_release/bin/solana" > "/etc/systemd/system/solna.env"
-  ```
-  -  For the purpose of this guide it is assumed the `user` is `ubuntu`. If your user is different or your solana client binary path is different please make the required changes above.
-
-  To know your solana binary path 
-  ```sh
-  which solana
-  ```
 
 Edit the `config.toml` with your changes. Information about all the fields in `config.toml` can be found [here](./docs/config-desc.md)
 
