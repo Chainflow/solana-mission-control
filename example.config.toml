@@ -26,6 +26,7 @@ skip_rate_alerts = "yes"
 block_diff_threshold = 10
 balance_change_threshold = 1000.123
 epoch_diff_threshold = 0
+skip_rate_threshold = 50
 
 [telegram]
 tg_chat_id = 2121888205

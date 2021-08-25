@@ -109,6 +109,8 @@ type (
 		// EpochDiffThreahold option is to send alerts when the difference b/w network and validator's
 		// epoch reaches or exceedes to epoch difference threshold
 		EpochDiffThreshold int64 `mapstructure:"epoch_diff_threshold"`
+		// SkipRateThreshold is to send alerts when the skip rate exceeds the configured threshold
+		SkipRateThreshold int64 `mapstructure:"skip_rate_threshold"`
 	}
 
 	// Config defines all the configurations required for the app
