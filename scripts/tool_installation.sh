@@ -49,13 +49,14 @@ mv solana-mc $HOME/go/bin
 
 echo "--------checking for solana binary path and updates it in env--------"
 
-sudo touch /etc/systemd/system/solana.env
+if [ ! -z "${SOLANA_BINARY_PATH}" ];
+then 
+    SOLANA_BINARY="$SOLANA_BINARY_PATH"
+else 
+    SOLANA_BINARY="solana"
+fi
 
-sudo chmod 777 /etc/systemd/system/solana.env
-
-echo "SOLANA_BINARY_PATH=$SOLANA_BINARY_PATH" >> /etc/systemd/system/solana.env
-
-echo "----------- Setupsolana-mc service------------"
+echo "----------- Setup solana-mc service------------"
 
 echo "[Unit]
 Description=Solana-mc
@@ -63,7 +64,7 @@ After=network-online.target
 
 [Service]
 User=$USER
-EnvironmentFile=/etc/systemd/system/solana.env
+Environment="SOLANA_BINARY_PATH=$SOLANA_BINARY"
 ExecStart=$HOME/go/bin/solana-mc
 Restart=always
 RestartSec=3
