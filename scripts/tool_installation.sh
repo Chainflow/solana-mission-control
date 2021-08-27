@@ -16,12 +16,6 @@ cp example.config.toml ~/.solana-mc/config/config.toml
 
 cd $HOME
 
-sudo touch /etc/systemd/system/solana.env
-
-sudo chmod 777 /etc/systemd/system/solana.env
-
-echo SOLANA_BINARY_PATH=$SOLANA_BINARY_PATH >> /etc/systemd/system/solana.env
-
 echo "------ Updatig config fields with exported values -------"
 
 sed -i '/rpc_endpoint =/c\rpc_endpoint = "'"$RPC_ENDPOINT"'"' ~/.solana-mc/config/config.toml
@@ -52,6 +46,14 @@ cd solana-mission-control
 
 go build -o solana-mc
 mv solana-mc $HOME/go/bin
+
+echo "--------checking for solana binary path and updates it in env--------"
+
+sudo touch /etc/systemd/system/solana.env
+
+sudo chmod 777 /etc/systemd/system/solana.env
+
+echo "SOLANA_BINARY_PATH=$SOLANA_BINARY_PATH" >> /etc/systemd/system/solana.env
 
 echo "----------- Setupsolana-mc service------------"
 
