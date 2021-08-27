@@ -18,7 +18,6 @@ cd $HOME
 
 echo "------ Updatig config fields with exported values -------"
 
-
 sed -i '/rpc_endpoint =/c\rpc_endpoint = "'"$RPC_ENDPOINT"'"' ~/.solana-mc/config/config.toml
 
 sed -i '/network_rpc =/c\network_rpc = "'"$NETWORK_RPC"'"' ~/.solana-mc/config/config.toml
@@ -48,7 +47,16 @@ cd solana-mission-control
 go build -o solana-mc
 mv solana-mc $HOME/go/bin
 
-echo "----------- Setupsolana-mc service------------"
+echo "--------checking for solana binary path and updates it in env--------"
+
+if [ ! -z "${SOLANA_BINARY_PATH}" ];
+then 
+    SOLANA_BINARY="$SOLANA_BINARY_PATH"
+else 
+    SOLANA_BINARY="solana"
+fi
+
+echo "----------- Setup solana-mc service------------"
 
 echo "[Unit]
 Description=Solana-mc
@@ -56,6 +64,7 @@ After=network-online.target
 
 [Service]
 User=$USER
+Environment="SOLANA_BINARY_PATH=$SOLANA_BINARY"
 ExecStart=$HOME/go/bin/solana-mc
 Restart=always
 RestartSec=3
