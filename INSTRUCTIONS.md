@@ -129,6 +129,35 @@ $ sudo systemctl restart prometheus.service
    $ go build -o solana-mc && ./solana-mc
 ```
 
+- Run monitoring tool as a system service
+
+Follow below steps to create a system service file and to start it.
+Before running this make sure to export the `$SOLANA_BINARY_PATH` .
+```sh
+echo "[Unit]
+Description=Solana-mc
+After=network-online.target
+
+[Service]
+User=$USER
+Environment="SOLANA_BINARY_PATH=$SOLANA_BINARY_PATH"
+ExecStart=$HOME/go/bin/solana-mc
+Restart=always
+RestartSec=3
+LimitNOFILE=4096
+
+[Install]
+WantedBy=multi-user.target" | sudo tee "/lib/systemd/system/solana_mc.service"
+```
+- Run the system service file
+```sh
+sudo systemctl daemon-reload
+
+sudo systemctl enable solana_mc.service
+
+sudo systemctl start solana_mc.service
+````
+
 Installation of the tool is completed let's configure the grafana dashboards.
 
 ### Grafana Dashboards
