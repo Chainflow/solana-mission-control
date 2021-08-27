@@ -123,6 +123,11 @@ $ sudo systemctl daemon-reload
 $ sudo systemctl restart prometheus.service
 ```
 
+If you wish to pass `solana binary path` then you export by following below step.
+```sh
+export SOLANA_BINARY_PATH="<solana-client-binary-path>" # Ex - export SOLANA_BINARY_PATH="/home/ubuntu/.local/share/solana/install/active_release/bin/solana"
+```
+
 - Build and run the monitoring binary
 
 ```sh
@@ -132,7 +137,8 @@ $ sudo systemctl restart prometheus.service
 - Run monitoring tool as a system service
 
 Follow below steps to create a system service file and to start it.
-Before running this make sure to export the `$SOLANA_BINARY_PATH` .
+Before running this make sure to export the `$SOLANA_BINARY_PATH`.
+
 ```sh
 echo "[Unit]
 Description=Solana-mc
