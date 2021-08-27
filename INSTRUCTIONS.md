@@ -78,8 +78,10 @@ Either of the two methods can be used to install the tool. It is not necessary t
   export VOTE_KEY="<vote-key>" # Ex - export VOTE_KEY="2oxQJ1qpgUZU9JU84BHaoM1GzHkYfRDgDQY9dpH5mghh"
   export TELEGRAM_CHAT_ID=<id> # Ex - export TELEGRAM_CHAT_ID=22128812
   export TELEGRAM_BOT_TOKEN="<token>" # Ex - TELEGRAM_BOT_TOKEN="1117273891:AAE12xZU5x4JRj5YSF5LBeu1fPF0T4xj-UI"
+  export SOLANA_BINARY_PATH="<solana-client-binary-path>" # Ex - export SOLANA_BINARY_PATH="/home/ubuntu/.local/share/solana/install/active_release/bin/solana"
 ```
 - **Note**: If you don't want telegram notifications you can skip exporting `TELEGRAM_CHAT_ID` and `TELEGRAM_BOT_TOKEN` but the rest are mandatory.
+
 - You can find the tool installation script [here](./scripts/tool_installation.sh)
 - Run the script using the following command
 
@@ -88,7 +90,7 @@ Either of the two methods can be used to install the tool. It is not necessary t
 ```
 You can check the logs of tool using:
 ```sh
-   journalctl -u solana_mc.service
+   journalctl -u solana_mc.service -f
 ```
 ### 2) Manual installation
 
