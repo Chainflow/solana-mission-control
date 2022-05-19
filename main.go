@@ -32,6 +32,13 @@ func main() {
 		}
 	}()
 
+	go func() {
+		for {
+			monitor.SkipRateAlerts(cfg)
+			time.Sleep(60 * time.Second)
+		}
+	}()
+
 	prometheus.MustRegister(collector)
 	http.Handle("/metrics", promhttp.Handler()) // exported metrics can be seen in /metrics
 	err = http.ListenAndServe(fmt.Sprintf("%s", cfg.Prometheus.ListenAddress), nil)
