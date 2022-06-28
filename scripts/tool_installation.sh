@@ -45,7 +45,7 @@ cd $HOME
 cd solana-mission-control
 
 go build -o solana-mc
-mv solana-mc $HOME/go/bin
+mv solana-mc $HOME/go/bin/
 
 echo "--------checking for solana binary path and updates it in env--------"
 
