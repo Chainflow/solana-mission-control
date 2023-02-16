@@ -37,103 +37,103 @@ else
   mkdir -p "$GOBIN"
 fi
 
-cd $HOME
+# cd $HOME
 
-echo "----------- Installing grafana -----------"
+# echo "----------- Installing grafana -----------"
 
-sudo apt-get install -y adduser libfontconfig1
+# sudo apt-get install -y adduser libfontconfig1
 
-wget https://dl.grafana.com/oss/release/grafana_7.5.2_amd64.deb
+# wget https://dl.grafana.com/oss/release/grafana_7.5.2_amd64.deb
 
-sudo dpkg -i grafana_7.5.2_amd64.deb
+# sudo dpkg -i grafana_7.5.2_amd64.deb
 
-echo "------ Starting grafana server using systemd --------"
+# echo "------ Starting grafana server using systemd --------"
 
-sudo -S systemctl daemon-reload
+# sudo -S systemctl daemon-reload
 
-sudo -S systemctl start grafana-server
+# sudo -S systemctl start grafana-server
 
-cd $HOME
+# cd $HOME
 
-echo "----------- Installing prometheus -----------"
+# echo "----------- Installing prometheus -----------"
 
-wget https://github.com/prometheus/prometheus/releases/download/v2.22.1/prometheus-2.22.1.linux-amd64.tar.gz
+# wget https://github.com/prometheus/prometheus/releases/download/v2.22.1/prometheus-2.22.1.linux-amd64.tar.gz
 
-tar -xvf prometheus-2.22.1.linux-amd64.tar.gz
+# tar -xvf prometheus-2.22.1.linux-amd64.tar.gz
 
-cp prometheus-2.22.1.linux-amd64/prometheus $HOME/go/bin
+# cp prometheus-2.22.1.linux-amd64/prometheus $HOME/go/bin
 
-cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
+# cp prometheus-2.22.1.linux-amd64/prometheus.yml $HOME
 
-echo "------- Edit prometheus.yml --------------"
+# echo "------- Edit prometheus.yml --------------"
 
-echo "
-  - job_name: 'solana'
+# echo "
+#   - job_name: 'solana'
 
-    static_configs:
-    - targets: ['localhost:1234']
-
-
-  - job_name: 'node_exporter'
-
-    static_configs:
-    - targets: ['localhost:9100']" >> "$HOME/prometheus.yml"
+#     static_configs:
+#     - targets: ['localhost:1234']
 
 
-echo "------- Setup prometheus system service -------"
+#   - job_name: 'node_exporter'
 
-echo "[Unit]
-Description=Prometheus
-After=network-online.target
-[Service]
-Type=simple
-ExecStart=$HOME/go/bin/prometheus --config.file=$HOME/prometheus.yml
-Restart=always
-RestartSec=3
-LimitNOFILE=4096
-[Install]
-WantedBy=multi-user.target" | sudo tee "/lib/systemd/system/prometheus.service"
+#     static_configs:
+#     - targets: ['localhost:9100']" >> "$HOME/prometheus.yml"
 
-echo "------ Start prometheus -----------"
 
-sudo systemctl daemon-reload
-sudo systemctl enable prometheus.service
-sudo systemctl start prometheus.service
+# echo "------- Setup prometheus system service -------"
 
-echo "-------- Installing node exporter -----------"
+# echo "[Unit]
+# Description=Prometheus
+# After=network-online.target
+# [Service]
+# Type=simple
+# ExecStart=$HOME/go/bin/prometheus --config.file=$HOME/prometheus.yml
+# Restart=always
+# RestartSec=3
+# LimitNOFILE=4096
+# [Install]
+# WantedBy=multi-user.target" | sudo tee "/lib/systemd/system/prometheus.service"
 
-cd $HOME
+# echo "------ Start prometheus -----------"
 
-curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz
+# sudo systemctl daemon-reload
+# sudo systemctl enable prometheus.service
+# sudo systemctl start prometheus.service
 
-tar -xvf node_exporter-1.2.2.linux-amd64.tar.gz
+# echo "-------- Installing node exporter -----------"
 
-sudo cp node_exporter-1.2.2.linux-amd64/node_exporter $HOME/go/bin
+# cd $HOME
 
-echo "---------- Setup Prometheus Node exporter service -----------"
+# curl -LO https://github.com/prometheus/node_exporter/releases/download/v1.2.2/node_exporter-1.2.2.linux-amd64.tar.gz
 
-echo "[Unit]
-Description=Node_exporter
-After=network-online.target
-[Service]
-Type=simple
-ExecStart=$HOME/go/bin/node_exporter
-Restart=always
-RestartSec=3
-LimitNOFILE=4096
-[Install]
-WantedBy=multi-user.target" | sudo tee "/lib/systemd/system/node_exporter.service"
+# tar -xvf node_exporter-1.2.2.linux-amd64.tar.gz
 
-echo "----------- Start node exporter ------------"
+# sudo cp node_exporter-1.2.2.linux-amd64/node_exporter $HOME/go/bin
 
-sudo systemctl daemon-reload
+# echo "---------- Setup Prometheus Node exporter service -----------"
 
-sudo systemctl enable node_exporter.service
+# echo "[Unit]
+# Description=Node_exporter
+# After=network-online.target
+# [Service]
+# Type=simple
+# ExecStart=$HOME/go/bin/node_exporter
+# Restart=always
+# RestartSec=3
+# LimitNOFILE=4096
+# [Install]
+# WantedBy=multi-user.target" | sudo tee "/lib/systemd/system/node_exporter.service"
 
-sudo systemctl start node_exporter.service
+# echo "----------- Start node exporter ------------"
 
-echo "---- Cleaning .dep .tar.gz files of grafana, prometheus and node exporter --------"
+# sudo systemctl daemon-reload
 
-rm grafana_7.5.2_amd64.deb node_exporter-1.2.2.linux-amd64.tar.gz prometheus-2.22.1.linux-amd64.tar.gz
+# sudo systemctl enable node_exporter.service
+
+# sudo systemctl start node_exporter.service
+
+# echo "---- Cleaning .dep .tar.gz files of grafana, prometheus and node exporter --------"
+
+# rm grafana_7.5.2_amd64.deb node_exporter-1.2.2.linux-amd64.tar.gz prometheus-2.22.1.linux-amd64.tar.gz
 
 echo "** Done with prerequisite installtion **"
